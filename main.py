@@ -1,5 +1,6 @@
 import pygame
 import signal
+import argparse
 from classes import Game
 from communication import Communication
 from graphics import Graphics
@@ -8,14 +9,23 @@ from graphics import Graphics
 #########################
 ###### VARIABLES ########
 #########################
-screen_width = 1000
-screen_height = 600
-HOST = '127.0.0.1'
-PORT = 8080
-map_confing_path = 'conf/maps/cross11.txt'
-parcels_config_path = 'conf/parcels/test_parcels.txt'
-framerate = 60
 
+parser = argparse.ArgumentParser(description="Deliveroo2 game server")
+parser.add_argument('--port', type=int, required=False, help="Port for the server", default=8080)
+parser.add_argument('--map', type=str, required=False, help="Map configuration file", default='conf/maps/simple5.txt')
+parser.add_argument('--parcels', type=str, required=False, help="Parcels configuration file", default='conf/parcels/test_parcels.txt')
+parser.add_argument('--framerate', type=int, required=False, help="Framerate of the game", default=60)
+parser.add_argument('--width', type=int, required=False, help="Width of the game window", default=1000)
+parser.add_argument('--height', type=int, required=False, help="Height of the game window", default=600)
+args = parser.parse_args()
+
+HOST = '127.0.0.1'
+PORT = args.port
+map_confing_path = args.map
+parcels_config_path = args.parcels
+framerate = args.framerate
+screen_width = args.width
+screen_height = args.height
 
 server = Communication(HOST, PORT)
 game = Game(map_confing_path, parcels_config_path, server)
@@ -53,6 +63,7 @@ def handle_actions():
             game.remove_agent(id)
             print("Agent ", id, " with port ", str(CLIENT_PORT), " has disconnected.")
         
+        ### GAME ACTIONS ###
         if msg[0] == 'moveleft':
             id = game.agents_port_to_id[str(CLIENT_PORT)]
             res = game.agent_move_left(id)
@@ -127,7 +138,6 @@ while game.server.is_open:
     handle_actions()
 
     graphics.draw_environment()
-
     graphics.display_info()
 
     game.decay_parcels()

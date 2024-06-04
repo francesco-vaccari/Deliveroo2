@@ -2,9 +2,10 @@ import socket
 import threading
 
 class Communication:
-    def __init__(self, HOST, PORT):
+    def __init__(self, HOST, PORT, SERVER_PORT = None):
         self.HOST = HOST
         self.PORT = PORT
+        self.SERVER_PORT = SERVER_PORT
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server_socket.bind((HOST, PORT))
         self.is_open = True
@@ -17,8 +18,11 @@ class Communication:
         data, addr = self.server_socket.recvfrom(1024)
         return data.decode('utf-8'), addr
     
-    def send(self, data, addr):
-        self.server_socket.sendto(data.encode('utf-8'), addr)
+    def send(self, data, addr = None):
+        if self.SERVER_PORT is not None:
+            self.server_socket.sendto(data.encode('utf-8'), (self.HOST, self.SERVER_PORT))
+        else:
+            self.server_socket.sendto(data.encode('utf-8'), addr)
 
     def close(self):
         self.server_socket.close()
