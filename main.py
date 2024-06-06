@@ -12,8 +12,8 @@ from graphics import Graphics
 
 parser = argparse.ArgumentParser(description="Deliveroo2 game server")
 parser.add_argument('--port', type=int, required=False, help="Port for the server", default=8080)
-parser.add_argument('--map', type=str, required=False, help="Map configuration file", default='conf/maps/simple5.txt')
-parser.add_argument('--parcels', type=str, required=False, help="Parcels configuration file", default='conf/parcels/test_parcels.txt')
+parser.add_argument('--map', type=str, required=False, help="Map configuration file", default='small5.txt')
+parser.add_argument('--parcels', type=str, required=False, help="Parcels configuration file", default='test_parcels.txt')
 parser.add_argument('--framerate', type=int, required=False, help="Framerate of the game", default=60)
 parser.add_argument('--width', type=int, required=False, help="Width of the game window", default=1000)
 parser.add_argument('--height', type=int, required=False, help="Height of the game window", default=600)
@@ -21,8 +21,8 @@ args = parser.parse_args()
 
 HOST = '127.0.0.1'
 PORT = args.port
-map_confing_path = args.map
-parcels_config_path = args.parcels
+map_confing_path = 'conf/maps/' + args.map
+parcels_config_path = 'conf/parcels/' + args.parcels
 framerate = args.framerate
 screen_width = args.width
 screen_height = args.height
@@ -41,6 +41,8 @@ clock = pygame.time.Clock()
 #########################
 
 def handle_actions():
+    # maybe change this to while so that it can handle multiple actions in one frame
+    # also I should add a timer for game actions from the same agent
     if len(server.buffer) > 0:
         msg, addr = server.buffer.pop(0)
         CLIENT_PORT = addr[1]

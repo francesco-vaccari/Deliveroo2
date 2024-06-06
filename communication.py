@@ -19,10 +19,25 @@ class Communication:
         return data.decode('utf-8'), addr
     
     def send(self, data, addr = None):
-        if self.SERVER_PORT is not None:
-            self.server_socket.sendto(data.encode('utf-8'), (self.HOST, self.SERVER_PORT))
+        if self.is_open:
+            if addr is None:
+                if self.SERVER_PORT is not None:
+                    try:
+                        self.server_socket.sendto(data.encode('utf-8'), (self.HOST, self.SERVER_PORT))
+                        return "OK"
+                    except Exception as e:
+                        return "ERROR: " + str(e)
+                else:
+                    return "ERROR: no server port specified"
+            else:
+                try:
+                    self.server_socket.sendto(data.encode('utf-8'), addr)
+                    return "OK"
+                except Exception as e:
+                    return "ERROR: " + str(e)
         else:
-            self.server_socket.sendto(data.encode('utf-8'), addr)
+            return "ERROR: server is closed"
+
 
     def close(self):
         self.server_socket.close()
