@@ -9,9 +9,9 @@ class Prompting:
 
     def ask(self, context, question, temperature = 0.7):
         if True:
-            # print(f"Making request with context: {context} and question: {question} and temperature: {temperature}")
+            print(f"CONTEXT:\n{context}\n\nQUESTION:\n{question}")
             response = "def process(event, belief_set): return {}"
-            # print(f"Received response: {response}")
+            print(f"RESPONSE: {response}")
             return response
 
         try:
@@ -63,5 +63,7 @@ class Prompting:
         # maybe I specify in the request to put the extracted elements in a specific format
         # I will need to extract functions, sentences, multiple sentences from the same response, boolean values
         # I need to specify to the LLM a way to let me locate in the response string the elements I want to extract
+
+        # chatgpt suggests something: Provide stuff in the following format: Function: <function> \n Description: <description>
         
         return [response]

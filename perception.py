@@ -73,7 +73,7 @@ class Perception:
         while not res:
             context_path = "prompting/perception_context.txt"
             question_path = "prompting/perception_question_1.txt"
-            elements = [example_events, self.belief_set]
+            elements = [example_events[object_type], self.belief_set]
             elements_names = ["example_events", "belief_set"]
             elements_to_extract = ["function"]
             
@@ -87,7 +87,7 @@ class Perception:
                 while retries < self.max_retries and not res:
                     context_path = "prompting/perception_context.txt"
                     question_path = "prompting/perception_question_2.txt"
-                    elements = [example_events, function_string, err, self.belief_set]
+                    elements = [example_events[object_type], function_string, err, self.belief_set]
                     elements_names = ["example_events", "function", "error", "belief_set"]
                     elements_to_extract = ["function"]
 
