@@ -1,0 +1,17 @@
+With this request the LLM has to fix the function that it previously generated, receiving as input the function but also the runtime error.
+
+So, given the events
+
+```example_events```
+
+and the function
+
+```function```
+
+the LLM should now consider the runtime error
+
+```error```
+
+should produce a new function that fixes the error and updates the belief set in the following format
+
+```belief_set```

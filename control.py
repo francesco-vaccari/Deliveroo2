@@ -3,13 +3,14 @@ import threading
 class Control:
     def __init__(self, server):
         self.server = server
+
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self.main_loop, args=())
         self.thread.start()
 
     def main_loop(self):
         while not self.stop_event.is_set():
-            # send every 1 second  message chosen randomly between 'moveleft', 'moveright', 'moveup', 'movedown'
+
             import random
             import time
             time.sleep(1)
