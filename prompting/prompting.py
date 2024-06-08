@@ -9,9 +9,9 @@ class Prompting:
 
     def ask(self, context, question, temperature = 0.7):
         if True:
-            print(f"Making request with context: {context} and question: {question} and temperature: {temperature}")
+            # print(f"Making request with context: {context} and question: {question} and temperature: {temperature}")
             response = "def process(event, belief_set): return {}"
-            print(f"Received response: {response}")
+            # print(f"Received response: {response}")
             return response
 
         try:
@@ -28,10 +28,10 @@ class Prompting:
             return "error"
         # maybe retry if there is an error?
     
-    def get_prompt(self, prompt_file_path, elements = None, elements_names = None):
+    def get_prompt(self, prompt_file_path, elements = [], elements_names = []):
         if not os.path.exists(prompt_file_path):
             return ""
-        
+
         with open(prompt_file_path, "r") as file:
             prompt_template = file.read()
         
@@ -47,13 +47,21 @@ class Prompting:
             extracted_elements.append(prompt_template[start:end])
         
         for element, element_name in zip(elements, elements_names):
-            prompt_template = prompt_template.replace(f"```{element_name}```", element)
+            prompt_template = prompt_template.replace(f"```{element_name}```", str(element))
 
         return prompt_template
+    
+    def make_request(self, context_path, question_path, elements, elements_names, elements_to_extract):
+        context = self.get_prompt(context_path)
+        question = self.get_prompt(question_path, elements, elements_names)
+        response = self.ask(context, question)
+        extracted_elements = self.extract_elements(response, elements_to_extract)
+        return extracted_elements
 
     def extract_elements(self, response, elements_to_extract):
         # how do I extract stuff from the response?
         # maybe I specify in the request to put the extracted elements in a specific format
         # I will need to extract functions, sentences, multiple sentences from the same response, boolean values
+        # I need to specify to the LLM a way to let me locate in the response string the elements I want to extract
         
-        return ["def process(event, belief_set): return {}"]
+        return [response]
