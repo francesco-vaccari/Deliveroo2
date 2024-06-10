@@ -1,8 +1,10 @@
 import threading
 
 class Control:
-    def __init__(self, server):
+    def __init__(self, server, belief_set):
         self.server = server
+
+        self.belief_set = belief_set
 
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self.main_loop, args=())
@@ -11,12 +13,23 @@ class Control:
     def main_loop(self):
         while not self.stop_event.is_set():
 
-            import random
+            print(self.belief_set)
             import time
             time.sleep(1)
-            actions = ['moveleft', 'moveright', 'moveup', 'movedown', 'pickup', 'putdown']
-            action = random.choice(actions)
-            self.send_action(action)
+            
+            # chiedere desire
+
+            # chiedere funzione
+
+            # testare funzione
+
+            # testare piano
+
+            # valutare funzione
+
+            # valutare desire
+
+            pass
         
         print("Control exited correctly.")
         exit()

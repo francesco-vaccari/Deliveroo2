@@ -2,10 +2,6 @@ Sistemare la gestione delle azioni e fare in modo che processi tutte le azioni c
 
 Aggiungere sistema di logging per eventi ricevuti, azioni eseguite e funzioni generate e testate e nel caso in cui avvengano errori in ogni step, stato dell'ambiente con ogni componente e belief set degli agenti, e prompt fatti con che dati. Magari sarebbe anche carino creare una interfaccia grafica per mostrare tutti i dati.
 
-Sistemare Perception e mettere le chiamate alla classe per creare i prompt e per fare la richiesta con API.
-
-Decidere come estrarre gli elementi che voglio in output dalla risposta della LLM.
-
 Gestire errori nel fare la richiesta all'API, in quel caso automaticamente riprovare a fare la richiesta, implementare in ask() in prompting.py.
 
-Creare una funzione a parte per il prompting dove viene dato in input il nome del template, tutti gli elementi da sostituire nel prompt e che ritorna solamente quelo che viene richiesto.
+Aggiungere prompt nel caso avvengano problemi di parsing?

@@ -1,12 +1,21 @@
-This is an example of a template. There will be many sequences of characters that I will want to replace with actual data.
-For example, in the following line I want to insert the example events
+Write a function that takes as input an event and the current belief set, and returns the updated belief set that incorporates the information from the event.
+
+The input event is structured like the following examples:
 
 ```example_events```
 
-Or I might want to replace
+
+The input event describes a change in the state of an object or entity in the environment. The field 'object_type' specifies the type of object. The function you will write will only be used to process events for the object '```object_type```'. Other functions will be used to process events for other object types. Each function updates the belief set indipedently from the others.
+
+The input event has the field 'event_type' that specifies the type of event. The field 'event_type' can be one of the following:
+- 'object added' meaning that the object didn't exist before and now it does;
+- 'object changed' meaning that the object already existed before and now at least one of its properties or attributes has changed;
+- 'object removed' meaning that the object existed before and now it doesn't.
+
+
+The belief set is a python dictionary. Update it with the information from the event. The belief set is structured like this:
 
 ```belief_set```
 
-with the current belief state.
 
-This should be an example of the question, I would also need the context prompt to use coupled with this question in the same request.
+Provide the response in JSON format with the field 'function' containing the function.

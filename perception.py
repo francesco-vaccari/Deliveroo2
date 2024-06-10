@@ -68,34 +68,39 @@ class Perception:
         exit()
 
     def ask_function(self, object_type, example_events):
-        res = False
-        retries = 0
-        while not res:
-            context_path = "prompting/perception_context.txt"
+        tested = False
+        while not tested:
+            retries = 0
+
+            # print(f"[ASK] {object_type}")
+            context_path = "prompting/context.txt"
             question_path = "prompting/perception_question_1.txt"
-            elements = [example_events[object_type], self.belief_set]
-            elements_names = ["example_events", "belief_set"]
+            elements = [example_events[object_type], self.belief_set, object_type]
+            elements_names = ["example_events", "belief_set", "object_type"]
             elements_to_extract = ["function"]
             
-            extracted_elements = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
+            parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
+            # print(f"[ASK]\tparsed: {parsed}\terr: {err}")
+            if parsed:
+                function_string = extracted_elements[0]
+                tested, err = test_function(function_string, example_events[object_type], self.belief_set)
+                # print(f"[ASK]\ttested: {tested}\terr: {err}")
 
-            function_string = extracted_elements[0]
-
-            res, err = test_function(function_string, example_events, self.belief_set)
-            
-            if not res:
-                while retries < self.max_retries and not res:
-                    context_path = "prompting/perception_context.txt"
+                while retries < self.max_retries and not tested:
+                    # print(f"[ASK]\t\tretrying {object_type}")
+                    context_path = "prompting/context.txt"
                     question_path = "prompting/perception_question_2.txt"
-                    elements = [example_events[object_type], function_string, err, self.belief_set]
-                    elements_names = ["example_events", "function", "error", "belief_set"]
+                    elements = [example_events[object_type], function_string, err, self.belief_set, object_type]
+                    elements_names = ["example_events", "function", "error", "belief_set", "object_type"]
                     elements_to_extract = ["function"]
 
-                    extracted_elements = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-
-                    function_string = extracted_elements[0]
-
-                    res, err = test_function(function_string, example_events, self.belief_set)
+                    parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
+                    # print(f"[ASK]\t\tparsed: {parsed}\terr: {err}")
+                    if parsed:
+                        function_string = extracted_elements[0]
+                        tested, err = test_function(function_string, example_events[object_type], self.belief_set)
+                        # print(f"[ASK]\t\ttested: {tested}\terr: {err}")
+                    
                     retries += 1
         
         return function_string
@@ -143,7 +148,6 @@ class Perception:
     def threshold(self, events, last_trigger, scaling):
         time_elapsed = time.time() - last_trigger
         return ((len(events) / 5) * ((time_elapsed / 3) ** 2)) > (1 * scaling)
-
     
     def close(self):
         self.stop_event.set()
