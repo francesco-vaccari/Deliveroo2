@@ -1,0 +1,16 @@
+You have to evaluate whether the agent has achieved the following long term goal:
+```desire```
+
+To perform this evaluation, consider the belief set of the agent prior to setting the goal, and the current belief set of the agent.
+
+This is the belief set of the agent prior to setting the goal:
+
+```belief_set_prior```
+
+
+This is the belief set of the agent after setting the goal:
+
+```belief_set_current```
+
+
+Provide the response in JSON format with the field 'evaluation' containing only one of the following value: 'True' or 'False'.

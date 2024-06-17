@@ -1,0 +1,27 @@
+The following function:
+
+```function```
+
+takes as input the current belief set, that is structured like the following example:
+
+```belief_set```
+
+The function should achieve the following short term goal description:
+```intention```
+
+However, when executed, the function gives the following runtime error:
+```error```.
+
+
+You have to modify and fix the function in order to achieve the short term goal description. The function can contain calls to already implemented functions from the following library:
+
+```library```
+
+To include one of the functions from the library in your function you need to call them with the belief set as argument. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions must be called with the belief set as the only argument. The functions from the library do not return any value.
+
+Do not modify the belief set in the function that you provide.
+
+Implement a function that is simple and general, and that can be used in a variety of situations.
+
+
+Provide the response in JSON format with the field 'function' containing the function.

@@ -2,6 +2,30 @@ Sistemare la gestione delle azioni e fare in modo che processi tutte le azioni c
 
 Aggiungere sistema di logging per eventi ricevuti, azioni eseguite e funzioni generate e testate e nel caso in cui avvengano errori in ogni step, stato dell'ambiente con ogni componente e belief set degli agenti, e prompt fatti con che dati. Magari sarebbe anche carino creare una interfaccia grafica per mostrare tutti i dati.
 
-Gestire errori nel fare la richiesta all'API, in quel caso automaticamente riprovare a fare la richiesta, implementare in ask() in prompting.py.
+Trovare un modo di terminare i thread quando viene ricevuto un SIGINT
 
-Aggiungere prompt nel caso avvengano problemi di parsing?
+Controllare se nell'estrarre gli elementi dalla risposta importa l'ordine degli elementi da estrarre che ho dato in input.
+
+Aggiornare descrizione delle azioni base. Aggiungendo le coordinate e sistemare un po' tutte le descrizioni. Pensarci bene.
+
+Per il momento assumo che le azioni precedentemente implementate funzionino senza problemi in ogni caso, dovrò implementare magari un testing di tutte le funzioni in libreria prima di darle come input per generare una nuova funzione. Inoltre devo fare in modo che se una funzione si rompe, allora tutte quelle che la includono non possono essere più utilizzate.
+
+Fare attenzione al belief set che viene usato per testare e poi generare il piano, se è diverso o lo stesso di quello usato come esempio.
+
+Togliere la test_function nell'__init__ del control
+
+Aggiungere belief set iniziale e finale per evaluation dell'intention control question 4?
+
+Rinominare le funzioni che salvo in libreria a qualcosa che sicuramente non ho già nella azioni base e che non sia lo stesso nome di azioni precedenti. Magari poi nel mostrarlo modificare la funzione get_dump in tipo get_string_for_prompt che sia decente e con i nomi delle funzioni che non siano portanti di significato, quindi ad esempio function_1, function_2, ecc.
+
+Sistemare il modo in cui inserisco gli elementi nei prompt
+
+Aggiungere un massimo numero di intentino che posso fallire di fila prima di poter creare un nuovo desire?
+
+Invece che fare self.close quando un res ha risultato negativo, resettare variabili del desire e ricominciare con la generazione di un nuovo desire.
+
+Pensare e aggiungere un sistema che permette all'agente di, invece che generare un nuovo desire/intention, eseguire funzioni/desire/goal/intention già ottenuti/implementati/raggiunti in precedenza tramite delle regole (funzioni) come spiegato nell'architettura BDI. Un input di questa funzione potrebbe essere il belief set corrente. Questo sistema può essere o meno incluso nella pipeline finale per avere differenti tipi di agenti.
+
+Creare un sistema per assegnare ad ogni funzione nella libreria un id, tutto gestito da una classe esterna, per tracciare quali altre funzioni chiama quella nuova generata in modo da poter costruire un grafo delle dipendenze. In questo modo se una funzione si rompe posso rimuovere tutte quelle che dipendono da quella funzione. Una funzione va aggiunta al grafo quando viene fatto l'update della libreria.
+
+Pseudo codice dell'architettura (tipo BDI per confrontare)

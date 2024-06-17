@@ -1,0 +1,12 @@
+The agent has just finished execution of a plan. The plan had the objective of achieving the following short term goal:
+```intention```
+
+
+During execution, the agente performed the following actions as part of the plan. After performing an action, the agent receives some events that inform the agent about how the world has changed. Not all events are a direct result of the action. Also, an action may not be executed, resulting in a success or a failure. The following list contains all the actions performed as part of the plan, in the order they were performed. Each action has associated a result and the events that were received after the action was performed.
+
+```actions```
+
+
+Provide a boolean evaluation on whether the agent has achieved the short term goal or not.
+
+Provide the response in JSON format with the field 'evaluation' containing only one of the following value: 'True' or 'False'.

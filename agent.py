@@ -17,7 +17,7 @@ PORT = args.port
 server = Communication(HOST, PORT, SERVER_PORT)
 server.send("connect", (HOST, SERVER_PORT))
 perception = Perception(server)
-control = Control(server, perception.belief_set)
+control = Control(server, perception)
 
 
 # set the SIGINT handler

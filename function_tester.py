@@ -1,28 +1,45 @@
 import ast
 import astor
 
-def test_function(function_string, events_list, belief_set):
+def test_perception_function(function_string, events_list, belief_set):
     is_valid, function_name = is_valid_function(function_string)
-
     if not is_valid:
         return False, ValueError("Function is not valid.")
     
     try:
         local_scope = {}
         exec(function_string, {}, local_scope)
-        
-        if function_name not in local_scope:
-            raise ValueError(f"Function '{function_name}' is not defined.")
-        
         func = local_scope[function_name]
-        
         if events_list is not None:
             for event in events_list:
                 func(event, belief_set)
-        
     except Exception as e:
         return False, e
     
+    return True, None
+
+
+def test_control_function(function_string, belief_set, test_file_content, functions_names_list):
+    with open("actions/test_functions.py", "w") as file:
+        file.write(test_file_content)
+    
+    import actions.test_functions as test_functions
+    global_scope = {}
+    for name in functions_names_list:
+        global_scope[name] = getattr(test_functions, name)
+    
+    is_valid, function_name = is_valid_function(function_string)
+    if not is_valid:
+        return False, ValueError("Function is not valid.")
+    try:
+        local_scope = {}
+        exec(function_string, global_scope, local_scope)
+        func = local_scope[function_name]
+        func(belief_set)
+    except Exception as e:
+        print(e)
+        return False, e
+
     return True, None
 
 

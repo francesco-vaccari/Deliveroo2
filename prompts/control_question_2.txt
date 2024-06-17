@@ -17,7 +17,7 @@ To include one of the functions from the library in your function you need to ca
 
 Do not modify the belief set in the function that you provide.
 
-If you think a function would be useful to achieve the short term goal description, but you do not have it in the library, you can provide the short term goal description of the useful function and generate that function instead and give them in the response.
+When generating the short term goal description and the function, keep in mind that the function should not be of much higher complexity than the functions from the library. Keep in mind that this is just a single step of an iterative process to populate the library. Implement a function that is simple and general, and that can be used in a variety of situations.
 
 
 Provide the response in JSON format with the field 'function' containing the function and the field 'goal' containing the short term goal description.
