@@ -22,10 +22,10 @@ def test_perception_function(function_string, events_list, belief_set):
 
 
 def test_control_function(function_string, belief_set, test_file_content, functions_names_list):
-    with open("actions/test_functions.py", "w") as file:
+    with open("agent_dir/actions/test_functions.py", "w") as file:
         file.write(test_file_content)
     
-    import actions.test_functions as test_functions
+    import agent_dir.actions.test_functions as test_functions
     global_scope = {}
     for name in functions_names_list:
         importlib.reload(test_functions)
@@ -111,10 +111,10 @@ def get_function_name(func_str):
 
 
 def check_library_functions(base_test_functions, not_base_test_functions, functions_names, function_to_test, belief_set):
-    with open("actions/test_functions.py", "w") as file:
+    with open("agent_dir/actions/test_functions.py", "w") as file:
         file.write(base_test_functions + not_base_test_functions)
     
-    import actions.test_functions as test_functions
+    import agent_dir.actions.test_functions as test_functions
     global_scope = {}
     for name in functions_names:
         importlib.reload(test_functions)

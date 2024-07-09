@@ -9,8 +9,8 @@ class Graphics:
         self.SPACE_BETWEEN_CELLS = 5
         self.TEXT_FONT_SIZE = 15
         self.INFO_TEXT_FONT_SIZE = 35
-        self.font = pygame.font.Font('font/Pixeltype.ttf', int(self.TEXT_FONT_SIZE))
-        self.font_info = pygame.font.Font('font/Pixeltype.ttf', int(self.INFO_TEXT_FONT_SIZE))
+        self.font = pygame.font.Font('server_dir/font/Pixeltype.ttf', int(self.TEXT_FONT_SIZE))
+        self.font_info = pygame.font.Font('server_dir/font/Pixeltype.ttf', int(self.INFO_TEXT_FONT_SIZE))
 
         self.x_offset = 0
         self.y_offset = 0
@@ -187,9 +187,6 @@ class Graphics:
                 #         text_rect = text_surf.get_rect(topleft = (self.get_pos(drawing_pos, self.INFO_TEXT_FONT_SIZE + vert_offset)))
                 #         self.screen.blit(text_surf, text_rect)
                 #         break
-
-            
-
     
     def scale_sizes(self, event_y):
         if event_y > 0:
@@ -200,8 +197,8 @@ class Graphics:
         self.SPACE_BETWEEN_CELLS *= scaling_factor
         self.TEXT_FONT_SIZE *= scaling_factor
         self.INFO_TEXT_FONT_SIZE *= scaling_factor
-        self.font = pygame.font.Font('font/Pixeltype.ttf', int(self.TEXT_FONT_SIZE))
-        self.font_info = pygame.font.Font('font/Pixeltype.ttf', int(self.INFO_TEXT_FONT_SIZE))
+        self.font = pygame.font.Font('server_dir/font/Pixeltype.ttf', int(self.TEXT_FONT_SIZE))
+        self.font_info = pygame.font.Font('server_dir/font/Pixeltype.ttf', int(self.INFO_TEXT_FONT_SIZE))
     
     def show_cell_info(self):
         mouse_pos = pygame.mouse.get_pos()

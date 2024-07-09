@@ -5,7 +5,7 @@ import networkx as nx
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from function_tester import rename_function
+from ..function_tester import rename_function
 
 class Action:
     def __init__(self, function_name, description, action_name):

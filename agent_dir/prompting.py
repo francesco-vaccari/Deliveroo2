@@ -1,6 +1,6 @@
 import os
 import json
-from AzureOpenAIClient import AzureOpenAIClient
+from .AzureOpenAIClient import AzureOpenAIClient
 
 class Prompting:
     def __init__(self):

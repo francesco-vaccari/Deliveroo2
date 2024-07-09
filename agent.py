@@ -1,58 +1,59 @@
 from communication import Communication
 import signal
+from agent_dir.perception import Perception
+from agent_dir.control import Control
 import argparse
-from perception import Perception
-from control import Control
 
-parser = argparse.ArgumentParser(description="LLMbAA agent")
-parser.add_argument('--server-port', type=int, required=False, help="Port for the server", default=8080)
-parser.add_argument('--port', type=int, required=False, help="Port for the agent", default=8081)
-args = parser.parse_args()
+class Agent:
+    def __init__(self, address, server_port, port):
+        self.HOST = address
+        self.SERVER_PORT = server_port
+        self.PORT = port
 
-HOST = '127.0.0.1'
-SERVER_PORT = args.server_port
-PORT = args.port
+        # start up the communication with the server and the perception and control threads
+        self.server = Communication(self.HOST, self.PORT, self.SERVER_PORT)
+        self.server.send("connect", (self.HOST, self.SERVER_PORT))
+        self.perception = Perception(self.server)
+        self.control = Control(self.server, self.perception)
 
-# start up the communication with the server and the perception and control threads
-server = Communication(HOST, PORT, SERVER_PORT)
-server.send("connect", (HOST, SERVER_PORT))
-perception = Perception(server)
-control = Control(server, perception)
+        signal.signal(signal.SIGINT, self.signal_handler)
 
+        self.handle_messages()
 
-# set the SIGINT handler
-def signal_handler(sig, frame):
-    server.send("disconnect", (HOST, SERVER_PORT))
-    server.send("exit", (HOST, PORT))
-    perception.close()
-    control.close()
-    server.server_thread.join()
-    print("Exited correctly.")
-    exit()
-signal.signal(signal.SIGINT, signal_handler)
-
-
-# handle messages and events received from the server
-def handle_messages():
-    while server.is_open:
-
-        if len(server.buffer) > 0:
-            msg, addr = server.buffer.pop(0)
-            temp = msg.split()
-            
-            if temp[0] == 'error':
-                print("An error occured with the server.")
-            elif temp[0] == 'connected':
-                print("Connected as agent: ", temp[1])
-            else:
-                perception.events.append(msg)
+        self.server.server_thread.join()
+        print("Exited correctly.")
     
-    perception.close()
-    control.close()
-handle_messages()
+    def signal_handler(self, sig, frame):
+        self.server.send("disconnect", (self.HOST, self.SERVER_PORT))
+        self.server.send("exit", (self.HOST, self.PORT))
+        self.perception.close()
+        self.control.close()
+        self.server.server_thread.join()
+        print("Exited correctly.")
+        exit()
+
+    def handle_messages(self):
+        while self.server.is_open:
+
+            if len(self.server.buffer) > 0:
+                msg, addr = self.server.buffer.pop(0)
+                temp = msg.split()
+                
+                if temp[0] == 'error':
+                    print("An error occured with the server.")
+                elif temp[0] == 'connected':
+                    print("Connected as agent: ", temp[1])
+                else:
+                    self.perception.events.append(msg)
+        
+        self.perception.close()
+        self.control.close()
 
 
-# wait for the server listening thread to exit
-server.server_thread.join()
-print("Exited correctly.")
-exit()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Deliveroo2 Agent")
+    parser.add_argument('--server_port', type=int, required=False, help="Port of the server", default=8080)
+    parser.add_argument('--port', type=int, required=True, help="Port for the agent")
+    args = parser.parse_args()
+
+    agent = Agent('127.0.0.1', args.server_port, args.port)

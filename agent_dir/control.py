@@ -1,14 +1,14 @@
 import time
 import threading
-import prompting as prompting
-from function_tester import test_control_function, get_function_name, check_library_functions, test_desire_trigger_function
-from actions.library import Library
+from agent_dir.prompting import Prompting
+from .function_tester import test_control_function, get_function_name, check_library_functions, test_desire_trigger_function
+from .actions.library import Library
 import importlib
 
 class Control:
     def __init__(self, server, perception):
         self.server = server
-        self.prompting = prompting.Prompting()
+        self.prompting = Prompting()
 
         self.belief_set = perception.belief_set
         self.get_events = perception.control_get_events
@@ -16,7 +16,7 @@ class Control:
         self.intial_waiting_time = 20
         self.max_retries = 3
 
-        self.library = Library("actions/actions.json")
+        self.library = Library("agent_dir/actions/actions.json")
 
         self.desires = [] # contains the description and the list of intentions with their descriptions and functions
         self.desires_trigger_functions = [] # contains the functions that trigger the execution of its desire
@@ -119,8 +119,8 @@ class Control:
         parsed = False
         parsing_retries = 0
         while not parsed and parsing_retries < self.max_retries:
-            context_path = "prompts/context.txt"
-            question_path = "prompts/control_question_1.txt"
+            context_path = "agent_dir/prompts/context.txt"
+            question_path = "agent_dir/prompts/control_question_1.txt"
             elements = [self.belief_set]
             elements_names = ["belief_set"]
             elements_to_extract = ["description"]
@@ -140,8 +140,8 @@ class Control:
         while not tested and parsing_retries < self.max_retries:
             retries = 0
 
-            context_path = "prompts/context.txt"
-            question_path = "prompts/control_question_2.txt"
+            context_path = "agent_dir/prompts/context.txt"
+            question_path = "agent_dir/prompts/control_question_2.txt"
             elements = [desire, self.library.get_unified_library(), self.belief_set]
             elements_names = ["desire", "library", "belief_set"]
             elements_to_extract = ["function", "description"]
@@ -153,8 +153,8 @@ class Control:
                 tested, err = test_control_function(function_string, self.belief_set, self.library.get_test_file_content(), self.library.get_list_function_names())
                 
                 while retries < self.max_retries and not tested:
-                    context_path = "prompts/context.txt"
-                    question_path = "prompts/control_question_3.txt"
+                    context_path = "agent_dir/prompts/context.txt"
+                    question_path = "agent_dir/prompts/control_question_3.txt"
                     elements = [function_string, self.belief_set, intention, err, self.library.get_dump()]
                     elements_names = ["function", "belief_set", "intention", "error", "library"]
                     elements_to_extract = ["function"]
@@ -173,8 +173,8 @@ class Control:
         parsed = False
         parsing_retries = 0
         while not parsed and parsing_retries < self.max_retries:
-            context_path = "prompts/context.txt"
-            question_path = "prompts/control_question_4.txt"
+            context_path = "agent_dir/prompts/context.txt"
+            question_path = "agent_dir/prompts/control_question_4.txt"
             actions = {}
             for action, event in zip(plan, events):
                 actions[action] = event
@@ -193,8 +193,8 @@ class Control:
         parsed = False
         parsing_retries = 0
         while not parsed and parsing_retries < self.max_retries:
-            context_path = "prompts/context.txt"
-            question_path = "prompts/control_question_5.txt"
+            context_path = "agent_dir/prompts/context.txt"
+            question_path = "agent_dir/prompts/control_question_5.txt"
             elements = [desire, belief_set_prior, self.belief_set]
             elements_names = ["desire", "belief_set_prior", "belief_set_current"]
             elements_to_extract = ["evaluation"]
@@ -211,8 +211,8 @@ class Control:
         retries = 0
         function_string = ""
         while not tested and retries < self.max_retries: # function has to be both parsable and executable
-            context_path = "prompts/context.txt"
-            question_path = "prompts/control_question_6.txt"
+            context_path = "agent_dir/prompts/context.txt"
+            question_path = "agent_dir/prompts/control_question_6.txt"
             elements = [desire, belief_set_prior, self.belief_set]
             elements_names = ["desire", "belief_set_prior", "belief_set"]
             elements_to_extract = ["function"]
@@ -249,10 +249,10 @@ class Control:
         if is_broken:
             return None
         
-        with open("actions/functions.py", "w") as file:
+        with open("agent_dir/actions/functions.py", "w") as file:
             file.write(self.library.get_file_content())
         try:
-            import actions.functions as functions
+            import agent_dir.actions.functions as functions
             global_scope = {}
             for name in self.library.get_list_function_names():
                 importlib.reload(functions)

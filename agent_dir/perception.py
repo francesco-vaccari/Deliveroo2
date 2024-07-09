@@ -1,14 +1,14 @@
 import threading
 import time
-from function_tester import test_perception_function, rename_function, get_function_name
+from .function_tester import test_perception_function, rename_function, get_function_name
 import json
-import prompting as prompting
+from agent_dir.prompting import Prompting
 import math
 
 class Perception:
     def __init__(self, server):
         self.server = server
-        self.prompting = prompting.Prompting()
+        self.prompting = Prompting()
         
         self.events = []
         self.control_events = []
@@ -93,8 +93,8 @@ class Perception:
         while not tested and parsing_retries < self.max_retries:
             retries = 0
 
-            context_path = "prompts/context.txt"
-            question_path = "prompts/perception_question_1.txt"
+            context_path = "agent_dir/prompts/context.txt"
+            question_path = "agent_dir/prompts/perception_question_1.txt"
             elements = [example_events, self.belief_set, object_type]
             elements_names = ["example_events", "belief_set", "object_type"]
             elements_to_extract = ["function"]
@@ -105,8 +105,8 @@ class Perception:
                 tested, err = test_perception_function(function_string, example_events, self.belief_set)
 
                 while not tested and retries < self.max_retries:
-                    context_path = "prompts/context.txt"
-                    question_path = "prompts/perception_question_2.txt"
+                    context_path = "agent_dir/prompts/context.txt"
+                    question_path = "agent_dir/prompts/perception_question_2.txt"
                     elements = [example_events, function_string, err, self.belief_set, object_type]
                     elements_names = ["example_events", "function", "error", "belief_set", "object_type"]
                     elements_to_extract = ["function"]
