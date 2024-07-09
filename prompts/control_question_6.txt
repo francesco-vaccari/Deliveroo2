@@ -1,23 +1,17 @@
-The following function:
+Given the following goal description:
+```desire```
 
-```function```
-
-takes as input the current belief set, that is structured like the following example:
+Provide a function that evaluates whether the goal should be pursued or not. The function takes as input the current belief set, like the one below, and returns either 'True' or 'False'.
 
 ```belief_set```
 
-The function should achieve the following short term goal description:
-```intention```
 
-However, when executed, the function gives the following runtime error:
-```error```.
+For context, the goal was originally pursued with the following instance of the belief set:
+
+```belief_set_prior```
 
 
-You have to modify and fix the function in order to achieve the short term goal description.
-
-Do not modify the belief set in the function that you provide.
-
-Implement a function that is simple and general, and that can be used in a variety of situations.
+The function should work with both the current belief set and the previous belief set.
 
 
 Provide the response in JSON format with the field 'function' containing the function.

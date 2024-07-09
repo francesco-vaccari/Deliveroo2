@@ -5,6 +5,7 @@ import networkx as nx
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from function_tester import rename_function
 
 class Action:
     def __init__(self, function_name, description, action_name):
@@ -15,8 +16,8 @@ class Action:
 class Function:
     def __init__(self, function_name, function_string, description):
         self.function_name = function_name
-        self.function_string = function_string
         self.description = description
+        self.function_string = function_string
 
 class FunctionsGraph:
     def __init__(self):
@@ -30,17 +31,9 @@ class FunctionsGraph:
         self.add_node(function_name)
         for function_called in functions_called:
             self.add_edge(function_name, function_called)
-        print(self.nodes)
-        print(self.edges)
-        print("\n\n")
-        self.draw_directed_graph()
     
     def add_base_action(self, function_name):
         self.add_node(function_name)
-        print(self.nodes)
-        print(self.edges)
-        print("\n\n")
-        self.draw_directed_graph()
 
     def extract_function_calls(self, function_string, allowed_functions):
         function_call_pattern = re.compile(r'\b(\w+)\s*\(')
@@ -85,6 +78,8 @@ class Library:
         self.functions_graph = FunctionsGraph()
         self.library_base_actions = self.load_library_base(base_actions_path)
         self.library = {}
+        self.broken_function_names = []
+        self.function_number = 0
 
     def load_library_base(self, path):
         library = {}
@@ -98,16 +93,34 @@ class Library:
             self.functions_graph.add_base_action(function_name)
         return library
 
-    def update_library(self, function_name, function_string, intention):
+    def update_library(self, function_string, intention):
+        function_string = rename_function(function_string, f"function_{self.function_number}")
+        function_name = f"function_{self.function_number}"
+        self.function_number += 1
         new_function = Function(function_name, function_string, intention)
         self.library[function_name] = new_function
         self.functions_graph.add_function(function_name, function_string, self.get_list_function_names())
         return new_function
+
+    def is_function_dependent(self, function_string, library_function_names):
+        functions_called = self.functions_graph.extract_function_calls(function_string, library_function_names)
+        if len(functions_called) > 0:
+            return True
+        for function_called in functions_called:
+            if self.is_function_dependent(self.library[function_called].function_string, library_function_names):
+                return True
+        return False
     
     def get_unified_library(self):
         unified_library = dict(self.library_base_actions)
         unified_library.update(self.library)
         return unified_library
+
+    def get_library_base(self):
+        return self.library_base_actions
+    
+    def get_library(self):
+        return self.library
     
     def get_test_file_content(self):
         content = ""
@@ -115,34 +128,71 @@ class Library:
             content += f"def {action.function_name}(belief_set):\n"
             content += f"    # test function definition\n"
             content += f"    pass\n\n"
-        
         for _, function in self.library.items():
             content += function.function_string
             content += "\n\n"
-        
+        return content
+
+    def get_base_test_file_content(self):
+        content = ""
+        for _, action in self.library_base_actions.items():
+            content += f"def {action.function_name}(belief_set):\n"
+            content += f"    # test function definition\n"
+            content += f"    pass\n\n"
         return content
     
+    def get_not_base_test_file_content(self, n):
+        content = ""
+        for i, (_, function) in enumerate(self.library.items()):
+            if i < n:
+                content += function.function_string
+                content += "\n\n"
+        return content
+        
     def get_file_content(self):
         content = "plan = []\n\n"
         for _, action in self.library_base_actions.items():
             content += f"def {action.function_name}(belief_set):\n"
             content += f"    global plan\n"
             content += f"    plan.append('{action.action_name}')\n\n"
-        
         for _, function in self.library.items():
             content += function.function_string
             content += "\n\n"
-        
         return content
+    
+    def get_number_of_functions(self):
+        return len(self.library)
+    
+    def get_definition(self, n):
+        return list(self.library.values())[n].function_string
+    
+    def get_function_name(self, n):
+        return list(self.library.keys())[n]
+
+    def remove_function(self, function_name):
+        del self.library[function_name]
+        self.broken_function_names.append(function_name)
+        id = self.functions_graph.nodes[function_name]
+        self.functions_graph.edges[id] = set([-1])
 
     def get_list_function_names(self):
         names = []
         for _, action in self.library_base_actions.items():
             names.append(action.function_name)
-        
         for _, function in self.library.items():
             names.append(function.function_name)
-
+        return names
+    
+    def get_base_list_function_names(self):
+        names = []
+        for _, action in self.library_base_actions.items():
+            names.append(action.function_name)
+        return names
+    
+    def get_n_not_base_list_function_names(self, n):
+        names = []
+        for _, function in list(self.library.items())[:n]:
+            names.append(function.function_name)
         return names
 
     def get_dump(self): # to change in get_content_for_prompt

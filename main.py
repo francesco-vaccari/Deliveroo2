@@ -15,7 +15,7 @@ parser.add_argument('--port', type=int, required=False, help="Port for the serve
 parser.add_argument('--map', type=str, required=False, help="Map configuration file", default='small5.txt')
 parser.add_argument('--parcels', type=str, required=False, help="Parcels configuration file", default='test_parcels.txt')
 parser.add_argument('--framerate', type=int, required=False, help="Framerate of the game", default=60)
-parser.add_argument('--width', type=int, required=False, help="Width of the game window", default=1000)
+parser.add_argument('--width', type=int, required=False, help="Width of the game window", default=600)
 parser.add_argument('--height', type=int, required=False, help="Height of the game window", default=600)
 args = parser.parse_args()
 
@@ -140,7 +140,7 @@ while game.server.is_open:
     handle_actions()
 
     graphics.draw_environment()
-    graphics.display_info()
+    # graphics.display_info()
 
     game.decay_parcels()
     game.spawn_parcels()

@@ -1,0 +1,105 @@
+PERCEPTION
+
+function perception:
+    start_storing_events()
+    start_processing_events()
+    main_loop()
+
+function start_storing_events:
+    while not stop:
+        for event in events_queue:
+            divide events by object type and queue them separately
+
+function start_processing_events:
+    while not stop:
+        for object_type in objects_seen:
+            if there is a function available for that object_type:
+                for event in object_type's queue of events:
+                    update belief set with the function generated given the event
+                    if there is a runtime error save the event to trigger new generation
+
+function main_loop:
+    while not stop:
+        for object_type in objects_seen:
+            if above_threshold(object_type) or special_trigger(object_type):
+                example_events = get_example_events(object_type)
+                # the function has both to be a valid python function (parsing) and has to run without errors (testing)
+                while function not parsed correctly for max 3 tries:
+                    function = make_request(example_events, belief_set, object_type)
+                while function not working correctly for max 3 tries:
+                    function, error = test_function(function, example_events, belief_set)
+                    function = make_request(example_events, belief_set, object_type, error) # include error if failed to execute
+                if function generated successfully:
+                    save the function
+                    save generation time
+                    increase scaling for object_type
+
+function above_threshold(object_type):
+    n_events = number of events queued for object_type
+    last_generation = last time a function for object_type was generated
+    scaling = scaling value for object_type
+    return boolean function based on n_events, last_generation and scaling
+
+function special_trigger(object_type):
+    if last function for object_type had a runtime error:
+        add the erroring event to the example_events
+        return True
+
+function get_example_events(object_type):
+    return a list of last n events (+ erroring event if present)
+
+
+
+
+CONTROL
+
+function control:
+    load base actions in the library
+
+    wait for the belief set to have at least one entry
+    wait another 20 seconds
+
+    # each make_request makes up to 3 attempts at returning a valid output
+    # if the make_request is not able to return a valid output with the requested objects, generate_desire is set to True
+
+    generate_desire = True
+
+    while not stop:
+        if generate_desire:
+            no_desire_triggered = True
+            
+            for trigger_function in desire_trigger_functions:
+                if trigger_function(belief_set) is True:
+                    generate plan using the intentions functions concatenated
+                    if problems during generation:
+                        mark the desire as not triggerable anymore
+                    else:
+                        execute the plan
+                    no_desire_triggered = False
+                    break
+            
+            if no_desire_triggered:
+                belief_set_prior = copy of the belief set
+                desire = make_request(belief_set)
+                generate_desire = False
+                intention_retries = 0
+                intentions = []
+        else:
+            intention, function = make_request(desire, library, belief_set)
+            plan = obtain the plan by executing the function
+            events = execute the actions in the plan and track which events are received after which action
+            evaluation = make_request(intention, plan, events) # ask the LLM if the intention is satisfied
+            if negative evaluation:
+                intention_retries += 1
+                if intention_retries >= 3:
+                    generate_desire = True
+            if positive evaluation:
+                update the library with new intention and its function
+                intentions.append(intention)
+                evaluation = make_request(desire, belief_set_prior, belief_set) # ask the LLM if the desire is satisfied
+                if positive evaluation:
+                    save the desire with its intention
+                    trigger function = make_request(desire, belief_set_prior, belief_set) # ask the LLM for the desire trigger function
+                if negative evaluation:
+                    do nothing
+                    # this means that the desire is not yet satisfied and new intentions will be generated

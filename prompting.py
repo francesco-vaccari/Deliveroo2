@@ -13,13 +13,28 @@ class Prompting:
             return """{"description": "this is the desire"}"""
         if self.counter == 1:
             self.counter += 1
-            return """{"description": "this is the intention", "function": "def process(belief_set):\n    move_up(belief_set)\n    pick_up(belief_set)\n    test_function(belief_set)\n    for i in range(1):\n        pick_up(belief_set)\n        move_down(belief_set)\n        pick_up(belief_set)\n        move_right(belief_set)\n        put_down(belief_set)"}"""
+            return """{"description": "intention number 1", "function": "def process(belief_set):\n    move_up(belief_set)"}"""
         if self.counter == 2:
             self.counter += 1
             return """{"evaluation": "True"}"""
         if self.counter == 3:
             self.counter += 1
+            return """{"evaluation": "False"}"""
+        if self.counter == 4:
+            self.counter += 1
+            return """{"description": "Intention number 2 for this desire", "function": "def func(belief_set):\n    move_down(belief_set)"}"""
+        if self.counter == 5:
+            self.counter += 1
             return """{"evaluation": "True"}"""
+        if self.counter == 6:
+            self.counter += 1
+            return """{"evaluation": "True"}"""
+        if self.counter == 7:
+            self.counter += 1
+            return """{"function": "def trigger(belief_set):\n    import random\n    return random.choice([True, False])"}"""
+
+        
+
         # response = None
         # max_retries = 3
         # retry = 0

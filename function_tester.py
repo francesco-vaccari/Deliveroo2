@@ -1,5 +1,7 @@
 import ast
 import astor
+import importlib
+
 
 def test_perception_function(function_string, events_list, belief_set):
     is_valid, function_name = is_valid_function(function_string)
@@ -26,6 +28,7 @@ def test_control_function(function_string, belief_set, test_file_content, functi
     import actions.test_functions as test_functions
     global_scope = {}
     for name in functions_names_list:
+        importlib.reload(test_functions)
         global_scope[name] = getattr(test_functions, name)
     
     is_valid, function_name = is_valid_function(function_string)
@@ -40,6 +43,27 @@ def test_control_function(function_string, belief_set, test_file_content, functi
         print(e)
         return False, e
 
+    return True, None
+
+
+def test_desire_trigger_function(function_string, belief_set_current, belief_set_prior):
+    is_valid, function_name = is_valid_function(function_string)
+    if not is_valid:
+        return False, ValueError("Function is not valid.")
+    
+    try:
+        local_scope = {}
+        exec(function_string, {}, local_scope)
+        func = local_scope[function_name]
+        result = func(belief_set_current)
+        if not isinstance(result, bool):
+            return False, ValueError("Function must return a boolean.")
+        result = func(belief_set_prior)
+        if not isinstance(result, bool):
+            return False, ValueError("Function must return a boolean.")
+    except Exception as e:
+        return False, e
+    
     return True, None
 
 
@@ -84,3 +108,24 @@ def get_function_name(func_str):
         return function_def.name
     else:
         raise ValueError("Input string must contain exactly one function definition")
+
+
+def check_library_functions(base_test_functions, not_base_test_functions, functions_names, function_to_test, belief_set):
+    with open("actions/test_functions.py", "w") as file:
+        file.write(base_test_functions + not_base_test_functions)
+    
+    import actions.test_functions as test_functions
+    global_scope = {}
+    for name in functions_names:
+        importlib.reload(test_functions)
+        global_scope[name] = getattr(test_functions, name)
+    
+    try:
+        local_scope = {}
+        exec(function_to_test, global_scope, local_scope)
+        function_name = get_function_name(function_to_test)
+        func = local_scope[function_name]
+        func(belief_set)
+    except Exception as e:
+        return False
+    return True

@@ -24,7 +24,11 @@ def put_down(belief_set):
     global plan
     plan.append('putdown')
 
-def test_function(belief_set):
-    pick_up(belief_set)
-    move_left(belief_set)
+def function_0(belief_set):
+    move_up(belief_set)
+
+
+def function_1(belief_set):
+    move_down(belief_set)
+
 

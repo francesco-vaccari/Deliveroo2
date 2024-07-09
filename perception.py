@@ -3,6 +3,7 @@ import time
 from function_tester import test_perception_function, rename_function, get_function_name
 import json
 import prompting as prompting
+import math
 
 class Perception:
     def __init__(self, server):
@@ -42,8 +43,7 @@ class Perception:
             for object_type, _ in events_by_object_copy.items():
                 res = self.create_new_perception_function(object_type)
                 if res == "error":
-                    print(f"Could not create a new perception function for {object_type}. Exiting.")
-                    self.close()
+                    print(f"Could not create a new perception function for {object_type}.")
         
         self.close()
         print("Perception exited correctly.")
@@ -68,12 +68,13 @@ class Perception:
     
     def create_new_perception_function(self, object_type):
         if self.threshold(object_type) or self.special_triggers[object_type] is not None:
-            self.functions_by_object[object_type] = None
-
             example_events = self.get_example_events(object_type)
             res, function_string = self.ask_new_function(object_type, example_events)
+            
             if not res:
                 return "error"
+            
+            self.functions_by_object[object_type] = None
             name = f"process_{object_type}" + "_" + str(int(time.time()))
             function_string = rename_function(function_string, name)
 
@@ -92,34 +93,28 @@ class Perception:
         while not tested and parsing_retries < self.max_retries:
             retries = 0
 
-            # print(f"[ASK] {object_type}")
             context_path = "prompts/context.txt"
             question_path = "prompts/perception_question_1.txt"
-            elements = [example_events[object_type], self.belief_set, object_type]
+            elements = [example_events, self.belief_set, object_type]
             elements_names = ["example_events", "belief_set", "object_type"]
             elements_to_extract = ["function"]
             
             parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-            # print(f"[ASK]\tparsed: {parsed}\terr: {err}")
             if parsed:
                 function_string = extracted_elements[0]
-                tested, err = test_perception_function(function_string, example_events[object_type], self.belief_set)
-                # print(f"[ASK]\ttested: {tested}\terr: {err}")
+                tested, err = test_perception_function(function_string, example_events, self.belief_set)
 
                 while not tested and retries < self.max_retries:
-                    # print(f"[ASK]\t\tretrying {object_type}")
                     context_path = "prompts/context.txt"
                     question_path = "prompts/perception_question_2.txt"
-                    elements = [example_events[object_type], function_string, err, self.belief_set, object_type]
+                    elements = [example_events, function_string, err, self.belief_set, object_type]
                     elements_names = ["example_events", "function", "error", "belief_set", "object_type"]
                     elements_to_extract = ["function"]
 
                     parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-                    # print(f"[ASK]\t\tparsed: {parsed}\terr: {err}")
                     if parsed:
                         function_string = extracted_elements[0]
-                        tested, err = test_perception_function(function_string, example_events[object_type], self.belief_set)
-                        # print(f"[ASK]\t\ttested: {tested}\terr: {err}")
+                        tested, err = test_perception_function(function_string, example_events, self.belief_set)
                     
                     retries += 1
             parsing_retries += 1
@@ -154,14 +149,14 @@ class Perception:
     
     def get_example_events(self, object_type):
         if self.special_triggers[object_type] is not None:
-            return [self.special_triggers[object_type]] + self.example_events
-        return self.example_events
+            return [self.special_triggers[object_type]] + self.example_events[object_type]
+        return self.example_events[object_type]
 
     def set_example_events(self, event, object_type):
         if object_type not in self.example_events:
             self.example_events[object_type] = []
 
-        if len(self.example_events[object_type]) == self.n_example_events:
+        if len(self.example_events[object_type]) >= self.n_example_events:
             self.example_events[object_type].pop(0)
         self.example_events[object_type].append(event)
 
@@ -171,7 +166,10 @@ class Perception:
         scaling = self.scaling_by_object[object_type]
 
         time_elapsed = time.time() - last_trigger
-        return ((len(events) / 5) * ((time_elapsed / 3) ** 2)) > (1 * scaling)
+
+        events_den = 3 * math.log(scaling)
+        time_elapsed_den = 2 * math.log(scaling)
+        return ((len(events) / events_den) + (time_elapsed / time_elapsed_den)) > (1 * scaling)
     
     def control_get_events(self):
         events = self.control_events

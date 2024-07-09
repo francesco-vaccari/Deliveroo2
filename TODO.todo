@@ -1,31 +1,32 @@
 Sistemare la gestione delle azioni e fare in modo che processi tutte le azioni che arrivano in un singolo frame, al massimo posso aggiungere un timer tra due azioni dello stesso agente.
 
-Aggiungere sistema di logging per eventi ricevuti, azioni eseguite e funzioni generate e testate e nel caso in cui avvengano errori in ogni step, stato dell'ambiente con ogni componente e belief set degli agenti, e prompt fatti con che dati. Magari sarebbe anche carino creare una interfaccia grafica per mostrare tutti i dati.
-
-Trovare un modo di terminare i thread quando viene ricevuto un SIGINT
+Trovare un modo di terminare i thread quando viene ricevuto un SIGINT (non credo sia possibile, per il momento bisogna aspettare che finiscano i prompt e finisca il l'iterazione del while che sta eseguendo in ogni thread)
 
 Controllare se nell'estrarre gli elementi dalla risposta importa l'ordine degli elementi da estrarre che ho dato in input.
 
 Aggiornare descrizione delle azioni base. Aggiungendo le coordinate e sistemare un po' tutte le descrizioni. Pensarci bene.
 
-Per il momento assumo che le azioni precedentemente implementate funzionino senza problemi in ogni caso, dovrò implementare magari un testing di tutte le funzioni in libreria prima di darle come input per generare una nuova funzione. Inoltre devo fare in modo che se una funzione si rompe, allora tutte quelle che la includono non possono essere più utilizzate.
+L'unica soluzione è, prima di generare il piano, testare la nuova funzione con il belief set che verrà effettivamente utilizzato. In questo modo posso tracciare gli errori ed eventualmente richiedere un nuova funzione con la libreria aggiornata.
+Nel testare una nuova funzione generata, devo anche testare che gli errori che accadono non siano all'interno delle vecchie funzioni. Se al momento di generare il piano c'è una funzione che fallisce con il belief set, allora quelle vengono rimosse dalla libreria e gli edge vengono azzerati, e se quelle funzioni erano nella nuova funzione o nelle funzioni figlie allora la generazione del piano viene interrotta e si riparte richiedendo una nuova intention e nuova funzione. DA TESTARE [FATTO (in teoria, testato poco)]
 
-Fare attenzione al belief set che viene usato per testare e poi generare il piano, se è diverso o lo stesso di quello usato come esempio.
+Modificare la funzione get_dump in tipo get_string_for_prompt.
 
-Togliere la test_function nell'__init__ del control
+Aggiungere nei prompt per fixare le funzioni che il belief set può essere diverso da quando è avvenuto l'errore.
+
+Togliere le test_function nell'__init__ del control
 
 Aggiungere belief set iniziale e finale per evaluation dell'intention control question 4?
 
-Rinominare le funzioni che salvo in libreria a qualcosa che sicuramente non ho già nella azioni base e che non sia lo stesso nome di azioni precedenti. Magari poi nel mostrarlo modificare la funzione get_dump in tipo get_string_for_prompt che sia decente e con i nomi delle funzioni che non siano portanti di significato, quindi ad esempio function_1, function_2, ecc.
-
-Sistemare il modo in cui inserisco gli elementi nei prompt
-
-Aggiungere un massimo numero di intentino che posso fallire di fila prima di poter creare un nuovo desire?
-
-Invece che fare self.close quando un res ha risultato negativo, resettare variabili del desire e ricominciare con la generazione di un nuovo desire.
+Sistemare il modo in cui inserisco gli elementi nei prompt che viene usata in control, question 2-3.
 
 Pensare e aggiungere un sistema che permette all'agente di, invece che generare un nuovo desire/intention, eseguire funzioni/desire/goal/intention già ottenuti/implementati/raggiunti in precedenza tramite delle regole (funzioni) come spiegato nell'architettura BDI. Un input di questa funzione potrebbe essere il belief set corrente. Questo sistema può essere o meno incluso nella pipeline finale per avere differenti tipi di agenti.
+Una volta che ho un desire disponibile, ho a disposizione tutte le funzioni delle intention che sono state generate per soddisfare il desire. Quindi dato un desire in teoria ho a disposizinoe tutto quello che mi serve per portarlo a termine. Potrei richiedere una funzione alla LLM nella fase di evaluation finale positiva per quel desire che fa da trigger nel primo step invece di generare un nuovo desire.
+Il contesto viene dato alla funzione di valutazione del desire perché ha a disposizione il belief set prior e anche quello corrente. Quindi, in caso di valutazione positiva del desire, posso chiedere se mi fornisce una funzione che, prendendo in input il belief set, mi ritorna un boolean che indica se eseguire o meno il desire appena raggiunto.
+Testare se quando triggero un desire, se ho intention che sono ora rotte, se effettivamente non le esegue.
+In teoria implementato correttamente, da testare.
 
-Creare un sistema per assegnare ad ogni funzione nella libreria un id, tutto gestito da una classe esterna, per tracciare quali altre funzioni chiama quella nuova generata in modo da poter costruire un grafo delle dipendenze. In questo modo se una funzione si rompe posso rimuovere tutte quelle che dipendono da quella funzione. Una funzione va aggiunta al grafo quando viene fatto l'update della libreria.
+Sistemare file e creare main per lanciare l'esperimento.
 
-Pseudo codice dell'architettura (tipo BDI per confrontare)
+Aggiungere sistema di logging per eventi ricevuti, azioni eseguite e funzioni generate e testate e nel caso in cui avvengano errori in ogni step, stato dell'ambiente con ogni componente e belief set degli agenti, e prompt fatti con che dati. Magari sarebbe anche carino creare una interfaccia grafica per mostrare tutti i dati. In modo da poter vedere cosa sta succedendo nel mentre che l'esperimento va avanti. Anche per controllare se ci sono bug.
+
+Fixare gli example_events in perception, perché ora come ora mi sa che l'evento di trigger quando c'è un errore non viene appeso correttamente agli esempi. Fixato ma sarebbe da testare.
