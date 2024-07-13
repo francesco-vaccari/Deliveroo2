@@ -108,8 +108,8 @@ class Perception:
         self.alive[2] = False
     
     def question_1(self, object_type, example_events, belief_set):
-        context_prompt_path = 'agent/prompts/context.txt'
-        question_prompt_path = 'agent/prompts/perception_question_1.txt'
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/perception_question_1.txt'
 
         elements = [example_events, object_type, belief_set]
         elements_names = ["example_events", "object_type", "belief_set"]
@@ -129,8 +129,8 @@ class Perception:
         return function_string, None
 
     def question_2(self, object_type, example_events, belief_set, function_string, error):
-        context_prompt_path = 'agent/prompts/context.txt'
-        question_prompt_path = 'agent/prompts/perception_question_2.txt'
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/perception_question_2.txt'
 
         elements = [function_string, error, example_events, object_type, belief_set]
         elements_names = ["function", "error", "example_events", "object_type", "belief_set"]
