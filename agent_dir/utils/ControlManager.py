@@ -161,7 +161,7 @@ class ControlManager:
 
     def invalidate_intention(self, id):
         self.intentions[id].executable = False
-        for intention_id, intention_calls in self.intention_graph.items():
+        for intention_id, intention_calls in self.intentions_graph.items():
             if id in intention_calls:
                 self.invalidate_intention(intention_id)
 
