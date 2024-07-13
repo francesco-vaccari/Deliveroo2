@@ -26,7 +26,7 @@ class Prompting:
                 log += f"\nResponse: {response.choices[0].message.content}"
             self.logger.log_info(log)
             return response.choices[0].message.content
-        self.logger.log_error("[{tag}] Prompting is stopped, cannot send request.")
+        self.logger.log_error(f"[{tag}] Prompting is stopped, cannot send request.")
         return ""
 
     def create_prompt(self, prompt_file_path, elements = [], elements_names = []):
