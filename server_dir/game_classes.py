@@ -2,13 +2,10 @@ import random
 import json
 
 class Game:
-    def __init__(self, map_conf_path, parcels_conf_path, server):
+    def __init__(self, map_conf_path, parcels_conf_path):
         self.map = Map(map_conf_path)
         self.parcels = []
         self.agents = []
-
-        self.server = server
-        self.agents_port_to_id = {}
         
         with open(parcels_conf_path) as f:
             self.spawning_rate = int(f.readline())
@@ -216,8 +213,7 @@ class Game:
                 new_state.append([object.copy() for object in element])
             else:
                 new_state.append(element.copy())
-            
-
+        
         self.diff_state = []
         self.diff_types = []
 
@@ -251,24 +247,21 @@ class Game:
         for i, object in enumerate(self.diff_state):
             event = object.get_event(self.diff_types[i])
             self.events.append(json.dumps(event))
-    
-    def send_events(self):
-        ports = list(self.agents_port_to_id.keys())
-        for event in self.events:
-            for port in ports:
-                self.server.send(event, (self.server.HOST, int(port)))
 
+    def get_events(self):
+        events = self.events
         self.events = []
+        return events
     
-    def send_entire_state(self, port):
+    def get_state(self):
+        state = []
         for i, element in enumerate(self.environment_state):
             if type(element) is list:
                 for object in element:
-                    event = object.get_event('object added')
-                    self.server.send(json.dumps(event), (self.server.HOST, port))
+                    state.append(json.dumps(object.get_event('object added')))
             else:
-                event = element.get_event('object added')
-                self.server.send(json.dumps(event), (self.server.HOST, port))
+                state.append(json.dumps(element.get_event('object added')))
+        return state
     
 
 class Map:

@@ -1,180 +1,192 @@
-import threading
 import time
-from .function_tester import test_perception_function, rename_function, get_function_name
 import json
-from agent_dir.prompting import Prompting
 import math
+import threading
+from utils.Logger import ExperimentLogger
+from agent_dir.utils.PerceptionManager import PerceptionManager
 
 class Perception:
-    def __init__(self, server):
-        self.server = server
-        self.prompting = Prompting()
-        
+    def __init__(self, folder, communication, prompting):
+        self.alive = [True, True, True]
+        self.stop = False
+        self.communication = communication
+        self.logger = ExperimentLogger(folder, 'perception.log')
+        self.manager = PerceptionManager(ExperimentLogger(folder, 'perception_manager.log'))
+        self.prompting = prompting
+        self.prompting.set_logger(ExperimentLogger(folder, 'perception_prompting.log'))
+
         self.events = []
         self.control_events = []
-        self.events_by_object = {}
-        self.functions_by_object = {}
+
+        self.initial_scaling_factor = 1.0
+        self.scaling_factor_multiplier = 2.0
+        self.number_example_events = 5
+
+        self.events_by_type = {}
+        self.error_event_by_type = {}
+        self.example_events_by_type = {}
+        self.last_generation_by_type = {}
+        self.scaling_factor_by_type = {}
         self.belief_set = {}
 
-        self.scaling_factor = 2
-        self.initial_scaling = 1
-        self.max_retries = 3
-        self.n_example_events = 5
-
-        self.last_trigger_by_object = {}
-        self.scaling_by_object = {}
-        self.special_triggers = {}
-        self.example_events = {}
-
-        self.stop = False
-        
-        # self.processing_thread = threading.Thread(target=self.process_events, args=())
-        # self.processing_thread.start()
-
-        self.storing_thread = threading.Thread(target=self.store_incoming_events, args=())
-        self.storing_thread.start()
-        
-        # self.thread = threading.Thread(target=self.main_loop, args=())
-        # self.thread.start()
-
-    def main_loop(self):
-        while not self.stop:
-            events_by_object_copy = self.events_by_object.copy()
-            for object_type, _ in events_by_object_copy.items():
-                res = self.create_new_perception_function(object_type)
-                if res == "error":
-                    print(f"Could not create a new perception function for {object_type}.")
-        
-        self.close()
-        print("Perception exited correctly.")
+        storing_thread = threading.Thread(target=self.store_events)
+        storing_thread.start()
+        processing_thread = threading.Thread(target=self.process_events)
+        processing_thread.start()
+        loop_thread = threading.Thread(target=self.loop)
+        loop_thread.start()
     
-    def store_incoming_events(self):
+    def store_events(self):
+        self.logger.log_debug("[STORE_EVENTS] Started storing events thread")
         while not self.stop:
             if len(self.events) > 0:
-                try:
-                    event = json.loads(self.events.pop(0))
-                    self.control_events.append(event)
-                    object_type = event['object_type']
-                    if object_type not in self.events_by_object:
-                        self.events_by_object[object_type] = []
-                        self.special_triggers[object_type] = None
-                        self.last_trigger_by_object[object_type] = time.time()
-                        self.scaling_by_object[object_type] = self.initial_scaling
-                    
-                    self.events_by_object[object_type].append(event)
-                    self.set_example_events(event, object_type)
-                except Exception as e:
-                    print(f"Error storing incoming events (probably due to server closing): {e}")
-    
-    def create_new_perception_function(self, object_type):
-        if self.threshold(object_type) or self.special_triggers[object_type] is not None:
-            example_events = self.get_example_events(object_type)
-            res, function_string = self.ask_new_function(object_type, example_events)
-            
-            if not res:
-                return "error"
-            
-            self.functions_by_object[object_type] = None
-            name = f"process_{object_type}" + "_" + str(int(time.time()))
-            function_string = rename_function(function_string, name)
-
-            self.last_trigger_by_object[object_type] = time.time()
-            self.scaling_by_object[object_type] *= self.scaling_factor
-            self.functions_by_object[object_type] = function_string
-
-            self.special_triggers[object_type] = None
-
-            return "success"
-
-    def ask_new_function(self, object_type, example_events):
-        tested = False
-        parsing_retries = 0
-        function_string = ""
-        while not tested and parsing_retries < self.max_retries:
-            retries = 0
-
-            context_path = "agent_dir/prompts/context.txt"
-            question_path = "agent_dir/prompts/perception_question_1.txt"
-            elements = [example_events, self.belief_set, object_type]
-            elements_names = ["example_events", "belief_set", "object_type"]
-            elements_to_extract = ["function"]
-            
-            parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-            if parsed:
-                function_string = extracted_elements[0]
-                tested, err = test_perception_function(function_string, example_events, self.belief_set)
-
-                while not tested and retries < self.max_retries:
-                    context_path = "agent_dir/prompts/context.txt"
-                    question_path = "agent_dir/prompts/perception_question_2.txt"
-                    elements = [example_events, function_string, err, self.belief_set, object_type]
-                    elements_names = ["example_events", "function", "error", "belief_set", "object_type"]
-                    elements_to_extract = ["function"]
-
-                    parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-                    if parsed:
-                        function_string = extracted_elements[0]
-                        tested, err = test_perception_function(function_string, example_events, self.belief_set)
-                    
-                    retries += 1
-            parsing_retries += 1
+                event = self.events.pop(0)
+                event = json.loads(event)
+                self.control_events.append(event)
+                object_type = event['object_type']
+                if object_type not in self.events_by_type:
+                    self.logger.log_info(f"[STORE_EVENTS] New object type detected: {object_type}")
+                    self.events_by_type[object_type] = []
+                    self.error_event_by_type[object_type] = None
+                    self.last_generation_by_type[object_type] = time.time()
+                    self.scaling_factor_by_type[object_type] = self.initial_scaling_factor
+                self.events_by_type[object_type].append(event)
+                self.update_example_events(object_type, event)
         
-        return tested, function_string
-    
+        self.logger.log_debug("[STORE_EVENTS] Stopped storing events thread")
+        self.alive[0] = False
+
     def process_events(self):
+        self.logger.log_debug("[PROCESS_EVENTS] Started processing events thread")
         while not self.stop:
-            events_by_object_copy = self.events_by_object.copy()
-            functions_by_object_copy = self.functions_by_object.copy()
+            events_by_type_copy = self.events_by_type.copy()
+            for object_type in events_by_type_copy:
+                if self.manager.is_function_ready(object_type):
+                    if len(self.events_by_type[object_type]) > 0:
+                        self.logger.log_info(f"[PROCESS_EVENTS] Processing events for object type: {object_type}")
+                        while len(events_by_type_copy) > 0:
+                            event = self.events_by_type[object_type].pop(0)
+                            res, updated_belief_set = self.manager.run_function(object_type, event, self.belief_set.copy())
+                            if res:
+                                self.belief_set = updated_belief_set
+                            else:
+                                self.logger.log_error(f"[PROCESS_EVENTS] Error while processing object type: {object_type} with event: {event}")
+                                self.error_event_by_type[object_type] = event
+                                self.manager.remove_function(object_type)
+                                break
+        
+        self.logger.log_debug("[PROCESS_EVENTS] Stopped processing events thread")
+        self.alive[1] = False
 
-            for object_type, events in events_by_object_copy.items():
-                if object_type in functions_by_object_copy and functions_by_object_copy[object_type] is not None:
-                    function_string = functions_by_object_copy[object_type]
-                    function_name = get_function_name(function_string)
+    def loop(self):
+        self.logger.log_debug("[LOOP] Started loop thread")
+        while not self.stop:
+            events_by_type_copy = self.events_by_type.copy()
+            for object_type in events_by_type_copy:
+                if self.error_event_by_type[object_type] is not None or self.threshold(object_type):
+                    self.logger.log_info(f"[LOOP] Generating perception function for object type: {object_type}")
+                    function_string = None
+                    for i in range(3):
+                        if function_string is None:
+                            function_string, error = self.question_1(object_type, self.get_example_events(object_type), self.belief_set.copy())
+                            for j in range(3):
+                                if function_string is None:
+                                    self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for object type {object_type} failed with error {error}, retrying...")
+                                    function_string, error = self.question_2(object_type, self.get_example_events(object_type), self.belief_set.copy(), function_string, error)
 
-                    for event in events:
-                        try:
-                            local_scope = {}
-                            exec(function_string, {}, local_scope)
-                            
-                            if function_name not in local_scope:
-                                raise ValueError(f"Function '{function_name}' is not defined.")
-                            
-                            func = local_scope[function_name]
-                            
-                            self.belief_set = func(event, self.belief_set)
-
-                        except Exception as e:
-                            self.special_triggers[object_type] = event
-                            self.functions_by_object[object_type] = None
+                    if function_string is not None:
+                        self.logger.log_info(f"[LOOP] Adding perception function for object type: {object_type}\n{function_string}")
+                        self.manager.add_function(object_type, function_string)
+                        self.error_event_by_type[object_type] = None
+                        self.last_generation_by_type[object_type] = time.time()
+                        self.scaling_factor_by_type[object_type] = self.initial_scaling_factor * self.scaling_factor_multiplier
+                    
+                    if function_string is None:
+                        self.logger.log_error(f"[LOOP] Unable to generate perception function for object type: {object_type}")
+                    
+        self.logger.log_debug("[LOOP] Stopped loop thread")
+        self.alive[2] = False
     
-    def get_example_events(self, object_type):
-        if self.special_triggers[object_type] is not None:
-            return [self.special_triggers[object_type]] + self.example_events[object_type]
-        return self.example_events[object_type]
+    def question_1(self, object_type, example_events, belief_set):
+        context_prompt_path = 'agent/prompts/context.txt'
+        question_prompt_path = 'agent/prompts/perception_question_1.txt'
 
-    def set_example_events(self, event, object_type):
-        if object_type not in self.example_events:
-            self.example_events[object_type] = []
+        elements = [example_events, object_type, belief_set]
+        elements_names = ["example_events", "object_type", "belief_set"]
+        elements_to_extract = ["function"]
 
-        if len(self.example_events[object_type]) >= self.n_example_events:
-            self.example_events[object_type].pop(0)
-        self.example_events[object_type].append(event)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q1] Error while making request: {error}")
+            return None, error
+        
+        function_string = extracted_elements[0]
+        error = self.manager.test_function(function_string, belief_set, example_events)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q1] Error while testing function: {error}")
+            return None, error
+        
+        return function_string, None
 
+    def question_2(self, object_type, example_events, belief_set, function_string, error):
+        context_prompt_path = 'agent/prompts/context.txt'
+        question_prompt_path = 'agent/prompts/perception_question_2.txt'
+
+        elements = [function_string, error, example_events, object_type, belief_set]
+        elements_names = ["function", "error", "example_events", "object_type", "belief_set"]
+        elements_to_extract = ["function"]
+
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q2] Error while making request: {error}")
+            return None, error
+        
+        function_string = extracted_elements[0]
+        error = self.manager.test_function(function_string, belief_set, example_events)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q2] Error while testing function: {error}")
+            return None, error
+        
+        return function_string, None
+    
     def threshold(self, object_type):
-        events = self.events_by_object[object_type]
-        last_trigger = self.last_trigger_by_object[object_type]
-        scaling = self.scaling_by_object[object_type]
-
-        time_elapsed = time.time() - last_trigger
+        events = self.events_by_type[object_type]
+        last_generation = self.last_generation_by_type[object_type]
+        scaling = self.scaling_factor_by_type[object_type]
+        time_elapsed = time.time() - last_generation
 
         events_den = 3 * math.log(scaling)
         time_elapsed_den = 2 * math.log(scaling)
-        return ((len(events) / events_den) + (time_elapsed / time_elapsed_den)) > (1 * scaling)
+        try:
+            return ((len(events) / events_den) + (time_elapsed / time_elapsed_den)) > (1 * scaling)
+        except:
+            return False
     
-    def control_get_events(self):
+    def append_event(self, event):
+        self.events.append(event)
+    
+    def update_example_events(self, object_type, event):
+        if object_type not in self.example_events_by_type:
+            self.example_events_by_type[object_type] = []
+        if len(self.example_events_by_type[object_type]) < self.number_example_events:
+            self.example_events_by_type[object_type].append(event)
+        else:
+            self.example_events_by_type[object_type].pop(0)
+            self.example_events_by_type[object_type].append(event)
+    
+    def get_example_events(self, object_type):
+        events = self.example_events_by_type[object_type]
+        if self.error_event_by_type[object_type] is not None:
+            events.append(self.error_event_by_type[object_type])
+        return events
+    
+    def get_control_events(self):
         events = self.control_events
         self.control_events = []
         return events
     
-    def close(self):
-        self.stop = True
+    def get_belief_set(self):
+        return self.belief_set.copy()
+
+    def is_alive(self):
+        return any(self.alive)

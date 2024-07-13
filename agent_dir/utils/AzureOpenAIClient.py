@@ -22,19 +22,17 @@ class AzureOpenAIClient:
 
     def send_request(self, context, question, temperature):
         try:
-            # response = self.client.chat.completions.create(
-            #     model=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
-            #     messages=[
-            #         {"role": "system", "content": context},
-            #         {"role": "user", "content": question}
-            #     ],
-            #     temperature = temperature
-            # )
-            # return response
-            return ""
+            response = self.client.chat.completions.create(
+                model=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+                messages=[
+                    {"role": "system", "content": context},
+                    {"role": "user", "content": question}
+                ],
+                temperature = temperature
+            )
+            return response, None
         except Exception as e:
-            print(f"Failed request to API: {e}")
-            return None
+            return None, f"Failed request to API: {e}"
 
 
 

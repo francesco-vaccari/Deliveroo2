@@ -1,55 +1,40 @@
-import sys
+import time
 import signal
 import argparse
 import subprocess
-from logger import ExperimentLogger
-import time
+from utils.Logger import ExperimentLogger
 
 parser = argparse.ArgumentParser(description="Deliveroo2 Experiment Manager")
-parser.add_argument('--port', type=int, required=False, help="Port for the server", default=8080)
-parser.add_argument('--map', type=str, required=True, help="Map configuration file")
-parser.add_argument('--parcels', type=str, required=True, help="Parcels configuration file")
-parser.add_argument('--framerate', type=int, required=False, help="Framerate of the game", default=60)
-parser.add_argument('--width', type=int, required=False, help="Width of the game window", default=600)
-parser.add_argument('--height', type=int, required=False, help="Height of the game window", default=600)
+parser.add_argument('--desc', action='store_true', help="Add a description to the experiment")
+parser.add_argument('--map', type=str, required=True, help="Path to the map config file")
+parser.add_argument('--parcels', type=str, required=True, help="Path to the parcels config file")
+parser.add_argument('--host', type=str, required=False, default='127.0.0.1', help="Host address of the server")
+parser.add_argument('--port', type=int, required=False, default=8080, help="Port number of the server")
 args = parser.parse_args()
 
+experiment_folder = time.strftime("experiments/%Y-%m-%d-%H-%M-%S")
+log_file = 'main.log'
+logger = ExperimentLogger(experiment_folder, log_file)
 
-server = 'server.py'
-server_args = ['--port', str(args.port), '--map', str(args.map), '--parcels', str(args.parcels), '--framerate', str(args.framerate), '--width', str(args.width), '--height', str(args.height)]
+if args.desc:
+    description = "Experiment Description: " + input("Please enter a description of the experiment: ")
+    logger.log_info(description)
 
-agent = 'agent.py'
-agent_args = ['--port', str(args.port), '--port', str(args.port+1)]
+server_args = ['--map', args.map, '--parcels', args.parcels, '--folder', experiment_folder, '--host', args.host , '--port', str(args.port)]
+process1 = subprocess.Popen(['python3', 'server.py'] + server_args)
+logger.log_debug("Server started")
 
-process1 = subprocess.Popen(['python3', server] + server_args)
-time.sleep(1)
-process2 = subprocess.Popen(['python3', agent] + agent_args)
-
-print("Server and agent started.")
+agent_args = ['--folder', experiment_folder, '--host', args.host, '--port', str(args.port+1), '--server-port', str(args.port)]
+process2 = subprocess.Popen(['python3', 'agent.py'] + agent_args)
+logger.log_debug("Agent started")
 
 def signal_handler(sig, frame):
-    print('Interrupt received, terminating subprocesses...')
     process1.terminate()
     process2.terminate()
-    sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
-try:
-    process1.wait()
-    process2.wait()
-except KeyboardInterrupt:
-    signal_handler(None, None)
-
-
-
-
-
-# log_dir = "logs"
-# log_file_name = "experiment.log"
-# exp_logger = ExperimentLogger(log_dir, log_file_name)
-
-# exp_logger.log_info("This is an info message.")
-# exp_logger.log_debug("This is a debug message.")
-# exp_logger.log_warning("This is a warning message.")
-# exp_logger.log_error("This is an error message.")
+process1.wait()
+process2.wait()
+logger.log_debug("Server and agent terminated. Experiment finished.")

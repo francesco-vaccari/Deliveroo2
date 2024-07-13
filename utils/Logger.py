@@ -37,8 +37,5 @@ class ExperimentLogger:
     def log_debug(self, message):
         self.logger.debug(message)
 
-    def log_warning(self, message):
-        self.logger.warning(message)
-
     def log_error(self, message):
         self.logger.error(message)

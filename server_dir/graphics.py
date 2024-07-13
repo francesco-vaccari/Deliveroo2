@@ -1,16 +1,17 @@
 import pygame
 
 class Graphics:
-    def __init__(self, width, height, game):
+    def __init__(self, game, width=600, height=600):
         self.screen = pygame.display.set_mode((width, height),flags = pygame.RESIZABLE)
         self.game = game
+        self.font_path = 'server_dir/font/Pixeltype.ttf'
         
         self.CELL_SIZE = 45
         self.SPACE_BETWEEN_CELLS = 5
         self.TEXT_FONT_SIZE = 15
         self.INFO_TEXT_FONT_SIZE = 35
-        self.font = pygame.font.Font('server_dir/font/Pixeltype.ttf', int(self.TEXT_FONT_SIZE))
-        self.font_info = pygame.font.Font('server_dir/font/Pixeltype.ttf', int(self.INFO_TEXT_FONT_SIZE))
+        self.font = pygame.font.Font(self.font_path, int(self.TEXT_FONT_SIZE))
+        self.font_info = pygame.font.Font(self.font_path, int(self.INFO_TEXT_FONT_SIZE))
 
         self.x_offset = 0
         self.y_offset = 0
@@ -197,8 +198,8 @@ class Graphics:
         self.SPACE_BETWEEN_CELLS *= scaling_factor
         self.TEXT_FONT_SIZE *= scaling_factor
         self.INFO_TEXT_FONT_SIZE *= scaling_factor
-        self.font = pygame.font.Font('server_dir/font/Pixeltype.ttf', int(self.TEXT_FONT_SIZE))
-        self.font_info = pygame.font.Font('server_dir/font/Pixeltype.ttf', int(self.INFO_TEXT_FONT_SIZE))
+        self.font = pygame.font.Font(self.font_path, int(self.TEXT_FONT_SIZE))
+        self.font_info = pygame.font.Font(self.font_path, int(self.INFO_TEXT_FONT_SIZE))
     
     def show_cell_info(self):
         mouse_pos = pygame.mouse.get_pos()

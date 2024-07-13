@@ -1,140 +1,160 @@
-import argparse
 import pygame
 import signal
-from server_dir.classes import Game
-from communication import Communication
-from server_dir.graphics import Graphics
+import argparse
 
-class Server:
-    def __init__(self, address, server_port, map_config_path, parcels_config_path, framerate, screen_width, screen_height):
-        self.HOST = address
-        self.PORT = server_port
-        self.map_confing_path = map_config_path
-        self.parcels_config_path = parcels_config_path
-        self.framerate = framerate
-        self.screen_width = screen_width
-        self.screen_height = screen_height
+from utils.Logger import ExperimentLogger
+from utils.Communication import Communication
+
+from server_dir.game_classes import Game
+from server_dir.Graphics import Graphics
+
+
+running = True
+
+def signal_handler(sig, frame):
+    global running
+    running = False
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+def send_events(communication, logger, events, agents_ports_to_ids):
+    for event in events:
+        for port, id in agents_ports_to_ids.items():
+            communication.send_to_agent(event, port, id)
+            logger.log_info(f"Sent event to agent (ID:{id}): {event}")
+
+def send_state(communication, logger, state, agents_ports_to_ids, id):
+    for port, agent_id in agents_ports_to_ids.items():
+        if agent_id == id:
+            for event in state:
+                communication.send_to_agent(event, port, agent_id)
+                logger.log_info(f"Sent event to agent (ID:{id}): {event}")
+        break
+
+def handle_actions(communication, logger, agents_ports_to_ids):
+    if len(communication.buffer) > 0:
+        msg, addr = communication.buffer.pop(0)
+        msg = msg.split()
+        agent_port = addr[1]
+
+        if msg[0] == 'connect':
+            if agent_port not in agents_ports_to_ids:
+                id = game.new_agent()
+                agents_ports_to_ids[agent_port] = id
+                communication.send_to_agent("connected " + str(id), agent_port, id)
+                logger.log_info(f"Agent connected with ID {id} and address {addr}")
+                send_state(communication, logger, game.get_state(), agents_ports_to_ids, id)
         
-        self.server = Communication(self.HOST, self.PORT)
-        self.game = Game(self.map_confing_path, parcels_config_path, self.server)
-        pygame.init()
-        self.graphics = Graphics(screen_width, screen_height, self.game)
-        pygame.display.set_caption("Deliveroo2")
-        self.clock = pygame.time.Clock()
+        if msg[0] == 'disconnect':
+            id = agents_ports_to_ids[agent_port]
+            del agents_ports_to_ids[agent_port]
+            game.remove_agent(id)
+            logger.log_info(f"Agent disconnected with ID:{id} and address {addr}")
+        
+        ### GAME ACTIONS ###
+        
+        if msg[0] == 'moveleft':
+            id = agents_ports_to_ids[agent_port]
+            res = game.agent_move_left(id)
+            logger.log_info(f"Agent {id} moved left: {res}")
+        
+        if msg[0] == 'moveright':
+            id = agents_ports_to_ids[agent_port]
+            res = game.agent_move_right(id)
+            logger.log_info(f"Agent {id} moved right: {res}")
+        
+        if msg[0] == 'moveup':
+            id = agents_ports_to_ids[agent_port]
+            res = game.agent_move_up(id)
+            logger.log_info(f"Agent {id} moved up: {res}")
+        
+        if msg[0] == 'movedown':
+            id = agents_ports_to_ids[agent_port]
+            res = game.agent_move_down(id)
+            logger.log_info(f"Agent {id} moved down: {res}")
+        
+        if msg[0] == 'pickup':
+            id = agents_ports_to_ids[agent_port]
+            res = game.agent_pick_up(id)
+            logger.log_info(f"Agent {id} picked up: {res}")
+        
+        if msg[0] == 'putdown':
+            id = agents_ports_to_ids[agent_port]
+            res = game.agent_put_down(id)
+            logger.log_info(f"Agent {id} put down: {res}")
+        
+        ####################
 
-        signal.signal(signal.SIGINT, self.signal_handler)
-
-        self.main_loop()
-
-    def handle_actions(self):
-        # maybe change this to while so that it can handle multiple actions in one frame
-        # also I should add a timer for game actions from the same agent
-        if len(self.server.buffer) > 0:
-            msg, addr = self.server.buffer.pop(0)
-            CLIENT_PORT = addr[1]
-            msg = msg.split()
-
-            if msg[0] == 'connect':
-                id = self.game.new_agent()
-                if id == 0:
-                    self.server.send("error", (self.HOST, CLIENT_PORT))
-                    print("An error occured while creating an agent.")
-                else:
-                    self.game.agents_port_to_id[str(CLIENT_PORT)] = id
-                    self.server.send("connected " + str(id), (self.HOST, CLIENT_PORT))
-                    self.game.send_entire_state(CLIENT_PORT)
-                    print("Agent ", str(id), " with port ", str(CLIENT_PORT), " has connected.")
-            
-            if msg[0] == 'disconnect':
-                id = self.game.agents_port_to_id[str(CLIENT_PORT)]
-                del self.game.agents_port_to_id[str(CLIENT_PORT)]
-                self.game.remove_agent(id)
-                print("Agent ", id, " with port ", str(CLIENT_PORT), " has disconnected.")
-            
-            ### GAME ACTIONS ###
-            if msg[0] == 'moveleft':
-                id = self.game.agents_port_to_id[str(CLIENT_PORT)]
-                res = self.game.agent_move_left(id)
-                print("Agent ", id, " move left: ", res)
-            
-            if msg[0] == 'moveright':
-                id = self.game.agents_port_to_id[str(CLIENT_PORT)]
-                res = self.game.agent_move_right(id)
-                print("Agent ", id, " move right: ", res)
-            
-            if msg[0] == 'moveup':
-                id = self.game.agents_port_to_id[str(CLIENT_PORT)]
-                res = self.game.agent_move_up(id)
-                print("Agent ", id, " move up: ", res)
-            
-            if msg[0] == 'movedown':
-                id = self.game.agents_port_to_id[str(CLIENT_PORT)]
-                res = self.game.agent_move_down(id)
-                print("Agent ", id, " move down: ", res)
-            
-            if msg[0] == 'pickup':
-                id = self.game.agents_port_to_id[str(CLIENT_PORT)]
-                res = self.game.agent_pick_up(id)
-                print("Agent ", id, " pick up: ", res)
-            
-            if msg[0] == 'putdown':
-                id = self.game.agents_port_to_id[str(CLIENT_PORT)]
-                res = self.game.agent_put_down(id)
-                print("Agent ", id, " put down: ", res)
-
-    def signal_handler(self, sig, frame):
-        for port in self.game.agents_port_to_id.keys():
-            self.server.send("exit", (self.HOST, int(port)))
-        self.server.send("exit", (self.HOST, self.PORT))
-        self.server.server_thread.join()
-        print("Exited correctly.")
-        exit()
+def game_loop(communication, game, graphics, clock, logger):
+    global running
+    agents_ports_to_ids = {}
     
-    def main_loop(self):
-        while self.game.server.is_open:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.signal_handler(signal.SIGINT, None)
-                
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.graphics.lmb_pressed()
-                    if event.button == 3:
-                        self.graphics.show_cell_info()
-                
-                if event.type == pygame.MOUSEMOTION:
-                    if event.buttons[0]:
-                        self.graphics.move_screen()
-                
-                if event.type == pygame.MOUSEWHEEL:
-                    self.graphics.scale_sizes(event.y)
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
             
-
-            self.handle_actions()
-
-            self.graphics.draw_environment()
-            # graphics.display_info()
-
-            self.game.decay_parcels()
-            self.game.spawn_parcels()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    graphics.lmb_pressed()
+                if event.button == 3:
+                    graphics.show_cell_info()
             
-            self.game.set_new_state()
-            self.game.create_events()
-            self.game.send_events()
+            if event.type == pygame.MOUSEMOTION:
+                if event.buttons[0]:
+                    graphics.move_screen()
+            
+            if event.type == pygame.MOUSEWHEEL:
+                graphics.scale_sizes(event.y)
+        
+        handle_actions(communication, logger, agents_ports_to_ids)
+
+        graphics.draw_environment()
+        # graphics.display_info()
+
+        game.decay_parcels()
+        game.spawn_parcels()
+        
+        game.set_new_state()
+        game.create_events()
+        events = game.get_events()
+
+        send_events(communication, logger, events, agents_ports_to_ids)
+
+        pygame.display.update()
+        clock.tick(60)
+
+    communication.close()
+    logger.log_debug("Server terminated")
 
 
-            pygame.display.update()
-            self.clock.tick(self.framerate)
 
-
-if __name__ == "__main__":    
-    parser = argparse.ArgumentParser(description="Deliveroo2 Experiment Manager")
-    parser.add_argument('--port', type=int, required=False, help="Port for the server", default=8080)
-    parser.add_argument('--map', type=str, required=True, help="Map configuration file")
-    parser.add_argument('--parcels', type=str, required=True, help="Parcels configuration file")
-    parser.add_argument('--framerate', type=int, required=False, help="Framerate of the game", default=60)
-    parser.add_argument('--width', type=int, required=False, help="Width of the game window", default=600)
-    parser.add_argument('--height', type=int, required=False, help="Height of the game window", default=600)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Deliveroo2 Server")
+    parser.add_argument('--map', type=str, required=True, help="Path to the map config file")
+    parser.add_argument('--parcels', type=str, required=True, help="Path to the parcels config file")
+    parser.add_argument('--folder', type=str, required=True, help="Path to the experiment folder")
+    parser.add_argument('--host', type=str, required=False, default='127.0.0.1', help="Host address of the server")
+    parser.add_argument('--port', type=int, required=False, default=8080, help="Port number of the server")
     args = parser.parse_args()
 
-    server = Server('127.0.0.1', args.port, 'server_dir/conf/maps/' + args.map, 'server_dir/conf/parcels/' + args.parcels, args.framerate, args.width, args.height)
+
+    logger = ExperimentLogger(args.folder, 'server.log')
+    logger.log_debug("Server started")
+
+    communication = Communication(args.folder, args.host, args.port)
+    game = Game(args.map, args.parcels)
+    
+    pygame.init()
+    
+    graphics = Graphics(game)
+    
+    pygame.display.set_caption("Deliveroo2")
+    clock = pygame.time.Clock()
+
+    game_loop(communication, game, graphics, clock, logger)
+
+
+
+

@@ -1,312 +1,240 @@
 import time
 import threading
-from agent_dir.prompting import Prompting
-from .function_tester import test_control_function, get_function_name, check_library_functions, test_desire_trigger_function
-from .actions.library import Library
-import importlib
+from utils.Logger import ExperimentLogger
+from agent_dir.utils.ControlManager import ControlManager
 
 class Control:
-    def __init__(self, server, perception):
-        self.server = server
-        self.prompting = Prompting()
-
-        self.belief_set = perception.belief_set
-        self.get_events = perception.control_get_events
-
-        self.intial_waiting_time = 20
-        self.max_retries = 3
-
-        self.library = Library("agent_dir/actions/actions.json")
-
-        self.desires = [] # contains the description and the list of intentions with their descriptions and functions
-        self.desires_trigger_functions = [] # contains the functions that trigger the execution of its desire
-
+    def __init__(self, folder, communication, prompting, get_events, get_belief_set):
+        self.communication = communication
         self.stop = False
-        self.thread = threading.Thread(target=self.main_loop, args=())
-        self.thread.start()
+        self.alive = [True]
+        self.get_events = get_events
+        self.get_belief_set = get_belief_set
+        self.logger = ExperimentLogger(folder, 'control.log')
+        self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'))
+        self.prompting = prompting
+        self.prompting.set_logger(ExperimentLogger(folder, 'control_prompting.log'))
 
-    def main_loop(self):
-        # while not self.belief_set and not self.stop:
-        #     time.sleep(1)
-        # if not self.stop:
-        #     time.sleep(self.intial_waiting_time)
+        self.initial_waiting_time = 20
+
+        thread = threading.Thread(target=self.loop)
+        thread.start()
+    
+    def loop(self):
+        self.logger.log_debug("[LOOP] Started loop thread")
+        while not self.stop and self.initial_waiting_time > 0:
+            if not self.get_belief_set():
+                self.logger.log_info("[LOOP] Waiting for belief set to be ready...")
+                time.sleep(1)
+            else:
+                self.logger.log_info(f"[LOOP] Belief set is ready, waiting another {self.initial_waiting_time} seconds...")
+                self.initial_waiting_time -= 1
+                time.sleep(1)
         
-        new_desire_generation = True
-        intention_retries = 0
-        max_intention_retries = 3
-        
-        desire = ""
-        intentions = []
-        belief_set_prior = {}
-        
+        generate_new_desire = True
+        desire_id = -1
+        intention_negative_evaluations = 0
+        belief_set_prior = None
+
         while not self.stop:
-            if new_desire_generation: # desire generation or desire trigger
-                trigger, desire_index = self.check_trigger_functions()
-                if trigger:
-                    print(f"Desire triggered: {self.desires[desire_index]['desire']}")
-                    plan = []
-                    for intention in self.desires[desire_index]["intentions"]:
-                        function_string = intention.function_string
-                        if function_string not in self.library.broken_function_names:
-                            plan += self.generate_plan(function_string)
-                        else:
-                            print(f"Desire {self.desires[desire_index]['desire']} has a broken intention.")
-                            self.desires_trigger_functions[desire_index] = None
-                            plan = []
-                    print(f"Plan: {plan}")
+            if generate_new_desire:
+                self.logger.log_info("[LOOP] Checking if any desire is triggered")
+                desire_id = self.manager.check_if_desire_triggered(self.get_belief_set())
+                plan = self.manager.run_desire(desire_id, self.get_belief_set())
+                if plan is not None:
+                    self.logger.log_info(f"[LOOP] Desire triggered ID: {desire_id}")
                     self.execute_plan(plan)
-                    time.sleep(1) # to remove
                 else:
-                    belief_set_prior = self.belief_set.copy()
-                    res, desire = self.question_1()
-                    if res:
-                        print(f"Desire generated: {desire}")
-                        new_desire_generation = False
-                        intention_retries = 0
-                        intentions = []
+                    self.logger.log_info("[LOOP] Generating new desire")
+                    belief_set_prior = self.get_belief_set()
+                    desire_description = self.question_1(belief_set_prior)
+                    if desire_description is None:
+                        self.logger.log_error("[LOOP] Error while generating desire")
                     else:
-                        print("Could not obtain the desire. Retrying.")
-                        time.sleep(1)
-            else: # intention generation
-                res, intention, function_string = self.question_2_3(desire)
-                if not res:
-                    print("Could not obtain intention or function.")
-                    new_desire_generation = True
+                        self.logger.log_info(f"[LOOP] Desire generated: {desire_description}")
+                        desire_id = self.manager.add_desire(desire_description)
+                        generate_new_desire = False
+            else:
+                self.logger.log_info("[LOOP] Generating new intention")
+                intention_description = None
+                belief_set_copy = self.get_belief_set()
+                for i in range(3):
+                    if intention_description is None:
+                        intention_description, function_string, error = self.question_2(desire_description, belief_set_copy, self.manager.get_library())
+                        for j in range:
+                            if intention_description is None:
+                                self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying...")
+                                function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library())
+                if intention_description is None:
+                    self.logger.log_error(f"[LOOP] Unable to generate intention for the desire")
+                    generate_new_desire = True
                 else:
-                    print(f"Intention generated: {intention}")
-                    plan = self.generate_plan(function_string)
+                    self.logger.log_info(f"[LOOP] Intention generated: {intention_description}")
+                    intention_id = self.manager.add_intention(desire_id, intention_description, function_string)
+                    plan = self.manager.run_intention(intention_id, self.get_belief_set())
                     if plan is None:
-                        print("Could not generate a plan.")
+                        self.logger.log_error(f"[LOOP] Error while running intention generated")
+                        self.manager.invalidate_intention(intention_id)
+                        generate_new_desire = True
+                    events = self.execute_plan(plan)
+                    intention_evaluation = self.question_4(intention_description, plan, events)
+                    if intention_evaluation is None:
+                        self.logger.log_error(f"[LOOP] Unable to obtain evaluation for intention")
+                        self.manager.invalidate_intention(intention_id)
+                        generate_new_desire = True
                     else:
-                        print(f"Plan: {plan}")
-                        events = self.execute_plan(plan)
-                        res, evaluation = self.question_4(plan, events, intention)
-                        if not res:
-                            print("Could not obtain intention evaluation.")
-                            new_desire_generation = True
-                        else:
-                            print(f"Intention evaluation: {evaluation}")
-                            if evaluation == "True":
-                                intention_object = self.library.update_library(function_string, intention)
-                                intentions.append(intention_object)
-                                res, evaluation = self.question_5(desire, belief_set_prior)
-                                if not res:
-                                    print("Could not obtain desire evaluation.")
-                                    new_desire_generation = True
-                                else:
-                                    print(f"Desire evaluation: {evaluation}")
-                                    if evaluation == "True":
-                                        self.desires.append({"desire": desire, "intentions": intentions})
-                                        res, function_string = self.question_6(desire, belief_set_prior)
-                                        if res:
-                                            self.desires_trigger_functions.append(function_string)
-                                        else:
-                                            print("Could not obtain desire trigger function.")
-                                            self.desires_trigger_functions.append(None)
-                                        new_desire_generation = True
-                                    else:
-                                        pass # means keep generating intentions
+                        if intention_evaluation == "True":
+                            desire_evaluation = self.question_5(desire_description, belief_set_prior, self.get_belief_set())
+                            if desire_evaluation is None:
+                                self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
                             else:
-                                intention_retries += 1
-                                if intention_retries >= max_intention_retries:
-                                    new_desire_generation = True
-                                    print("Three intention evaluations failed. Generating a new desire.")
+                                if desire_evaluation == "True":
+                                    function_string = self.question_6(desire_description, self.get_belief_set(), belief_set_prior)
+                                    if function_string is None:
+                                        self.logger.log_error(f"[LOOP] Unable to obtain trigger function for desire")
+                                    else:
+                                        self.manager.add_trigger_function(desire_id, function_string)
+                                else:
+                                    self.logger.log_info(f"[LOOP] Desire not yet satisfied")
+                        else:
+                            self.manager.invalidate_intention(intention_id)
+                            if intention_negative_evaluations < 3:
+                                intention_negative_evaluations += 1
+                            else:
+                                generate_new_desire = True
 
-        self.close()
-        print("Control exited correctly.")
+        self.logger.log_debug("[LOOP] Stopped loop thread")
+        self.alive[0] = False
     
-    def question_1(self):
-        parsed = False
-        parsing_retries = 0
-        while not parsed and parsing_retries < self.max_retries:
-            context_path = "agent_dir/prompts/context.txt"
-            question_path = "agent_dir/prompts/control_question_1.txt"
-            elements = [self.belief_set]
-            elements_names = ["belief_set"]
-            elements_to_extract = ["description"]
+    def question_1(self, belief_set):
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/control_question_1.txt'
 
-            parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-            parsing_retries += 1
-        
-        if not parsed:
-            return False, ""
-        return True, extracted_elements[0]
+        elements = [belief_set]
+        elements_names = ["belief_set"]
+        elements_to_extract = ["description"]
 
-    def question_2_3(self, desire):
-        tested = False
-        parsing_retries = 0
-        intention = ""
-        function_string = ""
-        while not tested and parsing_retries < self.max_retries:
-            retries = 0
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q1] Error while making request: {error}")
+            return None
 
-            context_path = "agent_dir/prompts/context.txt"
-            question_path = "agent_dir/prompts/control_question_2.txt"
-            elements = [desire, self.library.get_unified_library(), self.belief_set]
-            elements_names = ["desire", "library", "belief_set"]
-            elements_to_extract = ["function", "description"]
-            parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-
-            if parsed:
-                function_string = extracted_elements[0]
-                intention = extracted_elements[1]
-                tested, err = test_control_function(function_string, self.belief_set, self.library.get_test_file_content(), self.library.get_list_function_names())
-                
-                while retries < self.max_retries and not tested:
-                    context_path = "agent_dir/prompts/context.txt"
-                    question_path = "agent_dir/prompts/control_question_3.txt"
-                    elements = [function_string, self.belief_set, intention, err, self.library.get_dump()]
-                    elements_names = ["function", "belief_set", "intention", "error", "library"]
-                    elements_to_extract = ["function"]
-                    parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-
-                    if parsed:
-                        function_string = extracted_elements[0]
-                        tested, err = test_control_function(function_string, self.belief_set, self.library.get_test_file_content(), self.library.get_list_function_names())
-
-                    retries += 1
-            parsing_retries += 1
-
-        return tested, intention, function_string
+        return extracted_elements[0]
     
-    def question_4(self, plan, events, intention):
-        parsed = False
-        parsing_retries = 0
-        while not parsed and parsing_retries < self.max_retries:
-            context_path = "agent_dir/prompts/context.txt"
-            question_path = "agent_dir/prompts/control_question_4.txt"
-            actions = {}
-            for action, event in zip(plan, events):
-                actions[action] = event
-            elements = [intention, actions]
-            elements_names = ["intention", "actions"]
-            elements_to_extract = ["evaluation"]
+    def question_2(self, desire, belief_set, library):
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/control_question_2.txt'
 
-            parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-            parsing_retries += 1
+        elements = [desire, belief_set, library]
+        elements_names = ["desire", "belief_set", "library"]
+        elements_to_extract = ["goal", "function"]
 
-        if not parsed:
-            return False, ""
-        return True, extracted_elements[0]
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
 
-    def question_5(self, desire, belief_set_prior):
-        parsed = False
-        parsing_retries = 0
-        while not parsed and parsing_retries < self.max_retries:
-            context_path = "agent_dir/prompts/context.txt"
-            question_path = "agent_dir/prompts/control_question_5.txt"
-            elements = [desire, belief_set_prior, self.belief_set]
-            elements_names = ["desire", "belief_set_prior", "belief_set_current"]
-            elements_to_extract = ["evaluation"]
-
-            parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-            parsing_retries += 1
-
-        if not parsed:
-            return False, ""
-        return True, extracted_elements[0]
-
-    def question_6(self, desire, belief_set_prior):
-        tested = False
-        retries = 0
-        function_string = ""
-        while not tested and retries < self.max_retries: # function has to be both parsable and executable
-            context_path = "agent_dir/prompts/context.txt"
-            question_path = "agent_dir/prompts/control_question_6.txt"
-            elements = [desire, belief_set_prior, self.belief_set]
-            elements_names = ["desire", "belief_set_prior", "belief_set"]
-            elements_to_extract = ["function"]
-
-            parsed, extracted_elements, err = self.prompting.make_request(context_path, question_path, elements, elements_names, elements_to_extract)
-
-            if parsed:
-                function_string = extracted_elements[0]
-                tested, err = test_desire_trigger_function(function_string, self.belief_set, belief_set_prior)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q2] Error while making request: {error}")
+            return None, None, error
         
-            retries += 1
-        
-        return tested, function_string
+        intention = extracted_elements[0]
+        function_string = extracted_elements[1]
 
-    def generate_plan(self, function_string):
-        belief_set = self.belief_set
-        base_test_functions = self.library.get_base_test_file_content()
-
-        to_remove = []
-        for i in range(self.library.get_number_of_functions()):
-            not_base_test_functions = self.library.get_not_base_test_file_content(i)
-            base_function_names = self.library.get_base_list_function_names()
-            not_base_functions_names = self.library.get_n_not_base_list_function_names(i)
-            functions_names = base_function_names + not_base_functions_names
-            function_to_test = self.library.get_definition(i)
-            res = check_library_functions(base_test_functions, not_base_test_functions, functions_names, function_to_test, belief_set)
-            if not res:
-                to_remove.append(self.library.get_function_name(i))
+        error = self.manager.test_intention(function_string, belief_set)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q2] Error while testing intention function: {error}")
+            return None, None, error
         
-        is_broken = self.library.is_function_dependent(function_string, to_remove)
-        for name in to_remove:
-            print(f"Removing now broken function {name}")
-            self.library.remove_function(name)
-        if is_broken:
+        return intention, function_string, None
+
+    def question_3(self, function_string, belief_set, intention, error, library):
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/control_question_3.txt'
+
+        elements = [function_string, belief_set, intention, error, library]
+        elements_names = ["function", "belief_set", "intention", "error", "library"]
+        elements_to_extract = ["function"]
+
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q3] Error while making request: {error}")
+            return None, error
+
+        function_string = extracted_elements[0]
+
+        error = self.manager.test_intention(function_string, belief_set)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q3] Error while testing intention function: {error}")
+            return None, error
+        
+        return function_string, None
+
+    def question_4(self, intention, plan, events):
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/control_question_4.txt'
+
+        actions = [(action, events[i]) for i, action in enumerate(plan)]
+
+        elements = [intention, actions]
+        elements_names = ["intention", "actions"]
+        elements_to_extract = ["evaluation"]
+
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q4] Error while making request: {error}")
+            return None
+
+        return extracted_elements[0]
+
+    def question_5(self, desire, belief_set_prior, belief_set_current):
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/control_question_5.txt'
+
+        elements = [desire, belief_set_prior, belief_set_current]
+        elements_names = ["desire", "belief_set_prior", "belief_set_current"]
+        elements_to_extract = ["evaluation"]
+
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q5] Error while making request: {error}")
             return None
         
-        with open("agent_dir/actions/functions.py", "w") as file:
-            file.write(self.library.get_file_content())
-        try:
-            import agent_dir.actions.functions as functions
-            global_scope = {}
-            for name in self.library.get_list_function_names():
-                importlib.reload(functions)
-                global_scope[name] = getattr(functions, name)
-            
-            local_scope = {}
-            exec(function_string, global_scope, local_scope)
+        return extracted_elements[0]
 
-            function_name = get_function_name(function_string)
-            func = local_scope[function_name]
-            func(belief_set)
-        except Exception as e:
+    def question_6(self, desire, belief_set, belief_set_prior):
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/control_question_6.txt'
+
+        elements = [desire, belief_set, belief_set_prior]
+        elements_names = ["desire", "belief_set", "belief_set_prior"]
+        elements_to_extract = ["function"]
+
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q6] Error while making request: {error}")
             return None
         
-        return functions.plan
+        function_string = extracted_elements[0]
 
+        error = self.manager.test_trigger_function(function_string, belief_set_prior, belief_set)
+
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q6] Error while testing trigger function: {error}")
+            return None
+        
+        return function_string
+    
     def execute_plan(self, plan):
         events_plan = []
         self.get_events()
-        
         for action in plan:
             self.server.send(action)
             time.sleep(0.2)
             events = self.get_events()
             events_plan.append(events)
-        
         return events_plan
     
-    def check_trigger_functions(self):
-        trigger = False
-        i = -1
-        for i, function_string in enumerate(self.desires_trigger_functions):
-            if not trigger:
-                if function_string is not None:
-                    try:
-                        local_scope = {}
-                        exec(function_string, {}, local_scope)
-                        func = local_scope[get_function_name(function_string)]
-                        trigger = func(self.belief_set)
-                    except Exception as e:
-                        trigger = False
-        return trigger, i
-
-    def send_action(self, action):
-        self.server.send(action)
-    
-    def close(self):
-        self.stop = True
-    
-    def print_desires(self):
-        print("--------------------------------")
-        for desire in self.desires:
-            print(f"Desire: {desire['desire']}")
-            print("Intentions:")
-            for intention in desire["intentions"]:
-                print(f"    - name: {intention.function_name}\t description: {intention.description}")
-        print("--------------------------------")
+    def is_alive(self):
+        return any(self.alive)
