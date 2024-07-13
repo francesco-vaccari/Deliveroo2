@@ -188,6 +188,8 @@ class ControlManager:
         return self.desire_id - 1
 
     def run_desire(self, id, belief_set):
+        if id is None:
+            return None
         concat_plans = []
         for intention in self.desires[id].intentions:
             plan = self.run_intention(intention.id, belief_set)

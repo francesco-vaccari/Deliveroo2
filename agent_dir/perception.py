@@ -63,7 +63,7 @@ class Perception:
                 if self.manager.is_function_ready(object_type):
                     if len(events_by_type_copy[object_type]) > 0:
                         self.logger.log_info(f"[PROCESS_EVENTS] Processing events for object type: {object_type}")
-                        while len(events_by_type_copy) > 0:
+                        while len(events_by_type_copy[object_type]) > 0:
                             event = events_by_type_copy[object_type].pop(0)
                             res, updated_belief_set = self.manager.run_function(object_type, event, self.belief_set.copy())
                             if res:
