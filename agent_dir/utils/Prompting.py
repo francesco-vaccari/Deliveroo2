@@ -1,16 +1,17 @@
 import os
 import json
 from agent_dir.utils.AzureOpenAIClient import AzureOpenAIClient
+from utils.Logger import ExperimentLogger
 
 class Prompting:
-    def __init__(self):
+    def __init__(self, folder):
         self.client = AzureOpenAIClient()
-        self.logger = None
+        self.logger = ExperimentLogger(folder, 'prompting.log')
         self.stop = True # change to False when ready to use
     
-    def send_request(self, context, question, temperature=0.7):
+    def send_request(self, context, question, tag, temperature=0.7):
+        log = f"\n[{tag}]\nContext: {context}\nQuestion: {question}\nTemperature: {temperature}"
         if not self.stop:
-            self.logger.log_info(f"\nContext: {context}\nQuestion: {question}\nTemperature: {temperature}")
             response = None
             max_retries = 3
             retry = 0
@@ -18,13 +19,14 @@ class Prompting:
                 response, error = self.client.send_request(context, question, temperature)
                 retry += 1
                 if error is not None:
-                    self.logger.log_error(f"\nAttempt {retry+1}/{max_retries}\nError: {error}")
+                    log += f"\nAttempt {retry+1}/{max_retries}\nError: {error}"
             if response is None:
-                self.logger.log_error(f"\nFailed to get response after {max_retries} attempts.")
+                log += f"\nFailed to get response after {max_retries} attempts."
             else:
-                self.logger.log_info(f"\nReponse: {response.choices[0].message.content}")
+                log += f"\nResponse: {response.choices[0].message.content}"
+            self.logger.log_info(log)
             return response.choices[0].message.content
-        self.logger.log_error("Prompting is stopped, cannot send request.")
+        self.logger.log_error("[{tag}] Prompting is stopped, cannot send request.")
         return ""
 
     def create_prompt(self, prompt_file_path, elements = [], elements_names = []):
@@ -66,10 +68,10 @@ class Prompting:
 
         return prompt_template
 
-    def make_request(self, context_path, question_path, elements, elements_names, elements_to_extract):
+    def make_request(self, context_path, question_path, elements, elements_names, elements_to_extract, tag):
         context = self.create_prompt(context_path)
         question = self.create_prompt(question_path, elements, elements_names)
-        response = self.send_request(context, question)
+        response = self.send_request(context, question, tag)
         try:
             extracted_elements = self.extract_elements(response, elements_to_extract)
             return extracted_elements, None
@@ -86,6 +88,3 @@ class Prompting:
             extracted_elements.append(response[name])
 
         return extracted_elements
-
-    def set_logger(self, logger):
-        self.logger = logger

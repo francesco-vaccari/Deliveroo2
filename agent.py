@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 logger.log_info(f"Connected to server as agent ID: {msg[1]}")
                 break
 
-    prompting = Prompting()
+    prompting = Prompting(args.folder)
     perception = Perception(args.folder, communication, prompting)
     control = Control(args.folder, communication, prompting, perception.get_control_events, perception.get_belief_set)
     logger.log_debug("Perception and control units started")

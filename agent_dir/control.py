@@ -13,7 +13,6 @@ class Control:
         self.logger = ExperimentLogger(folder, 'control.log')
         self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'))
         self.prompting = prompting
-        self.prompting.set_logger(ExperimentLogger(folder, 'control_prompting.log'))
 
         self.initial_waiting_time = 20
 
@@ -114,7 +113,7 @@ class Control:
         elements_names = ["belief_set"]
         elements_to_extract = ["description"]
 
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q1")
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q1] Error while making request: {error}")
             return None
@@ -129,7 +128,7 @@ class Control:
         elements_names = ["desire", "belief_set", "library"]
         elements_to_extract = ["goal", "function"]
 
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q2")
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q2] Error while making request: {error}")
@@ -153,7 +152,7 @@ class Control:
         elements_names = ["function", "belief_set", "intention", "error", "library"]
         elements_to_extract = ["function"]
 
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q3")
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q3] Error while making request: {error}")
@@ -178,7 +177,7 @@ class Control:
         elements_names = ["intention", "actions"]
         elements_to_extract = ["evaluation"]
 
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q4")
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q4] Error while making request: {error}")
@@ -194,7 +193,7 @@ class Control:
         elements_names = ["desire", "belief_set_prior", "belief_set_current"]
         elements_to_extract = ["evaluation"]
 
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q5")
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q5] Error while making request: {error}")
@@ -210,7 +209,7 @@ class Control:
         elements_names = ["desire", "belief_set", "belief_set_prior"]
         elements_to_extract = ["function"]
 
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q6")
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q6] Error while making request: {error}")

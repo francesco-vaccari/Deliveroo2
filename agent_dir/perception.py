@@ -13,7 +13,6 @@ class Perception:
         self.logger = ExperimentLogger(folder, 'perception.log')
         self.manager = PerceptionManager(ExperimentLogger(folder, 'perception_manager.log'))
         self.prompting = prompting
-        self.prompting.set_logger(ExperimentLogger(folder, 'perception_prompting.log'))
 
         self.events = []
         self.control_events = []
@@ -115,7 +114,7 @@ class Perception:
         elements_names = ["example_events", "object_type", "belief_set"]
         elements_to_extract = ["function"]
 
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="PERCEPTION Q1")
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q1] Error while making request: {error}")
             return None, error
@@ -136,7 +135,7 @@ class Perception:
         elements_names = ["function", "error", "example_events", "object_type", "belief_set"]
         elements_to_extract = ["function"]
 
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract)
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="PERCEPTION Q2")
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q2] Error while making request: {error}")
             return None, error
