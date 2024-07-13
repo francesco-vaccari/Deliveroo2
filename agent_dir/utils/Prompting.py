@@ -81,6 +81,11 @@ class Prompting:
     def extract_elements(self, response, elements_to_extract):
         response = response.replace("\n", "\\n")
         response = response.replace("\t", "\\t")
+
+        start = response.find("```json")
+        end = response.find("```", start + 1)
+        if start != -1 and end != -1:
+            response = response[start + 7:end]
         
         response = json.loads(response)
         extracted_elements = []
