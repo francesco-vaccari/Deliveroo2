@@ -155,10 +155,10 @@ class Perception:
         scaling = self.scaling_factor_by_type[object_type]
         time_elapsed = time.time() - last_generation
 
-        events_den = 3 * math.log(scaling)
-        time_elapsed_den = 2 * math.log(scaling)
+        events_den = 3.0 * (math.log(scaling) + 1)
+        time_elapsed_den = 2.0 * (math.log(scaling) + 1)
         try:
-            return ((len(events) / events_den) + (time_elapsed / time_elapsed_den)) > (1 * scaling)
+            return ((len(events) / events_den) + (time_elapsed / time_elapsed_den)) > (1.0 * scaling)
         except:
             return False
     
