@@ -60,7 +60,7 @@ class Control:
                 for i in range(3):
                     if intention_description is None:
                         intention_description, function_string, error = self.question_2(desire_description, belief_set_copy, self.manager.get_library())
-                        for j in range:
+                        for j in range(3):
                             if intention_description is None:
                                 self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying...")
                                 function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library())

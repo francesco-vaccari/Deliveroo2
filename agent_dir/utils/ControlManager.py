@@ -37,10 +37,7 @@ class ControlManager:
         for action in actions:
             function_name = action["function_name"]
             description = action["description"]
-            function_string = ""
-            function_string += f"def {function_name}(belief_set):\n"
-            # function_string += f"    global plan\n"
-            function_string += f"    plan.append('{action["action_name"]}')\n\n"
+            function_string = f"""def {function_name}(belief_set):\n    plan.append('{action["action_name"]}')\n\n"""
             self.intentions[self.intention_id] = Intention(self.intention_id, function_name, function_string, description)
             self.intentions_graph[self.intention_id] = []
             self.intention_id += 1
@@ -62,27 +59,21 @@ class ControlManager:
             self.logger.log_error("Intention is invalid.")
             return error
         
+        working_functions_names_before = self.get_implemented_intentions_names()
         working_functions_names = self.test_implemented_intentions(belief_set, test=True)
         self.logger.log_info(f"Tested implemented intentions. {self.get_printable_intentions()}")
         
         extracted_calls = self.extract_function_calls(function_string)
         for function_called in extracted_calls:
-            if function_called not in working_functions_names:
-                self.logger.log_error(f"Intention is invalid. Contains call to broken functions.")
-                return f"The function called {function_called} can no longer be used. Do not use {function_called}."
+            if function_called in working_functions_names_before:
+                if function_called not in working_functions_names:
+                    self.logger.log_error(f"Intention is invalid. Contains call to broken functions.")
+                    return f"The function called {function_called} can no longer be used. Do not use {function_called}."
 
-        import agent_dir.functions.functions as functions
-        importlib.reload(functions)
-
-        global_scope = {}
-        for function_name in working_functions_names:
-            global_scope[function_name] = getattr(functions, function_name)
-        
         try:
-            local_scope = {}
-            exec(function_string, global_scope, local_scope)
-            function_name = self.get_function_name(function_string)
-            func = local_scope[function_name]
+            functions_module = importlib.import_module('agent_dir.functions.functions')
+            exec(function_string, functions_module.__dict__)
+            func = getattr(functions_module, self.get_function_name(function_string))
             func(belief_set)
         except Exception as e:
             self.logger.log_error(f"Intention is invalid. Error: {e}")
@@ -100,23 +91,15 @@ class ControlManager:
         f.write("plan = []\n")
 
         working_functions_names = []
-
         
         for id, intention in self.intentions.items():
             if intention.executable:
-                import agent_dir.functions.functions as functions
-                importlib.reload(functions)
-
-                global_scope = {}
-                for function_name in working_functions_names:
-                    global_scope[function_name] = getattr(functions, function_name)
-
                 try:
-                    local_scope = {}
-                    exec(intention.function_string, global_scope, local_scope)
-                    func = local_scope[intention.function_name]
+                    functions_module = importlib.import_module('agent_dir.functions.functions')
+                    exec(intention.function_string, functions_module.__dict__)
+                    func = getattr(functions_module, intention.function_name)
                     func(belief_set)
-                    
+                        
                     f.write("\n")
                     f.write(intention.function_string)
                     f.write("\n")
@@ -153,29 +136,20 @@ class ControlManager:
             return None
         
         self.logger.log_info(f"Running intention {id} ...")
-        function_string = self.intentions[id].function_string
 
         working_functions_names = self.test_implemented_intentions(belief_set, test=False)
         self.logger.log_info(f"Tested implemented intentions. {self.get_printable_intentions()}")
 
         if not self.intentions[id].executable:
             return None
-
-        import agent_dir.functions.functions as functions
-        importlib.reload(functions)
-
-        global_scope = {}
-        for function_name in working_functions_names:
-            global_scope[function_name] = getattr(functions, function_name)
         
         try:
-            local_scope = {}
-            exec(function_string, global_scope, local_scope)
-            function_name = self.get_function_name(function_string)
-            func = local_scope[function_name]
-            func(belief_set)
+            functions_module = importlib.import_module('agent_dir.functions.functions')
+            exec(self.intentions[id].function_string, functions_module.__dict__)
+            func = getattr(functions_module, self.intentions[id].function_name)
+            func(belief_set)            
             self.logger.log_info(f"Intention {id} has been executed.")
-            return functions.plan
+            return functions_module.plan
         except Exception as e:
             self.invalidate_intention(id)
             self.logger.log_error(f"Intention {id} is invalid. Error: {e}")
@@ -304,6 +278,9 @@ class ControlManager:
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 return node.name
+    
+    def get_implemented_intentions_names(self):
+        return [intention.function_name for intention in self.intentions.values() if intention.executable]
 
     def rename_function(self, function_string, new_name):
         tree = ast.parse(function_string)
