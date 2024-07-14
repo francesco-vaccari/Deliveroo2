@@ -32,13 +32,14 @@ def send_state(communication, logger, state, agents_ports_to_ids, id):
                 logger.log_info(f"Sent event to agent (ID:{id}): {event}")
         break
 
-def handle_actions(communication, logger, agents_ports_to_ids):
-    if len(communication.buffer) > 0:
+def handle_messages(communication, logger, agents_ports_to_ids):
+    actions = []
+
+    while len(communication.buffer) > 0:
         msg, addr = communication.buffer.pop(0)
-        msg = msg.split()
         agent_port = addr[1]
 
-        if msg[0] == 'connect':
+        if msg.split()[0] == 'connect':
             if agent_port not in agents_ports_to_ids:
                 id = game.new_agent()
                 agents_ports_to_ids[agent_port] = id
@@ -46,13 +47,21 @@ def handle_actions(communication, logger, agents_ports_to_ids):
                 logger.log_info(f"Agent connected with ID {id} and address {addr}")
                 send_state(communication, logger, game.get_state(), agents_ports_to_ids, id)
         
-        if msg[0] == 'disconnect':
+        elif msg.split()[0] == 'disconnect':
             id = agents_ports_to_ids[agent_port]
             del agents_ports_to_ids[agent_port]
             game.remove_agent(id)
             logger.log_info(f"Agent disconnected with ID:{id} and address {addr}")
         
-        ### GAME ACTIONS ###
+        else:
+            actions.append((msg, agent_port))
+        
+    return actions
+
+def handle_actions(communication, logger, agents_ports_to_ids, actions):
+    for action in actions:
+        msg, agent_port = action
+        msg = msg.split()
         
         if msg[0] == 'moveleft':
             id = agents_ports_to_ids[agent_port]
@@ -83,8 +92,6 @@ def handle_actions(communication, logger, agents_ports_to_ids):
             id = agents_ports_to_ids[agent_port]
             res = game.agent_put_down(id)
             logger.log_info(f"Agent {id} put down: {res}")
-        
-        ####################
 
 def game_loop(communication, game, graphics, clock, logger):
     global running
@@ -107,11 +114,39 @@ def game_loop(communication, game, graphics, clock, logger):
             
             if event.type == pygame.MOUSEWHEEL:
                 graphics.scale_sizes(event.y)
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    game.agent_move_left(0)
+                    game.agent_move_left(1)
+                    game.agent_move_left(2)
+                if event.key == pygame.K_RIGHT:
+                    game.agent_move_right(0)
+                    game.agent_move_right(1)
+                    game.agent_move_right(2)
+                if event.key == pygame.K_UP:
+                    game.agent_move_up(0)
+                    game.agent_move_up(1)
+                    game.agent_move_up(2)
+                if event.key == pygame.K_DOWN:
+                    game.agent_move_down(0)
+                    game.agent_move_down(1)
+                    game.agent_move_down(2)
+                if event.key == pygame.K_SPACE:
+                    game.agent_pick_up(0)
+                    game.agent_pick_up(1)
+                    game.agent_pick_up(2)
+                if event.key == pygame.K_RETURN:
+                    game.agent_put_down(0)
+                    game.agent_put_down(1)
+                    game.agent_put_down(2)
+                    
         
-        handle_actions(communication, logger, agents_ports_to_ids)
+        actions = handle_messages(communication, logger, agents_ports_to_ids)
+        handle_actions(communication, logger, agents_ports_to_ids, actions)
 
         graphics.draw_environment()
-        # graphics.display_info()
+        graphics.display_info()
 
         game.decay_parcels()
         game.spawn_parcels()
