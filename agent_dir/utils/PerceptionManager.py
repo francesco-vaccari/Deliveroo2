@@ -11,8 +11,10 @@ class PerceptionManager:
         self.logger = logger
 
     def test_function(self, function_string, belief_set, test_events):
+        self.logger.log_info(f"Testing function: {function_string}")
         error = self.is_valid_function(function_string)
         if error is not None:
+            self.logger.log_error(f"Function is invalid. Error: {error}")
             return error
 
         function_name = self.get_function_name(function_string)
@@ -24,11 +26,14 @@ class PerceptionManager:
                 func = local_vars[function_name]
                 belief_set = func(event, belief_set)
             except Exception as e:
+                self.logger.log_error(f"Function is invalid. Error event: {event}\nError: {e}")
                 return f"Error with input event: {event}\nError: {e}"
         
+        self.logger.log_info("Function is valid.")
         return None
     
     def run_function(self, type, event, belief_set):
+        self.logger.log_info(f"Running function for type: {type}")
         function_string = self.functions[type][-1].function_string
         function_name = self.get_function_name(function_string)
 
@@ -36,15 +41,27 @@ class PerceptionManager:
         try:
             exec(function_string, {}, local_vars)
             func = local_vars[function_name]
-            return True, func(event, belief_set)
+            res = func(event, belief_set)
+            self.logger.log_info(f"Function ran successfully. Result:\n{res}")
+            return True, res
         except Exception as e:
+            self.logger.log_error(f"Error running function. Error: {e}")
             return False, None
     
     def add_function(self, type, function_string):
-        self.functions[type] = []
-        self.functions[type].append(PerceptionFunction(type, function_string))
+        self.logger.log_info(f"Adding function for type: {type}")
+        if type not in self.functions:
+            self.functions[type] = []
+            self.functions[type].append(PerceptionFunction(type, function_string))
+        else:
+            if self.functions[type][-1] is None:
+                self.functions[type][-1] = PerceptionFunction(type, function_string)
+            else:
+                self.functions[type].append(PerceptionFunction(type, function_string))
+        self.logger.log_info(f"Functions: {self.get_printable_functions()}")
 
     def remove_function(self, type):
+        self.logger.log_info(f"Removing function for type: {type}")
         self.functions[type].append(None)
     
     def is_valid_function(self, function_string):
@@ -73,3 +90,11 @@ class PerceptionManager:
             if self.functions[type][-1] is not None:
                 return True
         return False
+    
+    def get_printable_functions(self):
+        out = "\n"
+        for type in self.functions:
+            out += f"Type: {type}\n"
+            for function in self.functions[type]:
+                if function is not None:
+                    out += f"{function.function_string}\n"

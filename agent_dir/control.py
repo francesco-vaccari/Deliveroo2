@@ -26,7 +26,7 @@ class Control:
                 self.logger.log_info("[LOOP] Waiting for belief set to be ready...")
                 time.sleep(1)
             else:
-                self.logger.log_info(f"[LOOP] Belief set is ready, waiting another {self.initial_waiting_time} seconds...")
+                self.logger.log_info(f"[LOOP] Belief set is ready, waiting {self.initial_waiting_time} seconds...")
                 self.initial_waiting_time -= 1
                 time.sleep(1)
         
@@ -41,8 +41,8 @@ class Control:
                 desire_id = self.manager.check_if_desire_triggered(self.get_belief_set())
                 plan = self.manager.run_desire(desire_id, self.get_belief_set())
                 if plan is not None:
-                    self.logger.log_info(f"[LOOP] Desire triggered ID: {desire_id}")
-                    self.execute_plan(plan)
+                    self.logger.log_info(f"[LOOP] Desire triggered : {self.manager.get_desire_description(desire_id)}")
+                    self.execute_plan(plan, wait_for_events=False)
                 else:
                     self.logger.log_info("[LOOP] Generating new desire")
                     belief_set_prior = self.get_belief_set()
@@ -68,7 +68,7 @@ class Control:
                     self.logger.log_error(f"[LOOP] Unable to generate intention for the desire")
                     generate_new_desire = True
                 else:
-                    self.logger.log_info(f"[LOOP] Intention generated: {intention_description}")
+                    self.logger.log_info(f"[LOOP] Intention generated: {intention_description}\n{function_string}")
                     intention_id = self.manager.add_intention(desire_id, intention_description, function_string)
                     plan = self.manager.run_intention(intention_id, self.get_belief_set())
                     if plan is None:
@@ -93,6 +93,9 @@ class Control:
                                         self.logger.log_error(f"[LOOP] Unable to obtain trigger function for desire")
                                     else:
                                         self.manager.add_trigger_function(desire_id, function_string)
+                                        self.logger.log_info(f"[LOOP] Obtained trigger function for desire: {desire_description}\n{function_string}")
+                                    self.logger.log_info(f"[LOOP] Desire satisfied")
+                                    generate_new_desire = True
                                 else:
                                     self.logger.log_info(f"[LOOP] Desire not yet satisfied")
                         else:
@@ -225,12 +228,13 @@ class Control:
         
         return function_string
     
-    def execute_plan(self, plan):
+    def execute_plan(self, plan, wait_for_events=True):
         events_plan = []
         self.get_events()
         for action in plan:
             self.server.send(action)
-            time.sleep(0.2)
+            if wait_for_events:
+                time.sleep(0.2)
             events = self.get_events()
             events_plan.append(events)
         return events_plan

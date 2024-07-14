@@ -1,24 +1,19 @@
-In server.py, la funzione handle actions viene chiamata solo una volta per frame, il che vuol dire che posso processare solo un'azione/messaggio ogni frame. Non posso rendere il processing dei messaggi bloccante perché altrimenti può essere che non vada più avanti. Potrebbe aver senso avere al massimo una azione da ogni agente per ogni frame, quindi aggiungendo un controllo su chi manda il messaggio. Potrei inoltre dividere la gestione dei messaggi connect/disconnect dalla gestione delle azioni di gioco. E potrei anche inserire magari un timer tra due azioni dello stesso agente.
-
 Aggiornare descrizione delle azioni base. Aggiungendo le coordinate e sistemare un po' tutte le descrizioni. Pensarci bene.
+
+Fare un testing per vedere se le funzioni riescono effettivamente a modificare la variabile globale plan. Solo quelle base ne hanno bisogno perché quelle successive non sanno dell'esistenza di plan visto che possono solo eseguire le azioni base.
+
+Controllare e sistemare lo pseudo codice con tutto aggiornato e magari guardare come è fatto quello BDI standard per confrontare.
+
+
+Vedere se cambiare la temperature per la request cambia le cose.
+
+Aggiungere modalità senza possibilità di eseguire desire già implementati.
+
+
+Cambiare nel prompting il self.stop quando pronto per esperimenti.
+
+Per poter runnare il progetto serve: pygame, astor, python-dotenv, openai e ovviamente il file .env con le variablili di ambiente. Aggiornare magari la descrizione della repo così da spiegare come farlo partire.
 
 Aggiungere nei prompt per fixare le funzioni che il belief set può essere diverso da quando è avvenuto l'errore. Non più perché mi sa che il belief set dato e con cui si testa è una copia fatta prima della generazione dell'intention. Verificare che sia così, altrimenti specificare nel prompt.
 
 Aggiungere belief set iniziale e finale per evaluation dell'intention control question 4?
-
-Cambiare nel prompting il self.stop quando pronto per esperimenti.
-
-Aggiungere logging in ControlManager e PerceptionManager.
-
-Controllare e sistemare lo pseudo codice con tutto aggiornato e magari guardare come è fatto quello BDI standard per confrontare.
-
-Aggiungere modalità senza possibilità di eseguire desire già implementati.
-
-In control, quando esegue un desire, non mi serve aspettare tra una azione e la seguente per sentire che eventi arrivano. Magari sdoppiare la funzionein una che ritorna gli eventi e una che solo esegue il piano.
-
-Potrei cambiare il formato in cui chiedo una response e invece del JSON chiedo un altro formato.
-
-Vedere se cambiare la temperature per la request cambia le cose.
-
-
-Per poter runnare il progetto serve: pygame, astor, python-dotenv, openai e ovviamente il file .env con le variablili di ambiente. Aggiornare magari la descrizione della repo così da spiegare come farlo partire.
