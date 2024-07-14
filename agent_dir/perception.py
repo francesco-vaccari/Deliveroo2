@@ -50,6 +50,7 @@ class Perception:
                     self.error_event_by_type[object_type] = None
                     self.last_generation_by_type[object_type] = time.time()
                     self.scaling_factor_by_type[object_type] = self.initial_scaling_factor
+                    self.manager.initialize_function(object_type)
                 self.events_by_type[object_type].append(event)
                 self.update_example_events(object_type, event)
         
@@ -84,7 +85,7 @@ class Perception:
             events_by_type_copy = self.events_by_type.copy()
             for object_type in events_by_type_copy:
                 if self.generate_only_with_error:
-                    trigger = self.error_event_by_type[object_type] is not None
+                    trigger = not self.manager.is_function_ready(object_type)
                 else:
                     trigger = self.error_event_by_type[object_type] is not None or self.threshold(object_type)
                 if trigger:

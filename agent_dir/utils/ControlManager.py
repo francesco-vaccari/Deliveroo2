@@ -5,6 +5,7 @@ import time
 import json
 import astor
 import importlib
+import multiprocessing
 
 class Intention:
     def __init__(self, id, function_name, function_string, description):
@@ -26,6 +27,7 @@ class ControlManager:
     def __init__(self, logger):
         self.intention_id = 1
         self.desire_id = 1
+        self.timeout = 4
         self.intentions = {} # id -> Intention
         self.intentions_graph = {} # id -> [id] the function id contains calls to the functions [id]
         self.desires = {} # id -> Desire
@@ -78,7 +80,18 @@ class ControlManager:
             functions_module = importlib.import_module('functions.test_functions')
             exec(function_string, functions_module.__dict__)
             func = getattr(functions_module, self.get_function_name(function_string))
-            func(belief_set)
+            queue = multiprocessing.Queue()
+            process = multiprocessing.Process(target=self.run_func, args=(func, queue,))
+            process.start()
+            process.join(self.timeout)
+            if process.is_alive():
+                process.terminate()
+                process.join()
+                raise TimeoutError(f"Function execution timed out: cannot exceed {self.timeout} seconds")
+            else:
+                if not queue.empty():
+                    error = queue.get()
+                    raise error
         except Exception as e:
             self.logger.log_error(f"Intention is invalid. Error: {e}")
             return f"Error: {e}"
@@ -108,7 +121,18 @@ class ControlManager:
                     exec(intention.function_string, functions_module.__dict__)
                     func = getattr(functions_module, intention.function_name)
                     print(func.__name__)
-                    func(belief_set)
+                    queue = multiprocessing.Queue()
+                    process = multiprocessing.Process(target=self.run_func, args=(func, queue,))
+                    process.start()
+                    process.join(self.timeout)
+                    if process.is_alive():
+                        process.terminate()
+                        process.join()
+                        raise TimeoutError(f"Function execution timed out: cannot exceed {self.timeout} seconds")
+                    else:
+                        if not queue.empty():
+                            error = queue.get()
+                            raise error
                     
                     f = open(functions_file_name, "a")
                     f.write("\n")
@@ -160,7 +184,18 @@ class ControlManager:
             functions_module = importlib.import_module('functions.functions')
             exec(self.intentions[id].function_string, functions_module.__dict__)
             func = getattr(functions_module, self.intentions[id].function_name)
-            func(belief_set)            
+            queue = multiprocessing.Queue()
+            process = multiprocessing.Process(target=self.run_func, args=(func, queue,))
+            process.start()
+            process.join(self.timeout)
+            if process.is_alive():
+                process.terminate()
+                process.join()
+                raise TimeoutError(f"Function execution timed out: cannot exceed {self.timeout} seconds")
+            else:
+                if not queue.empty():
+                    error = queue.get()
+                    raise error       
             self.logger.log_info(f"Intention {id} has been executed.")
             return functions_module.plan
         except Exception as e:
@@ -345,3 +380,9 @@ class ControlManager:
 
     def add_tab(self, string, n_tabs):
         return "\n".join(["    " * n_tabs + line for line in string.split("\n")])
+
+    def run_func(self, func, queue):
+        try:
+            func()
+        except Exception as e:
+            queue.put(e)
