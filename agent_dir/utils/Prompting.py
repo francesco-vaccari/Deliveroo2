@@ -61,6 +61,12 @@ class Prompting:
         elif element_name == "library":
             for i, (_, intention) in enumerate(element.items()):
                 string += f"- {intention.function_name}()\tDescription: {intention.description}\n"
+        elif element_name == "actions":
+            for i, (name_action, events) in enumerate(element):
+                string += f"- {name_action} execute, events received:\n"
+                for event in events:
+                    string += f"\t- {event}\n"
+                string += "\n"
         else:
             string = str(element)
         

@@ -85,22 +85,23 @@ class Perception:
                 if self.error_event_by_type[object_type] is not None or self.threshold(object_type):
                     self.logger.log_info(f"[LOOP] Generating perception function for object type: {object_type}")
                     function_string = None
+                    error = "error"
                     for i in range(3):
-                        if function_string is None:
+                        if error is not None:
                             function_string, error = self.question_1(object_type, self.get_example_events(object_type), self.belief_set.copy())
-                            for j in range(3):
-                                if function_string is None:
+                            for j in range(2):
+                                if error is not None:
                                     self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for object type {object_type} failed with error {error}, retrying...")
                                     function_string, error = self.question_2(object_type, self.get_example_events(object_type), self.belief_set.copy(), function_string, error)
 
-                    if function_string is not None:
+                    if error is None:
                         self.logger.log_info(f"[LOOP] Adding perception function for object type: {object_type}\n{function_string}")
                         self.manager.add_function(object_type, function_string)
                         self.error_event_by_type[object_type] = None
                         self.last_generation_by_type[object_type] = time.time()
                         self.scaling_factor_by_type[object_type] = self.initial_scaling_factor * self.scaling_factor_multiplier
                     
-                    if function_string is None:
+                    if error is not None:
                         self.logger.log_error(f"[LOOP] Unable to generate perception function for object type: {object_type}")
                     
         self.logger.log_debug("[LOOP] Stopped loop thread")
@@ -123,7 +124,7 @@ class Perception:
         error = self.manager.test_function(function_string, belief_set, example_events)
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q1] Error while testing function: {error}")
-            return None, error
+            return function_string, error
         
         return function_string, None
 
@@ -144,7 +145,7 @@ class Perception:
         error = self.manager.test_function(function_string, belief_set, example_events)
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q2] Error while testing function: {error}")
-            return None, error
+            return function_string, error
         
         return function_string, None
     

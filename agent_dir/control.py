@@ -56,15 +56,16 @@ class Control:
             else:
                 self.logger.log_info("[LOOP] Generating new intention")
                 intention_description = None
+                error = "error"
                 belief_set_copy = self.get_belief_set()
                 for i in range(3):
-                    if intention_description is None:
+                    if error is not None:
                         intention_description, function_string, error = self.question_2(desire_description, belief_set_copy, self.manager.get_library())
-                        for j in range(3):
-                            if intention_description is None:
+                        for j in range(2):
+                            if error is not None:
                                 self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying...")
                                 function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library())
-                if intention_description is None:
+                if error is not None:
                     self.logger.log_error(f"[LOOP] Unable to generate intention for the desire")
                     generate_new_desire = True
                 else:
@@ -135,7 +136,7 @@ class Control:
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q2] Error while making request: {error}")
-            return None, None, error
+            return None, function_string, error
         
         intention = extracted_elements[0]
         function_string = extracted_elements[1]
@@ -143,7 +144,7 @@ class Control:
         error = self.manager.test_intention(function_string, belief_set)
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q2] Error while testing intention function: {error}")
-            return None, None, error
+            return None, function_string, error
         
         return intention, function_string, None
 
@@ -159,14 +160,14 @@ class Control:
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q3] Error while making request: {error}")
-            return None, error
+            return function_string, error
 
         function_string = extracted_elements[0]
 
         error = self.manager.test_intention(function_string, belief_set)
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q3] Error while testing intention function: {error}")
-            return None, error
+            return function_string, error
         
         return function_string, None
 
@@ -232,6 +233,8 @@ class Control:
         events_plan = []
         self.get_events()
         for action in plan:
+            if self.stop:
+                return events_plan
             self.communication.send_to_server(action)
             if wait_for_events:
                 time.sleep(0.2)

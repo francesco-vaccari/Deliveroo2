@@ -11,7 +11,7 @@ class PerceptionManager:
         self.logger = logger
 
     def test_function(self, function_string, belief_set, test_events):
-        self.logger.log_info(f"Testing function: {function_string}")
+        self.logger.log_info(f"Testing function:\n{function_string}")
         error = self.is_valid_function(function_string)
         if error is not None:
             self.logger.log_error(f"Function is invalid. Error: {error}")
@@ -20,8 +20,8 @@ class PerceptionManager:
         function_name = self.get_function_name(function_string)
 
         for event in test_events:
-            local_vars = {}
             try:
+                local_vars = {}
                 exec(function_string, {}, local_vars)
                 func = local_vars[function_name]
                 belief_set = func(event, belief_set)
