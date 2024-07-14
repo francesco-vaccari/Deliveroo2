@@ -1,3 +1,5 @@
+import sys
+import os
 import ast
 import json
 import astor
@@ -71,7 +73,8 @@ class ControlManager:
                     return f"The function called {function_called} can no longer be used. Do not use {function_called}."
 
         try:
-            functions_module = importlib.import_module('agent_dir.functions.functions')
+            sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'agent_dir')))
+            functions_module = importlib.import_module('functions.test_functions')
             exec(function_string, functions_module.__dict__)
             func = getattr(functions_module, self.get_function_name(function_string))
             func(belief_set)
@@ -85,29 +88,37 @@ class ControlManager:
     def test_implemented_intentions(self, belief_set, test):
         if test:
             functions_file_name = self.functions_file_path + "/test_functions.py"
+            module_name = "functions.test_functions"
         else:
             functions_file_name = self.functions_file_path + "/functions.py"
+            module_name = "functions.functions"
         f = open(functions_file_name, "w")
         f.write("plan = []\n")
+        f.close()
+        
 
         working_functions_names = []
         
         for id, intention in self.intentions.items():
             if intention.executable:
                 try:
-                    functions_module = importlib.import_module('agent_dir.functions.functions')
+                    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'agent_dir')))
+                    functions_module = importlib.import_module(module_name)
                     exec(intention.function_string, functions_module.__dict__)
                     func = getattr(functions_module, intention.function_name)
+                    print(func.__name__)
                     func(belief_set)
-                        
+                    
+                    f = open(functions_file_name, "a")
                     f.write("\n")
                     f.write(intention.function_string)
                     f.write("\n")
+                    f.close()
                     working_functions_names.append(intention.function_name)
                 except Exception as e:
+                    print(f"Intention {id} is invalid. Error: {e}")
                     self.invalidate_intention(id)
         
-        f.close()
         return working_functions_names
     
     def add_intention(self, desire_id, description, function_string):
@@ -144,7 +155,8 @@ class ControlManager:
             return None
         
         try:
-            functions_module = importlib.import_module('agent_dir.functions.functions')
+            sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'agent_dir')))
+            functions_module = importlib.import_module('functions.functions')
             exec(self.intentions[id].function_string, functions_module.__dict__)
             func = getattr(functions_module, self.intentions[id].function_name)
             func(belief_set)            
