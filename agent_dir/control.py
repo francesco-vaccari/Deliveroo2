@@ -232,7 +232,7 @@ class Control:
         events_plan = []
         self.get_events()
         for action in plan:
-            self.server.send(action)
+            self.communication.send_to_server(action)
             if wait_for_events:
                 time.sleep(0.2)
             events = self.get_events()

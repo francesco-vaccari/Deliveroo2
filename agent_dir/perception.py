@@ -18,7 +18,7 @@ class Perception:
         self.control_events = []
 
         self.initial_scaling_factor = 1.0
-        self.scaling_factor_multiplier = 2.0
+        self.scaling_factor_multiplier = 12.0
         self.number_example_events = 5
 
         self.events_by_type = {}
