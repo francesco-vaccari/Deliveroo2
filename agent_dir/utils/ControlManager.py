@@ -28,7 +28,7 @@ class ControlManager:
         self.desires = {} # id -> Desire
         self.logger = logger
         folder_path = 'agent_dir/functions'
-        self.functions_file = folder_path + "/functions.py"
+        self.functions_file_path = folder_path
         self.load_actions(folder_path + "/actions.json")
     
     def load_actions(self, actions_path):
@@ -39,7 +39,7 @@ class ControlManager:
             description = action["description"]
             function_string = ""
             function_string += f"def {function_name}(belief_set):\n"
-            function_string += f"    global plan\n"
+            # function_string += f"    global plan\n"
             function_string += f"    plan.append('{action["action_name"]}')\n\n"
             self.intentions[self.intention_id] = Intention(self.intention_id, function_name, function_string, description)
             self.intentions_graph[self.intention_id] = []
@@ -62,7 +62,7 @@ class ControlManager:
             self.logger.log_error("Intention is invalid.")
             return error
         
-        working_functions_names, _ = self.test_implemented_intentions(belief_set)
+        working_functions_names, _ = self.test_implemented_intentions(belief_set, test=True)
         self.logger.log_info(f"Tested implemented intentions. {self.get_printable_intentions()}")
         
         extracted_calls = self.extract_function_calls(function_string)
@@ -91,8 +91,12 @@ class ControlManager:
         self.logger.log_info("The intention is valid.")
         return None
 
-    def test_implemented_intentions(self, belief_set):
-        f = open(self.functions_file, "w")
+    def test_implemented_intentions(self, belief_set, test):
+        if test:
+            functions_file_name = self.functions_file_path + "/test_functions.py"
+        else:
+            functions_file_name = self.functions_file_path + "/functions.py"
+        f = open(functions_file_name, "w")
         f.write("plan = []\n")
 
         working_functions_names = []
@@ -151,7 +155,7 @@ class ControlManager:
         self.logger.log_info(f"Running intention {id} ...")
         function_string = self.intentions[id].function_string
 
-        working_functions_names = self.test_implemented_intentions(belief_set)
+        working_functions_names = self.test_implemented_intentions(belief_set, test=False)
         self.logger.log_info(f"Tested implemented intentions. {self.get_printable_intentions()}")
 
         if not self.intentions[id].executable:
