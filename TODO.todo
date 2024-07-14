@@ -1,5 +1,3 @@
-Aggiornare descrizione delle azioni base. Aggiungendo le coordinate e sistemare un po' tutte le descrizioni. Pensarci bene.
-
 Fare un testing per vedere se le funzioni riescono effettivamente a modificare la variabile globale plan. Solo quelle base ne hanno bisogno perché quelle successive non sanno dell'esistenza di plan visto che possono solo eseguire le azioni base.
 
 Controllare e sistemare lo pseudo codice con tutto aggiornato e magari guardare come è fatto quello BDI standard per confrontare.
@@ -14,6 +12,8 @@ Cambiare nel prompting il self.stop quando pronto per esperimenti.
 
 Per poter runnare il progetto serve: pygame, astor, python-dotenv, openai e ovviamente il file .env con le variablili di ambiente. Aggiornare magari la descrizione della repo così da spiegare come farlo partire.
 
-Aggiungere nei prompt per fixare le funzioni che il belief set può essere diverso da quando è avvenuto l'errore. Non più perché mi sa che il belief set dato e con cui si testa è una copia fatta prima della generazione dell'intention. Verificare che sia così, altrimenti specificare nel prompt.
+Aggiungere nei prompt per fixare le funzioni che il belief set può essere diverso da quando è avvenuto l'errore. Non più necessario perché mi sa che il belief set dato e con cui si testa è una copia fatta prima della generazione dell'intention. Verificare che sia così, altrimenti specificare nel prompt.
 
 Aggiungere belief set iniziale e finale per evaluation dell'intention control question 4?
+
+Fixare le coordinate nell'ambiente? Per adesso la y aumenta con moveright e la x aumenta con movedown. Quindi da in alto a sinistra, con le coordinate invertite. Posso lasciare così o cambiare magari il nome e la descrizione delle azioni, cambiano il tipo di azione che viene mandata dalle azioni base. Un altro problema è che non è garantito che la mappa venga salvata correttamente nel belief set. Dovrei aggiungere magari nell'evento della mappa più informazioni riguardo le coordinate delle celle.
