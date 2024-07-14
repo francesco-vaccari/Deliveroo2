@@ -62,7 +62,7 @@ class ControlManager:
             self.logger.log_error("Intention is invalid.")
             return error
         
-        working_functions_names, _ = self.test_implemented_intentions(belief_set, test=True)
+        working_functions_names = self.test_implemented_intentions(belief_set, test=True)
         self.logger.log_info(f"Tested implemented intentions. {self.get_printable_intentions()}")
         
         extracted_calls = self.extract_function_calls(function_string)
