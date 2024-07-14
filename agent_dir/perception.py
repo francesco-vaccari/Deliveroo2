@@ -19,7 +19,8 @@ class Perception:
 
         self.initial_scaling_factor = 1.0
         self.scaling_factor_multiplier = 12.0
-        self.number_example_events = 5
+        self.number_example_events = 2
+        self.generate_only_with_error = True
 
         self.events_by_type = {}
         self.error_event_by_type = {}
@@ -82,7 +83,11 @@ class Perception:
         while not self.stop:
             events_by_type_copy = self.events_by_type.copy()
             for object_type in events_by_type_copy:
-                if self.error_event_by_type[object_type] is not None or self.threshold(object_type):
+                if self.generate_only_with_error:
+                    trigger = self.error_event_by_type[object_type] is not None
+                else:
+                    trigger = self.error_event_by_type[object_type] is not None or self.threshold(object_type)
+                if trigger:
                     self.logger.log_info(f"[LOOP] Generating perception function for object type: {object_type}")
                     function_string = None
                     error = "error"

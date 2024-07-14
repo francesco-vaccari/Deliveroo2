@@ -54,7 +54,7 @@ class Control:
                         desire_id = self.manager.add_desire(desire_description)
                         generate_new_desire = False
             else:
-                self.logger.log_info("[LOOP] Generating new intention")
+                self.logger.log_info("[LOOP] Generating new intention ...")
                 intention_description = None
                 error = "error"
                 belief_set_copy = self.get_belief_set()

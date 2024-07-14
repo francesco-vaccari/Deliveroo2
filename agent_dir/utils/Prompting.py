@@ -63,10 +63,12 @@ class Prompting:
                 string += f"- {intention.function_name}()\tDescription: {intention.description}\n"
         elif element_name == "actions":
             for i, (name_action, events) in enumerate(element):
-                string += f"- {name_action} execute, events received:\n"
-                for event in events:
-                    string += f"\t- {event}\n"
-                string += "\n"
+                string += f"- {name_action}   events received:"
+                if len(events) == 0:
+                    string += "None\n"
+                else:
+                    for event in events:
+                        string += f"\t- {event}\n"
         else:
             string = str(element)
         
