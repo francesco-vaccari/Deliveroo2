@@ -364,6 +364,7 @@ class ControlManager:
             out += f"    Executable: {intention.executable}\n"
             out += f"    Function:\n"
             out += self.add_tab(intention.function_string, 2)
+            out += "\n"
         return out
     
     def get_printable_desires(self):
@@ -375,9 +376,16 @@ class ControlManager:
                 out += f"        Description: {intention.description}\n"
                 out += f"        Executable: {intention.executable}\n"
                 out += f"        Function:\n"
-                out = self.add_tab(intention.function_string, 4)
+                out += self.add_tab(intention.function_string, 4)
+                out += "\n"
         return out
 
+    def get_printable_intentions_graph(self):
+        out = "\n"
+        for id, calls in self.intentions_graph.items():
+            out += f"Intention {id} calls: {calls}\n"
+        return out
+    
     def add_tab(self, string, n_tabs):
         return "\n".join(["    " * n_tabs + line for line in string.split("\n")])
 

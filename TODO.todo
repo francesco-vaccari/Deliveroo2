@@ -1,26 +1,28 @@
 Controllare e sistemare lo pseudo codice con tutto aggiornato e magari guardare come è fatto quello BDI standard per confrontare.
 
+Riguardare tutto lo scritto riguardo al progetto per vedere se manca qualcosa o se rielaborare idee vecchie.
+
+Controllare costi di azure e eventualmente chiedere al professore se cambiare modello.
+
+Come faccio ad includere informazioni riguardo a cosa vogliono dire le celle della mappa? Posso rendere l'evento della mappa più self explanatory con campi significativi. Sarebbe anche da inserire un sistema di feedback una volta finita l'evaluation di una intention o di un desire nel caso fallisca. Magari con un meccanismo di memoria che permette alla LLM di fare delle osservazioni per generazioni future su cosa ha sbagliato o su comportamenti o interazioni dell'agente interessanti. Questo potrebbe risolvere il problema del non capire cosa fanno le celle. Potrei quindi costruire anche un insieme di conoscenza basata sull'interazione dell'agente con l'ambiente che l'LLM può utilizzare in futuro.
+
+
+
 Vedere se cambiare la temperature per la request cambia le cose.
 
-Aggiungere modalità senza possibilità di eseguire desire già implementati.
+Aggiungere modalità senza possibilità di eseguire desire già implementati. E rendere quella del perception solo con errori non hard coded.
 
 
-Cambiare nel prompting il self.stop quando pronto per esperimenti.
-
-Per poter runnare il progetto serve: pygame, astor, python-dotenv, openai e ovviamente il file .env con le variablili di ambiente. Aggiornare magari la descrizione della repo così da spiegare come farlo partire.
 
 Aggiungere nei prompt per fixare le funzioni che il belief set può essere diverso da quando è avvenuto l'errore. Non più necessario perché mi sa che il belief set dato e con cui si testa è una copia fatta prima della generazione dell'intention. Verificare che sia così, altrimenti specificare nel prompt.
 
 Aggiungere belief set iniziale e finale per evaluation dell'intention control question 4?
 
-Fixare le coordinate nell'ambiente? Per adesso la y aumenta con moveright e la x aumenta con movedown. Quindi da in alto a sinistra, con le coordinate invertite. Posso lasciare così o cambiare magari il nome e la descrizione delle azioni, cambiano il tipo di azione che viene mandata dalle azioni base. Un altro problema è che non è garantito che la mappa venga salvata correttamente nel belief set. Dovrei aggiungere magari nell'evento della mappa più informazioni riguardo le coordinate delle celle.
-
-Come faccio ad includere informazioni riguardo a cosa vogliono dire le celle della mappa? Sarebbe anche da inserire un sistema di feedback una volta finita l'evaluation di una intention o di un desire nel caso fallisca. Magari con un meccanismo di memoria che permette alla LLM di fare delle osservazioni per generazioni future su cosa ha sbagliato o su comportamenti o interazioni dell'agente interessanti. Questo potrebbe risolvere il problema del non capire cosa fanno le celle. Potrei quindi costruire anche un insieme di conoscenza basata sull'interazione dell'agente con l'ambiente che l'LLM può utilizzare in futuro.
-
-Riguardare tutto lo scritto riguardo al progetto per vedere se manca qualcosa o se rielaborare idee vecchie.
-
-Controllare costi di azure e eventualmente chiedere al professore se cambiare modello.
 
 Rendere tutti i nomi dei file e delle folder inseribili quando si lancia il main.
 
 Rendere più semplice specificare i conf per map e parcels.
+
+Cambiare nel prompting il self.stop quando pronto per esperimenti.
+
+Per poter runnare il progetto serve: pygame, astor, python-dotenv, PyQt5, openai e ovviamente il file .env con le variablili di ambiente. Aggiornare magari la descrizione della repo così da spiegare come farlo partire.

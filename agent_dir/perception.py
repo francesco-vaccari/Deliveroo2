@@ -193,6 +193,12 @@ class Perception:
     
     def get_belief_set(self):
         return self.belief_set.copy()
+    
+    def get_printable_belief_set(self):
+        out = ""
+        for entry in self.belief_set:
+            out += f"{entry}: {self.belief_set[entry]}\n"
+        return out
 
     def is_alive(self):
         return any(self.alive)

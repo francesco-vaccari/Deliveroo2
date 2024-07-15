@@ -1,8 +1,12 @@
+import sys
 import time
 import signal
 import argparse
+import threading
 from utils.Logger import ExperimentLogger
 from utils.Communication import Communication
+from PyQt5.QtWidgets import QApplication
+from utils.Visualizer import RealTimeVisualizer
 from agent_dir.perception import Perception
 from agent_dir.control import Control
 from agent_dir.utils.Prompting import Prompting
@@ -16,6 +20,18 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
+
+def receive_events(communication, perception, visualizer):
+    while running:
+        if len(communication.buffer) > 0:
+            msg, addr = communication.buffer.pop(0)
+            if msg.split()[0] == "connected":
+                logger.log_info(f"Connected to server as agent ID: {msg.split()[1]}")
+            else:
+                perception.append_event(msg)
+        else:
+            time.sleep(0.1)
+    visualizer.self_close = True
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Deliveroo2 Agent")
@@ -45,15 +61,16 @@ if __name__ == "__main__":
     control = Control(args.folder, communication, prompting, perception.get_control_events, perception.get_belief_set)
     logger.log_debug("Perception and control units started")
 
-    while running:
-        if len(communication.buffer) > 0:
-            msg, addr = communication.buffer.pop(0)
-            if msg.split()[0] == "connected":
-                logger.log_info(f"Connected to server as agent ID: {msg.split()[1]}")
-            else:
-                perception.append_event(msg)
-        else:
-            time.sleep(0.1)
+
+    app = QApplication(sys.argv)
+    visualizer = RealTimeVisualizer(perception, control, args.folder)
+    
+    listener = threading.Thread(target=receive_events, args=(communication, perception, visualizer))
+    listener.start()
+    
+    app.exec_()
+    
+    listener.join()
 
     perception.stop = True
     control.stop = True
@@ -65,3 +82,15 @@ if __name__ == "__main__":
     communication.send_to_server("disconnect")
     communication.close()
     logger.log_debug("Agent terminated")
+
+
+
+
+'''
+Need to track:
+perception.get_printable_belief_set()
+perception.manager.get_printable_functions()
+control.manager.get_printable_intentions()
+control.manager.get_printable_desires()
+control.manager.get_printable_intentions_graph()
+'''
