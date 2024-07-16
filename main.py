@@ -24,10 +24,10 @@ if args.desc:
     description = "Experiment Description: " + input("Please enter a description of the experiment: ")
     logger.log_info(description)
 
-maps_path = 'server_dir/conf/maps/'
-parcels_path = 'server_dir/conf/parcels/'
+maps_path = 'server_dir/conf/maps/' + args.map
+parcels_path = 'server_dir/conf/parcels/' + args.parcels
 
-server_args = ['--map', args.map, '--parcels', args.parcels, '--folder', experiment_folder, '--host', args.host , '--port', str(args.port)]
+server_args = ['--map', maps_path, '--parcels', parcels_path, '--folder', experiment_folder, '--host', args.host , '--port', str(args.port)]
 process1 = subprocess.Popen(['python3', 'server.py'] + server_args)
 logger.log_debug("Server started")
 
