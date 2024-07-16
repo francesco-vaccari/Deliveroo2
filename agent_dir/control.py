@@ -97,13 +97,13 @@ class Control:
                     if plan is None:
                         self.logger.log_error(f"[LOOP] Error while running intention generated")
                         self.status = "Error while running intention generated"
-                        self.manager.invalidate_intention(intention_id)
-                        generate_new_desire = True
-                    self.logger.log_info(f"[LOOP] Plan generated: {plan}")
-                    self.status = f"Executing plan"
-                    events = self.execute_plan(plan)
-                    self.logger.log_info(f"[LOOP] Plan executed with events {events}\nAsking for intention evaluation...")
-                    intention_evaluation = self.question_4(intention_description, plan, events)
+                        intention_evaluation = "False"
+                    else:
+                        self.logger.log_info(f"[LOOP] Plan generated: {plan}")
+                        self.status = f"Executing plan"
+                        events = self.execute_plan(plan)
+                        self.logger.log_info(f"[LOOP] Plan executed with events {events}\nAsking for intention evaluation...")
+                        intention_evaluation = self.question_4(intention_description, plan, events)
                     if intention_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for intention")
                         self.status = "Unable to obtain evaluation for intention"
