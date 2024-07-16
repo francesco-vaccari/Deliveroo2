@@ -17,6 +17,21 @@ class RealTimeVisualizer(QWidget):
     def initUI(self):
         self.layout = QVBoxLayout()
 
+        self.perception_status = QScrollArea()
+        self.control_status = QScrollArea()
+        perception_status_label = QLabel("Perception Status:")
+        control_status_label = QLabel("Control Status:")
+        self.perception_status.setWidget(perception_status_label)
+        self.control_status.setWidget(control_status_label)
+        self.perception_status.setWidgetResizable(True)
+        self.control_status.setWidgetResizable(True)
+        self.perception_status.setMaximumHeight(50)
+        self.control_status.setMaximumHeight(50)
+        self.perception_status.setVisible(True)
+        self.control_status.setVisible(True)
+        perception_status_label.setWordWrap(True)
+        control_status_label.setWordWrap(True)
+
         self.buttons_layout = QVBoxLayout()
         self.button1 = QPushButton("Show Belief Set")
         self.button2 = QPushButton("Show Perception Functions")
@@ -44,6 +59,8 @@ class RealTimeVisualizer(QWidget):
         self.scroll4 = self.create_scrollable_label("Desires")
         self.scroll5 = self.create_scrollable_label("Intentions Graph")
 
+        self.layout.addWidget(self.perception_status)
+        self.layout.addWidget(self.control_status)
         self.layout.addWidget(self.scroll1)
         self.layout.addWidget(self.scroll2)
         self.layout.addWidget(self.scroll3)
@@ -54,9 +71,9 @@ class RealTimeVisualizer(QWidget):
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_labels)
-        self.timer.start(500)
+        self.timer.start(1000)
 
-        self.setWindowTitle('Real-Time Variable Visualizer')
+        self.setWindowTitle(self.folder)
         self.show()
         
         self.show_widget(self.scroll1)  # Show the first widget by default
@@ -79,17 +96,23 @@ class RealTimeVisualizer(QWidget):
         widget.setVisible(True)
 
     def update_labels(self):
+        perception_status = self.perception.status
+        control_status = self.control.status
+
+        self.perception_status.widget().setText(f"Perception Status: {perception_status}")
+        self.control_status.widget().setText(f"Control Status: {control_status}")
+
         var1_value = self.perception.get_printable_belief_set()
         var2_value = self.perception.manager.get_printable_functions()
         var3_value = self.control.manager.get_printable_intentions()
         var4_value = self.control.manager.get_printable_desires()
         var5_value = self.control.manager.get_printable_intentions_graph()
 
-        self.scroll1.widget().setText(f"Belief Set: {var1_value}")
-        self.scroll2.widget().setText(f"Perception Functions: {var2_value}")
-        self.scroll3.widget().setText(f"Intentions: {var3_value}")
-        self.scroll4.widget().setText(f"Desires: {var4_value}")
-        self.scroll5.widget().setText(f"Intentions Graph: {var5_value}")
+        self.scroll1.widget().setText(f"{var1_value}")
+        self.scroll2.widget().setText(f"{var2_value}")
+        self.scroll3.widget().setText(f"{var3_value}")
+        self.scroll4.widget().setText(f"{var4_value}")
+        self.scroll5.widget().setText(f"{var5_value}")
 
         if self.self_close:
             os.makedirs(f"{self.folder}/result", exist_ok=True)

@@ -365,31 +365,33 @@ class ControlManager:
     def get_printable_intentions(self):
         out = "\n"
         for id, intention in self.intentions.items():
-            out += f"Intention {id}: {intention.function_name}\n"
-            out += f"    Description: {intention.description}\n"
-            out += f"    Executable: {intention.executable}\n"
-            out += f"    Function:\n"
+            out += f"[{id}]\n"
+            out += f"Executable: {intention.executable}\n"
+            out += f"Description: {intention.description}\n"
             out += self.add_tab(intention.function_string, 2)
             out += "\n"
         return out
     
     def get_printable_desires(self):
+        if not bool(self.desires):
+            return "Empty"
         out = "\n"
         for id, desire in self.desires.items():
             out += f"Desire {id}: {desire.description}\n"
             for intention in desire.intentions:
-                out += f"    Intention {intention.id}: {intention.function_name}\n"
-                out += f"        Description: {intention.description}\n"
-                out += f"        Executable: {intention.executable}\n"
-                out += f"        Function:\n"
+                out += f"    [{id}]\n"
+                out += f"    Executable: {intention.executable}\n"
+                out += f"    Description: {intention.description}\n"
                 out += self.add_tab(intention.function_string, 4)
                 out += "\n"
         return out
 
     def get_printable_intentions_graph(self):
+        if not bool(self.intentions_graph):
+            return "Empty"
         out = "\n"
         for id, calls in self.intentions_graph.items():
-            out += f"Intention {id} calls: {calls}\n"
+            out += f"    - [{id}] calls : {calls}\n"
         return out
     
     def add_tab(self, string, n_tabs):

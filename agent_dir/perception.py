@@ -9,6 +9,7 @@ class Perception:
     def __init__(self, folder, communication, prompting, generation_only_on_error):
         self.alive = [True, True, True]
         self.stop = False
+        self.status = "Initialized"
         self.communication = communication
         self.logger = ExperimentLogger(folder, 'perception.log')
         self.manager = PerceptionManager(ExperimentLogger(folder, 'perception_manager.log'))
@@ -46,6 +47,7 @@ class Perception:
                 object_type = event['object_type']
                 if object_type not in self.events_by_type:
                     self.logger.log_info(f"[STORE_EVENTS] New object type detected: {object_type}")
+                    self.status = f"New object type detected: {object_type}"
                     self.events_by_type[object_type] = []
                     self.error_event_by_type[object_type] = None
                     self.last_generation_by_type[object_type] = time.time()
@@ -72,6 +74,7 @@ class Perception:
                                 self.belief_set = updated_belief_set
                             else:
                                 self.logger.log_error(f"[PROCESS_EVENTS] Error while processing object type: {object_type} with event: {event}")
+                                self.status = f"Error while processing object type: {object_type} with event: {event}"
                                 self.error_event_by_type[object_type] = event
                                 self.manager.remove_function(object_type)
                                 break
@@ -90,6 +93,7 @@ class Perception:
                     trigger = self.error_event_by_type[object_type] is not None or self.threshold(object_type)
                 if trigger:
                     self.logger.log_info(f"[LOOP] Generating perception function for object type: {object_type}")
+                    self.status = f"Generating perception function for object type: {object_type}"
                     function_string = None
                     error = "error"
                     for i in range(3):
@@ -98,10 +102,12 @@ class Perception:
                             for j in range(2):
                                 if error is not None:
                                     self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for object type {object_type} failed with error {error}, retrying...")
+                                    self.status = f"Generation attempt {i+1}:{j+1} for object type {object_type} failed, retrying..."
                                     function_string, error = self.question_2(object_type, self.get_example_events(object_type), self.belief_set.copy(), function_string, error)
 
                     if error is None:
                         self.logger.log_info(f"[LOOP] Adding perception function for object type: {object_type}\n{function_string}")
+                        self.status = f"Adding perception function for object type: {object_type}"
                         self.manager.add_function(object_type, function_string)
                         self.error_event_by_type[object_type] = None
                         self.last_generation_by_type[object_type] = time.time()
@@ -109,6 +115,7 @@ class Perception:
                     
                     if error is not None:
                         self.logger.log_error(f"[LOOP] Unable to generate perception function for object type: {object_type}")
+                        self.status = f"Unable to generate perception function for object type: {object_type}"
                     
         self.logger.log_debug("[LOOP] Stopped loop thread")
         self.alive[2] = False
@@ -195,6 +202,8 @@ class Perception:
         return self.belief_set.copy()
     
     def get_printable_belief_set(self):
+        if not bool(self.belief_set):
+            return "Empty"
         out = ""
         for entry in self.belief_set:
             out += f"{entry}: {self.belief_set[entry]}\n"

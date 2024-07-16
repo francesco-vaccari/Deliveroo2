@@ -8,6 +8,7 @@ class Control:
         self.communication = communication
         self.stop = False
         self.alive = [True]
+        self.status = "Initialized"
         self.get_events = get_events
         self.get_belief_set = get_belief_set
         self.logger = ExperimentLogger(folder, 'control.log')
@@ -28,9 +29,11 @@ class Control:
         while not self.stop and self.initial_waiting_time > 0:
             if not self.get_belief_set():
                 self.logger.log_info("[LOOP] Waiting for belief set to be ready...")
+                self.status = "Waiting for belief set to be ready"
                 time.sleep(1)
             else:
                 self.logger.log_info(f"[LOOP] Belief set is ready, waiting {self.initial_waiting_time} seconds...")
+                self.status = f"Belief set is ready, waiting {self.initial_waiting_time} seconds"
                 self.initial_waiting_time -= 1
                 time.sleep(1)
         
@@ -44,26 +47,33 @@ class Control:
                 plan = None
                 if not self.no_desire_triggering:
                     self.logger.log_info("[LOOP] Checking if any desire is triggered")
+                    self.status = "Checking if any desire is triggered"
                     desire_id = self.manager.check_if_desire_triggered(self.get_belief_set())
                     plan = self.manager.run_desire(desire_id, self.get_belief_set())
                 if plan is not None:
                     self.logger.log_info(f"[LOOP] Desire triggered : {self.manager.get_desire_description(desire_id)}")
+                    self.status = f"Desire triggered : {self.manager.get_desire_description(desire_id)}"
                     self.execute_plan(plan, wait_for_events=False)
                 else:
                     self.logger.log_info("[LOOP] Generating new desire")
+                    self.status = "Generating new desire"
                     belief_set_prior = self.get_belief_set()
                     if self.user_generated_desire:
                         desire_description = self.question_1(belief_set_prior)
                     else:
+                        self.status = "Please input in the terminal the desire you want to generate..."
                         desire_description = input("Enter a desire: ")
                     if desire_description is None:
                         self.logger.log_error("[LOOP] Error while generating desire")
+                        generate_new_desire = True
                     else:
                         self.logger.log_info(f"[LOOP] Desire generated: {desire_description}")
+                        self.status = f"Desire generated: {desire_description}"
                         desire_id = self.manager.add_desire(desire_description)
                         generate_new_desire = False
             else:
                 self.logger.log_info("[LOOP] Generating new intention ...")
+                self.status = "Generating new intention"
                 intention_description = None
                 error = "error"
                 belief_set_copy = self.get_belief_set()
@@ -73,41 +83,59 @@ class Control:
                         for j in range(2):
                             if error is not None:
                                 self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying...")
+                                self.status = f"Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying..."
                                 function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library(self.stateless_intention_generation))
                 if error is not None:
                     self.logger.log_error(f"[LOOP] Unable to generate intention for the desire")
+                    self.status = "Unable to generate intention for the desire"
                     generate_new_desire = True
                 else:
                     self.logger.log_info(f"[LOOP] Intention generated: {intention_description}\n{function_string}")
+                    self.status = f"Intention generated: {intention_description}"
                     intention_id = self.manager.add_intention(desire_id, intention_description, function_string)
                     plan = self.manager.run_intention(intention_id, self.get_belief_set())
                     if plan is None:
                         self.logger.log_error(f"[LOOP] Error while running intention generated")
+                        self.status = "Error while running intention generated"
                         self.manager.invalidate_intention(intention_id)
                         generate_new_desire = True
+                    self.logger.log_info(f"[LOOP] Plan generated: {plan}")
+                    self.status = f"Executing plan"
                     events = self.execute_plan(plan)
+                    self.logger.log_info(f"[LOOP] Plan executed with events {events}\nAsking for intention evaluation...")
                     intention_evaluation = self.question_4(intention_description, plan, events)
                     if intention_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for intention")
+                        self.status = "Unable to obtain evaluation for intention"
                         self.manager.invalidate_intention(intention_id)
                         generate_new_desire = True
                     else:
                         if intention_evaluation == "True":
+                            self.logger.log_info(f"[LOOP] Intention evaluation positive")
+                            self.status = "Intention evaluation positive, now asking for desire evaluation..."
+                            self.logger.log_info("[LOOP] Asking for desire evaluation...")
                             desire_evaluation = self.question_5(desire_description, belief_set_prior, self.get_belief_set())
                             if desire_evaluation is None:
                                 self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
+                                self.status = "Unable to obtain evaluation for desire"
                             else:
                                 if desire_evaluation == "True":
+                                    self.logger.log_info(f"[LOOP] Desire evaluation positive")
+                                    self.status = "Desire evaluation positive, now asking for trigger function..."
                                     function_string = self.question_6(desire_description, self.get_belief_set(), belief_set_prior)
                                     if function_string is None:
                                         self.logger.log_error(f"[LOOP] Unable to obtain trigger function for desire")
+                                        self.status = "Unable to obtain trigger function for desire"
                                     else:
                                         self.manager.add_trigger_function(desire_id, function_string)
                                         self.logger.log_info(f"[LOOP] Obtained trigger function for desire: {desire_description}\n{function_string}")
+                                        self.status = f"Obtained trigger function for desire: {desire_description}"
                                     self.logger.log_info(f"[LOOP] Desire satisfied")
+                                    self.status = f"Desire satisfied: {desire_description}"
                                     generate_new_desire = True
                                 else:
                                     self.logger.log_info(f"[LOOP] Desire not yet satisfied")
+                                    self.status = f"Desire not yet satisfied: {desire_description}"
                         else:
                             self.manager.invalidate_intention(intention_id)
                             if intention_negative_evaluations < 3:

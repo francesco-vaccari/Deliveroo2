@@ -97,6 +97,8 @@ class PerceptionManager:
             self.functions[type].append(None)
     
     def get_printable_functions(self):
+        if not bool(self.functions):
+            return "Empty"
         out = "\n"
         for type in self.functions:
             out += f"Type: {type}\n"
