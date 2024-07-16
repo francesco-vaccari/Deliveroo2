@@ -4,7 +4,7 @@ from utils.Logger import ExperimentLogger
 from agent_dir.utils.ControlManager import ControlManager
 
 class Control:
-    def __init__(self, folder, communication, prompting, get_events, get_belief_set):
+    def __init__(self, folder, communication, prompting, get_events, get_belief_set, user_generated_desire, stateless_intention_generation, no_desire_triggering):
         self.communication = communication
         self.stop = False
         self.alive = [True]
@@ -13,6 +13,10 @@ class Control:
         self.logger = ExperimentLogger(folder, 'control.log')
         self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'))
         self.prompting = prompting
+
+        self.user_generated_desire = user_generated_desire
+        self.stateless_intention_generation = stateless_intention_generation
+        self.no_desire_triggering = no_desire_triggering
 
         self.initial_waiting_time = 20
 
@@ -37,16 +41,21 @@ class Control:
 
         while not self.stop:
             if generate_new_desire:
-                self.logger.log_info("[LOOP] Checking if any desire is triggered")
-                desire_id = self.manager.check_if_desire_triggered(self.get_belief_set())
-                plan = self.manager.run_desire(desire_id, self.get_belief_set())
+                plan = None
+                if not self.no_desire_triggering:
+                    self.logger.log_info("[LOOP] Checking if any desire is triggered")
+                    desire_id = self.manager.check_if_desire_triggered(self.get_belief_set())
+                    plan = self.manager.run_desire(desire_id, self.get_belief_set())
                 if plan is not None:
                     self.logger.log_info(f"[LOOP] Desire triggered : {self.manager.get_desire_description(desire_id)}")
                     self.execute_plan(plan, wait_for_events=False)
                 else:
                     self.logger.log_info("[LOOP] Generating new desire")
                     belief_set_prior = self.get_belief_set()
-                    desire_description = self.question_1(belief_set_prior)
+                    if self.user_generated_desire:
+                        desire_description = self.question_1(belief_set_prior)
+                    else:
+                        desire_description = input("Enter a desire: ")
                     if desire_description is None:
                         self.logger.log_error("[LOOP] Error while generating desire")
                     else:
@@ -60,11 +69,11 @@ class Control:
                 belief_set_copy = self.get_belief_set()
                 for i in range(3):
                     if error is not None:
-                        intention_description, function_string, error = self.question_2(desire_description, belief_set_copy, self.manager.get_library())
+                        intention_description, function_string, error = self.question_2(desire_description, belief_set_copy, self.manager.get_library(self.stateless_intention_generation))
                         for j in range(2):
                             if error is not None:
                                 self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying...")
-                                function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library())
+                                function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library(self.stateless_intention_generation))
                 if error is not None:
                     self.logger.log_error(f"[LOOP] Unable to generate intention for the desire")
                     generate_new_desire = True

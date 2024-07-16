@@ -32,11 +32,12 @@ class ControlManager:
         self.intentions_graph = {} # id -> [id] the function id contains calls to the functions [id]
         self.desires = {} # id -> Desire
         self.logger = logger
+        self.base_actions_max_id = 0
         folder_path = 'agent_dir/functions'
         self.functions_file_path = folder_path
-        self.load_actions(folder_path + "/actions.json")
+        self.load_base_actions(folder_path + "/actions.json")
     
-    def load_actions(self, actions_path):
+    def load_base_actions(self, actions_path):
         self.logger.log_info(f"Loading actions from {actions_path} ...")
         actions = json.load(open(actions_path))["actions"]
         for action in actions:
@@ -45,6 +46,7 @@ class ControlManager:
             function_string = f"""def {function_name}(belief_set):\n    plan.append('{action["action_name"]}')\n\n"""
             self.intentions[self.intention_id] = Intention(self.intention_id, function_name, function_string, description)
             self.intentions_graph[self.intention_id] = []
+            self.base_actions_max_id = self.intention_id
             self.intention_id += 1
         self.logger.log_info(f"Actions loaded: {self.get_printable_intentions()}")
     
@@ -349,11 +351,15 @@ class ControlManager:
         new_func_str = astor.to_source(tree)
         return new_func_str
 
-    def get_library(self):
+    def get_library(self, include_only_base_actions):
         intentions = {}
         for id, intention in self.intentions.items():
-            if intention.executable:
-                intentions[id] = intention
+            if include_only_base_actions:
+                if intention.id <= self.base_actions_max_id:
+                    intentions[id] = intention
+            else:
+                if intention.executable:
+                    intentions[id] = intention
         return intentions
 
     def get_printable_intentions(self):

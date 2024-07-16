@@ -297,13 +297,16 @@ class Map:
         return map
 
     def get_event(self, event_type):
+        grid = []
+        for row in self.grid:
+            grid.append(['wall' if cell == 0 else 'walkable' if cell == 1 else 'delivery' for cell in row])
         event = {
             "event_type": event_type,
             "object_type": "map",
             "object": {
                 "width": self.width,
                 "height": self.height,
-                "grid": self.grid
+                "grid": grid
             }
         }
         return event

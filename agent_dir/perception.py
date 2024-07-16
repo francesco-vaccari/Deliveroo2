@@ -6,7 +6,7 @@ from utils.Logger import ExperimentLogger
 from agent_dir.utils.PerceptionManager import PerceptionManager
 
 class Perception:
-    def __init__(self, folder, communication, prompting):
+    def __init__(self, folder, communication, prompting, generation_only_on_error):
         self.alive = [True, True, True]
         self.stop = False
         self.communication = communication
@@ -20,7 +20,7 @@ class Perception:
         self.initial_scaling_factor = 1.0
         self.scaling_factor_multiplier = 12.0
         self.number_example_events = 2
-        self.generate_only_with_error = True
+        self.generation_only_on_error = generation_only_on_error
 
         self.events_by_type = {}
         self.error_event_by_type = {}
@@ -84,7 +84,7 @@ class Perception:
         while not self.stop:
             events_by_type_copy = self.events_by_type.copy()
             for object_type in events_by_type_copy:
-                if self.generate_only_with_error:
+                if self.generation_only_on_error:
                     trigger = not self.manager.is_function_ready(object_type)
                 else:
                     trigger = self.error_event_by_type[object_type] is not None or self.threshold(object_type)

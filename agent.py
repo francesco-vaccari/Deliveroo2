@@ -39,6 +39,10 @@ if __name__ == "__main__":
     parser.add_argument('--host', type=str, required=False, default='127.0.0.1', help="Host address of the server")
     parser.add_argument('--port', type=int, required=True, help="Port number of the agent")
     parser.add_argument('--server-port', type=int, required=True, help="Port number of the server")
+    parser.add_argument('--user-generated-desire', required=True, help="Use user-generated desire")
+    parser.add_argument('--stateless-intention-generation', required=True, help="Use stateless intention generation")
+    parser.add_argument('--no-desire-triggering', required=True, help="Disable desire triggering")
+    parser.add_argument('--perception-generation-only-on-error', required=True, help="Generate perception only on error")
     args = parser.parse_args()
 
     logger = ExperimentLogger(args.folder, 'agent.log')
@@ -57,8 +61,8 @@ if __name__ == "__main__":
                 break
 
     prompting = Prompting(args.folder)
-    perception = Perception(args.folder, communication, prompting)
-    control = Control(args.folder, communication, prompting, perception.get_control_events, perception.get_belief_set)
+    perception = Perception(args.folder, communication, prompting, args.perception_generation_only_on_error)
+    control = Control(args.folder, communication, prompting, perception.get_control_events, perception.get_belief_set, args.user_generated_desire, args.stateless_intention_generation, args.no_desire_triggering)
     logger.log_debug("Perception and control units started")
 
 
