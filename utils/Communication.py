@@ -19,7 +19,7 @@ class Communication:
     
     def receive(self):
         if self.is_open:
-            data, addr = self.server_socket.recvfrom(1024)
+            data, addr = self.server_socket.recvfrom(8192)
             self.logger.log_info(f"[{self.PORT}] Received message from {addr}: {data.decode('utf-8')}")
             return data.decode('utf-8'), addr
         else:

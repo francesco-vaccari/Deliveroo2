@@ -8,6 +8,7 @@ class Prompting:
         self.client = AzureOpenAIClient()
         self.logger = ExperimentLogger(folder, 'prompting.log')
         self.stop = True # change to False when ready to use
+        self.requests_made = 0
     
     def send_request(self, context, question, tag, temperature=0.7):
         log = f"\n[{tag}]\nContext: {context}\nQuestion: {question}\nTemperature: {temperature}"
@@ -17,6 +18,7 @@ class Prompting:
             retry = 0
             while response is None and retry < max_retries:
                 response, error = self.client.send_request(context, question, temperature)
+                self.requests_made += 1
                 retry += 1
                 if error is not None:
                     log += f"\nAttempt {retry+1}/{max_retries}\nError: {error}"

@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
 
     app = QApplication(sys.argv)
-    visualizer = RealTimeVisualizer(perception, control, args.folder)
+    visualizer = RealTimeVisualizer(perception, control, prompting, args.folder)
     
     listener = threading.Thread(target=receive_events, args=(communication, perception, visualizer))
     listener.start()
@@ -97,4 +97,5 @@ perception.manager.get_printable_functions()
 control.manager.get_printable_intentions()
 control.manager.get_printable_desires()
 control.manager.get_printable_intentions_graph()
+prompting.requests_made
 '''

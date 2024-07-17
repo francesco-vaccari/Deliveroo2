@@ -3,10 +3,11 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, QScrollArea, QApplication
 
 class RealTimeVisualizer(QWidget):
-    def __init__(self, perception, control, folder):
+    def __init__(self, perception, control, prompting, folder):
         super().__init__()
         self.perception = perception
         self.control = control
+        self.prompting = prompting
 
         self.folder = folder
 
@@ -16,6 +17,13 @@ class RealTimeVisualizer(QWidget):
         
     def initUI(self):
         self.layout = QVBoxLayout()
+
+        self.API_calls = QScrollArea()
+        self.API_calls_label = QLabel("API Calls:")
+        self.API_calls.setWidget(self.API_calls_label)
+        self.API_calls.setWidgetResizable(True)
+        self.API_calls.setMaximumHeight(30)
+        self.API_calls_label.setWordWrap(True)
 
         self.perception_status = QScrollArea()
         self.control_status = QScrollArea()
@@ -59,6 +67,7 @@ class RealTimeVisualizer(QWidget):
         self.scroll4 = self.create_scrollable_label("Desires")
         self.scroll5 = self.create_scrollable_label("Intentions Graph")
 
+        self.layout.addWidget(self.API_calls)
         self.layout.addWidget(self.perception_status)
         self.layout.addWidget(self.control_status)
         self.layout.addWidget(self.scroll1)
@@ -96,9 +105,11 @@ class RealTimeVisualizer(QWidget):
         widget.setVisible(True)
 
     def update_labels(self):
+        api_calls = self.prompting.requests_made
         perception_status = self.perception.status
         control_status = self.control.status
 
+        self.API_calls_label.setText(f"API Calls: {api_calls}")
         self.perception_status.widget().setText(f"Perception Status: {perception_status}")
         self.control_status.widget().setText(f"Control Status: {control_status}")
 
