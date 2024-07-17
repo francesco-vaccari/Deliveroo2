@@ -13,7 +13,7 @@ The input event is structured like the following examples:
 ```example_events```
 
 
-The input event describes a change in the state of an object or entity in the environment. The field 'object_type' specifies the type of object. The function you will write will only be used to process events for the object '```object_type```'. Other functions will be used to process events for other object types. Each function updates the belief set indipedently from the others.
+The input event describes a change in the state of an object in the environment. The field 'object_type' specifies the type of the object. The function you provide will only be used to process events for the object '```object_type```'. Other functions will be used to process events for other object types. Each function updates the belief set indipedently from the others.
 
 The input event has the field 'event_type' that specifies the type of event. The field 'event_type' can be one of the following:
 - 'object added' meaning that the obejct didn't exist before and now it does;
@@ -21,7 +21,7 @@ The input event has the field 'event_type' that specifies the type of event. The
 - 'object removed' meaning that the object existed before and now it doesn't.
 
 
-The belief set is a python dictionary. Update it with the information from the event. The belief set is structured like this:
+The belief set is a python dictionary. Update it with the information from the event. The current belief set is structured like this:
 
 ```belief_set```
 

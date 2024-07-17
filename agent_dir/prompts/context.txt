@@ -1,11 +1,11 @@
-An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will have to provide python code to process the events and to generate plans to act on the environment. Your code will be used in a BDI agent system. You will not have to write the entire agent system, you will just have to write snippets of python code.
+An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will have to provide python code to process the events and to generate plans. Your code will be used in a BDI-based agent architecture. You will not have to write the entire system, you will just have to write snippets of python code.
 
 If you have to provide a function, stick to the following guidelines:
 - do not use any external libraries except the standard python libraries
-- do not use any global variables
 - do not use print statements
 - do not split the code into multiple blocks
-- keep your code clean and readable
 - fully implement the function
 
-Make sure to format the response as a JSON object following the instructions in the question. If a functoin is requested, the must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+If you have to provide a textual description, make it concise, direct and imperative starting with a verb.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a functoin is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
