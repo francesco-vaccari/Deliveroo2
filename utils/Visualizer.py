@@ -127,6 +127,9 @@ class RealTimeVisualizer(QWidget):
 
         if self.self_close:
             os.makedirs(f"{self.folder}/result", exist_ok=True)
+            with open(f"{self.folder}/result/api_calls.txt", "w") as f:
+                f.write(str(api_calls))
+                f.close()
             with open(f"{self.folder}/result/belief_set.txt", "w") as f:
                 f.write(var1_value)
                 f.close()

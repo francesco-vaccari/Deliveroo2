@@ -83,7 +83,7 @@ class ControlManager:
             exec(function_string, functions_module.__dict__)
             func = getattr(functions_module, self.get_function_name(function_string))
             queue = multiprocessing.Queue()
-            process = multiprocessing.Process(target=self.run_func, args=(func, queue,))
+            process = multiprocessing.Process(target=self.run_func, args=(func, queue, belief_set,))
             process.start()
             process.join(self.timeout)
             if process.is_alive():
@@ -122,9 +122,8 @@ class ControlManager:
                     functions_module = importlib.import_module(module_name)
                     exec(intention.function_string, functions_module.__dict__)
                     func = getattr(functions_module, intention.function_name)
-                    print(func.__name__)
                     queue = multiprocessing.Queue()
-                    process = multiprocessing.Process(target=self.run_func, args=(func, queue,))
+                    process = multiprocessing.Process(target=self.run_func, args=(func, queue, belief_set,))
                     process.start()
                     process.join(self.timeout)
                     if process.is_alive():
@@ -143,7 +142,6 @@ class ControlManager:
                     f.close()
                     working_functions_names.append(intention.function_name)
                 except Exception as e:
-                    print(f"Intention {id} is invalid. Error: {e}")
                     self.invalidate_intention(id)
         
         return working_functions_names
@@ -166,7 +164,7 @@ class ControlManager:
 
         self.intention_id += 1
 
-        self.logger.log_info(f"Intention added to desire {desire_id}:")
+        self.logger.log_info(f"Intention added to desire {desire_id}")
         return self.intention_id - 1
     
     def run_intention(self, id, belief_set):
@@ -187,7 +185,7 @@ class ControlManager:
             exec(self.intentions[id].function_string, functions_module.__dict__)
             func = getattr(functions_module, self.intentions[id].function_name)
             queue = multiprocessing.Queue()
-            process = multiprocessing.Process(target=self.run_func, args=(func, queue,))
+            process = multiprocessing.Process(target=self.run_func, args=(func, queue, belief_set,))
             process.start()
             process.join(self.timeout)
             if process.is_alive():
@@ -354,12 +352,11 @@ class ControlManager:
     def get_library(self, include_only_base_actions):
         intentions = {}
         for id, intention in self.intentions.items():
-            if include_only_base_actions:
-                if intention.id <= self.base_actions_max_id:
-                    intentions[id] = intention
-            else:
                 if intention.executable:
                     intentions[id] = intention
+                if include_only_base_actions:
+                    if id == self.base_actions_max_id:
+                        break
         return intentions
 
     def get_printable_intentions(self):
@@ -397,8 +394,8 @@ class ControlManager:
     def add_tab(self, string, n_tabs):
         return "\n".join(["    " * n_tabs + line for line in string.split("\n")])
 
-    def run_func(self, func, queue):
+    def run_func(self, func, queue, belief_set):
         try:
-            func()
+            func(belief_set)
         except Exception as e:
             queue.put(e)

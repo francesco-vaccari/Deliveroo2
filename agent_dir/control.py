@@ -65,11 +65,13 @@ class Control:
                         desire_description = input("Enter a desire: ")
                     if desire_description is None:
                         self.logger.log_error("[LOOP] Error while generating desire")
+                        intention_negative_evaluations = 0
                         generate_new_desire = True
                     else:
                         self.logger.log_info(f"[LOOP] Desire generated: {desire_description}")
                         self.status = f"Desire generated: {desire_description}"
                         desire_id = self.manager.add_desire(desire_description)
+                        intention_negative_evaluations = 0
                         generate_new_desire = False
             else:
                 self.logger.log_info("[LOOP] Generating new intention ...")
@@ -88,6 +90,7 @@ class Control:
                 if error is not None:
                     self.logger.log_error(f"[LOOP] Unable to generate intention for the desire")
                     self.status = "Unable to generate intention for the desire"
+                    intention_negative_evaluations = 0
                     generate_new_desire = True
                 else:
                     self.logger.log_info(f"[LOOP] Intention generated: {intention_description}\n{function_string}")
@@ -108,9 +111,11 @@ class Control:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for intention")
                         self.status = "Unable to obtain evaluation for intention"
                         self.manager.invalidate_intention(intention_id)
+                        intention_negative_evaluations = 0
                         generate_new_desire = True
                     else:
                         if intention_evaluation == "True":
+                            intention_negative_evaluations = 0
                             self.logger.log_info(f"[LOOP] Intention evaluation positive")
                             self.status = "Intention evaluation positive, now asking for desire evaluation..."
                             self.logger.log_info("[LOOP] Asking for desire evaluation...")
@@ -132,6 +137,7 @@ class Control:
                                         self.status = f"Obtained trigger function for desire: {desire_description}"
                                     self.logger.log_info(f"[LOOP] Desire satisfied")
                                     self.status = f"Desire satisfied: {desire_description}"
+                                    intention_negative_evaluations = 0
                                     generate_new_desire = True
                                 else:
                                     self.logger.log_info(f"[LOOP] Desire not yet satisfied")
@@ -141,6 +147,7 @@ class Control:
                             if intention_negative_evaluations < 3:
                                 intention_negative_evaluations += 1
                             else:
+                                intention_negative_evaluations = 0
                                 generate_new_desire = True
 
         self.logger.log_debug("[LOOP] Stopped loop thread")
@@ -167,7 +174,7 @@ class Control:
 
         elements = [desire, belief_set, library]
         elements_names = ["desire", "belief_set", "library"]
-        elements_to_extract = ["goal", "function"]
+        elements_to_extract = ["description", "function"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q2")
 
@@ -223,6 +230,8 @@ class Control:
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q4] Error while making request: {error}")
             return None
+        
+        self.logger.log_info(f"[LOOP] Obtained evaluation for intention: {extracted_elements[0]}")
 
         return extracted_elements[0]
 
@@ -239,6 +248,8 @@ class Control:
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q5] Error while making request: {error}")
             return None
+        
+        self.logger.log_info(f"[LOOP] Obtained evaluation for desire: {extracted_elements[0]}")
         
         return extracted_elements[0]
 

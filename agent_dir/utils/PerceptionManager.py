@@ -105,4 +105,5 @@ class PerceptionManager:
             for function in self.functions[type]:
                 if function is not None:
                     out += f"{function.function_string}\n"
+        out += "\n"
         return out
