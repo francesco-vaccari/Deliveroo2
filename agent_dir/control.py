@@ -14,7 +14,6 @@ class Control:
         self.logger = ExperimentLogger(folder, 'control.log')
         self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'))
         self.prompting = prompting
-
         self.user_generated_desire = user_generated_desire
         self.stateless_intention_generation = stateless_intention_generation
         self.no_desire_triggering = no_desire_triggering
@@ -52,6 +51,7 @@ class Control:
                     plan = self.manager.run_desire(desire_id, self.get_belief_set())
                 if plan is not None:
                     self.logger.log_info(f"[LOOP] Desire triggered : {self.manager.get_desire_description(desire_id)}")
+                    self.logger.log_info(f"[LOOP] Plan generated: {plan}")
                     self.status = f"Desire triggered : {self.manager.get_desire_description(desire_id)}"
                     self.execute_plan(plan, wait_for_events=False)
                 else:
@@ -59,10 +59,10 @@ class Control:
                     self.status = "Generating new desire"
                     belief_set_prior = self.get_belief_set()
                     if self.user_generated_desire:
-                        desire_description = self.question_1(belief_set_prior)
-                    else:
                         self.status = "Please input in the terminal the desire you want to generate..."
                         desire_description = input("Enter a desire: ")
+                    else:
+                        desire_description = self.question_1(belief_set_prior)
                     if desire_description is None:
                         self.logger.log_error("[LOOP] Error while generating desire")
                         intention_negative_evaluations = 0
@@ -83,11 +83,11 @@ class Control:
                     if error is not None:
                         intention_description, function_string, error = self.question_2(desire_description, belief_set_copy, self.manager.get_library(self.stateless_intention_generation))
                         for j in range(2):
-                            if error is not None:
+                            if error is not None and intention_description is not None:
                                 self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying...")
                                 self.status = f"Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying..."
                                 function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library(self.stateless_intention_generation))
-                if error is not None:
+                if error is not None or intention_description is None:
                     self.logger.log_error(f"[LOOP] Unable to generate intention for the desire")
                     self.status = "Unable to generate intention for the desire"
                     intention_negative_evaluations = 0
@@ -104,9 +104,10 @@ class Control:
                     else:
                         self.logger.log_info(f"[LOOP] Plan generated: {plan}")
                         self.status = f"Executing plan"
+                        belief_set_before_execution = self.get_belief_set()
                         events = self.execute_plan(plan)
                         self.logger.log_info(f"[LOOP] Plan executed with events {events}\nAsking for intention evaluation...")
-                        intention_evaluation = self.question_4(intention_description, plan, events)
+                        intention_evaluation = self.question_4(intention_description, plan, events, belief_set_before_execution)
                     if intention_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for intention")
                         self.status = "Unable to obtain evaluation for intention"
@@ -119,7 +120,12 @@ class Control:
                             self.logger.log_info(f"[LOOP] Intention evaluation positive")
                             self.status = "Intention evaluation positive, now asking for desire evaluation..."
                             self.logger.log_info("[LOOP] Asking for desire evaluation...")
-                            desire_evaluation = self.question_5(desire_description, belief_set_prior, self.get_belief_set())
+                            if self.user_generated_desire:
+                                desire_evaluation = None
+                                while desire_evaluation is None or desire_evaluation not in ["True", "False"]:
+                                    desire_evaluation = input("Enter evaluation for intention (True/False): ")
+                            else:
+                                desire_evaluation = self.question_5(desire_description, belief_set_prior, self.get_belief_set())
                             if desire_evaluation is None:
                                 self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
                                 self.status = "Unable to obtain evaluation for desire"
@@ -127,14 +133,15 @@ class Control:
                                 if desire_evaluation == "True":
                                     self.logger.log_info(f"[LOOP] Desire evaluation positive")
                                     self.status = "Desire evaluation positive, now asking for trigger function..."
-                                    function_string = self.question_6(desire_description, self.get_belief_set(), belief_set_prior)
-                                    if function_string is None:
-                                        self.logger.log_error(f"[LOOP] Unable to obtain trigger function for desire")
-                                        self.status = "Unable to obtain trigger function for desire"
-                                    else:
-                                        self.manager.add_trigger_function(desire_id, function_string)
-                                        self.logger.log_info(f"[LOOP] Obtained trigger function for desire: {desire_description}\n{function_string}")
-                                        self.status = f"Obtained trigger function for desire: {desire_description}"
+                                    if not self.user_generated_desire:
+                                        function_string = self.question_6(desire_description, self.get_belief_set(), belief_set_prior)
+                                        if function_string is None:
+                                            self.logger.log_error(f"[LOOP] Unable to obtain trigger function for desire")
+                                            self.status = "Unable to obtain trigger function for desire"
+                                        else:
+                                            self.manager.add_trigger_function(desire_id, function_string)
+                                            self.logger.log_info(f"[LOOP] Obtained trigger function for desire: {desire_description}\n{function_string}")
+                                            self.status = f"Obtained trigger function for desire: {desire_description}"
                                     self.logger.log_info(f"[LOOP] Desire satisfied")
                                     self.status = f"Desire satisfied: {desire_description}"
                                     intention_negative_evaluations = 0
@@ -170,7 +177,10 @@ class Control:
     
     def question_2(self, desire, belief_set, library):
         context_prompt_path = 'agent_dir/prompts/context.txt'
-        question_prompt_path = 'agent_dir/prompts/control_question_2.txt'
+        if self.stateless_intention_generation:
+            question_prompt_path = 'agent_dir/prompts/control_question_2_SIG.txt'
+        else:
+            question_prompt_path = 'agent_dir/prompts/control_question_2.txt'
 
         elements = [desire, belief_set, library]
         elements_names = ["desire", "belief_set", "library"]
@@ -188,7 +198,7 @@ class Control:
         error = self.manager.test_intention(function_string, belief_set)
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q2] Error while testing intention function: {error}")
-            return None, function_string, error
+            return intention, function_string, error
         
         return intention, function_string, None
 
@@ -215,14 +225,14 @@ class Control:
         
         return function_string, None
 
-    def question_4(self, intention, plan, events):
+    def question_4(self, intention, plan, events, belief_set):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_4.txt'
 
         actions = [(action, events[i]) for i, action in enumerate(plan)]
 
-        elements = [intention, actions]
-        elements_names = ["intention", "actions"]
+        elements = [intention, belief_set, actions]
+        elements_names = ["intention", "belief_set", "actions"]
         elements_to_extract = ["evaluation"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q4")
@@ -282,12 +292,13 @@ class Control:
         self.get_events()
         for action in plan:
             if self.stop:
-                return events_plan
-            self.communication.send_to_server(action)
-            if wait_for_events:
-                time.sleep(0.2)
-            events = self.get_events()
-            events_plan.append(events)
+                events_plan.append([])
+            else:
+                self.communication.send_to_server(action)
+                if wait_for_events:
+                    time.sleep(0.2)
+                events = self.get_events()
+                events_plan.append(events)
         return events_plan
     
     def is_alive(self):

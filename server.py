@@ -1,4 +1,6 @@
 import pygame
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import signal
 import argparse
 
@@ -157,6 +159,8 @@ def game_loop(communication, game, graphics, clock, logger):
 
         send_events(communication, logger, events, agents_ports_to_ids)
 
+        graphics.display_fps(clock.get_fps())
+        
         pygame.display.update()
         clock.tick(60)
 
@@ -179,7 +183,7 @@ if __name__ == '__main__':
     logger.log_debug("Server started")
 
     communication = Communication(args.folder, args.host, args.port)
-    game = Game(args.map, args.parcels)
+    game = Game(args.map, args.parcels, args.folder)
     
     pygame.init()
     

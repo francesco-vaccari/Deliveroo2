@@ -31,8 +31,17 @@ server_args = ['--map', maps_path, '--parcels', parcels_path, '--folder', experi
 process1 = subprocess.Popen(['python3', 'server.py'] + server_args)
 logger.log_debug("Server started")
 
-agent_args = ['--folder', experiment_folder, '--host', args.host, '--port', str(args.port+1), '--server-port', str(args.port), '--user-generated-desire', str(args.user_generated_desire), '--stateless-intention-generation', str(args.stateless_intention_generation), '--no-desire-triggering', str(args.no_desire_triggering), '--perception-generation-only-on-error', str(args.perception_generation_only_on_error)]
-process2 = subprocess.Popen(['python3', 'agent.py'] + agent_args)
+arguments = []
+if args.user_generated_desire:
+    arguments.append('--user-generated-desire')
+if args.stateless_intention_generation:
+    arguments.append('--stateless-intention-generation')
+if args.no_desire_triggering:
+    arguments.append('--no-desire-triggering')
+if args.perception_generation_only_on_error:
+    arguments.append('--perception-generation-only-on-error')
+agent_args = ['--folder', experiment_folder, '--host', args.host, '--port', str(args.port+1), '--server-port', str(args.port)]
+process2 = subprocess.Popen(['python3', 'agent.py'] + agent_args + arguments)
 logger.log_debug("Agent started")
 
 def signal_handler(sig, frame):

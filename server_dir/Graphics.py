@@ -1,4 +1,6 @@
 import pygame
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 class Graphics:
     def __init__(self, game, width=600, height=600):
@@ -221,3 +223,12 @@ class Graphics:
         self.x_offset += mouse_end_pos[0] - self.mouse_start_pos[0]
         self.y_offset += mouse_end_pos[1] - self.mouse_start_pos[1]
         self.mouse_start_pos = mouse_end_pos
+    
+    def display_fps(self, fps):
+        pygame.font.init()
+        font = pygame.font.SysFont(None, 15)
+        fps_text = font.render(f"{int(fps)}", True, pygame.Color('white'))
+        screen_width, screen_height = self.screen.get_size()
+        text_rect = fps_text.get_rect()
+        text_rect.topright = (screen_width - 10, 10)
+        self.screen.blit(fps_text, text_rect)

@@ -1,0 +1,24 @@
+Given the long term goal description
+
+```desire```
+
+and the belief set describing the agent's knowledge about the world
+
+```belief_set```
+
+propose a short term goal description in natural language and a function that achieves the short term goal. The short term goal description should be an explanation of what the agent achieves by executing the function.
+
+The short term goal description should be aligned with the long term goal description, and should be simple, brief and general without referring specific objects of the belief set.
+
+The function has to take as input 'belief_set' and must not modify it. The function can contain calls to already implemented functions from the following library:
+
+```library```
+
+To include one of the library functions, you need to call them with 'belief_set' as argument. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions from the library do not return any value.
+
+Do not modify the belief set in the function that you provide. The belief set is a copy of the original and is not updated when the agent executes the functions from the library.
+
+Implement a function that is simple and general, and that can be used in a variety of situations.
+
+
+Provide the response in JSON format with the field 'description' containing the short term goal description and the field 'function' containing the function that achieves the short term goal description.

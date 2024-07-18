@@ -1,20 +1,17 @@
 Controllare e sistemare lo pseudo codice con tutto aggiornato e magari guardare come è fatto quello BDI standard per confrontare.
 
-Testare user-provided desire e tutte le altre alternative di pipeline magari.
+Testare le alternative di pipeline.
+User provided deve saltare generazione del desire, evaluation del desire (richiedere all'utente) e generazione della trigger function.
+Stateless intention generation devo solo modificare la funzione manager.get_library() per includere solo le azioni base (da testare).
+No desire triggering semplicemente no chiamo la prima parte della funzione (da testare).
 
 
-
-
-Aggiungere belief set iniziale (e finale) control question 4?
 
 Implementare memoria?
 
+Per avere i replay della finestra di pygame, potrei utilizzare seed per riprodurre le stesse generazioni di elementi casuali, e per le azioni invece posso salvare lato server le azioni che ricevo da ogni agente in quale frame sono state ricevute e poi nel replay simulare la loro ricezione, utilizzando già l'architettura che ho nel file server.py.
 
 
-
-Non posso usare multiprocessing, devo trovare un'altra soluzione per avere timeout delle intention.
-
-Forse non funziona anche l'inclusione delle nuove funzioni nella libreria perché vedo solo quelle base.
 
 Provare a cambiare la temperature per la request cambia le cose.
 

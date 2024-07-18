@@ -2,7 +2,7 @@ import random
 import json
 
 class Game:
-    def __init__(self, map_conf_path, parcels_conf_path):
+    def __init__(self, map_conf_path, parcels_conf_path, folder):
         self.map = Map(map_conf_path)
         self.parcels = []
         self.agents = []

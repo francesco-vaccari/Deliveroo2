@@ -5,7 +5,7 @@ import time
 import json
 import astor
 import importlib
-import multiprocessing
+import subprocess
 
 class Intention:
     def __init__(self, id, function_name, function_string, description):
@@ -33,17 +33,18 @@ class ControlManager:
         self.desires = {} # id -> Desire
         self.logger = logger
         self.base_actions_max_id = 0
-        folder_path = 'agent_dir/functions'
-        self.functions_file_path = folder_path
-        self.load_base_actions(folder_path + "/actions.json")
+        self.functions_file_path = 'agent_dir/functions'
+        self.plan_file = self.functions_file_path + "/plan.txt"
+        self.load_base_actions(self.functions_file_path + "/actions.json")
     
     def load_base_actions(self, actions_path):
         self.logger.log_info(f"Loading actions from {actions_path} ...")
         actions = json.load(open(actions_path))["actions"]
         for action in actions:
-            function_name = action["function_name"]
+            # function_name = action["function_name"]
+            function_name = f"function_{self.intention_id}"
             description = action["description"]
-            function_string = f"""def {function_name}(belief_set):\n    plan.append('{action["action_name"]}')\n\n"""
+            function_string = f"""def {function_name}(belief_set):\n    with open('{self.plan_file}', 'a') as f:\n        f.write('{action["action_name"]}\\n')\n        f.close()\n\n"""
             self.intentions[self.intention_id] = Intention(self.intention_id, function_name, function_string, description)
             self.intentions_graph[self.intention_id] = []
             self.base_actions_max_id = self.intention_id
@@ -77,24 +78,33 @@ class ControlManager:
                     self.logger.log_error(f"Intention is invalid. Contains call to broken functions.")
                     return f"The function called {function_called} can no longer be used. Do not use {function_called}."
 
+        functions_file_name = self.functions_file_path + "/test_functions.py"
+
+        belief_set_file = self.functions_file_path + "/belief_set.txt"
+        with open(belief_set_file, 'w') as f:
+            f.write(str(belief_set))
+            f.close()
+
         try:
-            sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'agent_dir')))
-            functions_module = importlib.import_module('functions.test_functions')
-            exec(function_string, functions_module.__dict__)
-            func = getattr(functions_module, self.get_function_name(function_string))
-            queue = multiprocessing.Queue()
-            process = multiprocessing.Process(target=self.run_func, args=(func, queue, belief_set,))
-            process.start()
-            process.join(self.timeout)
-            if process.is_alive():
-                process.terminate()
-                process.join()
-                raise TimeoutError(f"Function execution timed out: cannot exceed {self.timeout} seconds")
-            else:
-                if not queue.empty():
-                    error = queue.get()
-                    raise error
+            with open(functions_file_name, "a") as f:
+                f.write("\n")
+                f.write(function_string)
+                f.write("\n")
+                f.write("\n")
+                f.write(f"""with open('{belief_set_file}', 'r') as f:\n""")
+                f.write("""    belief_set = eval(f.read())\n""")
+                f.write("""    f.close()\n""")
+                f.write("\n")
+                f.write("\n")
+                f.write(f"{self.get_function_name(function_string)}(belief_set)\n")
+                f.close()
+
+            process = subprocess.Popen(['python3', functions_file_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate(timeout=5)
+            if stderr != b'':
+                raise Exception(stderr)
         except Exception as e:
+            process.kill()
             self.logger.log_error(f"Intention is invalid. Error: {e}")
             return f"Error: {e}"
         
@@ -104,44 +114,54 @@ class ControlManager:
     def test_implemented_intentions(self, belief_set, test):
         if test:
             functions_file_name = self.functions_file_path + "/test_functions.py"
-            module_name = "functions.test_functions"
         else:
             functions_file_name = self.functions_file_path + "/functions.py"
-            module_name = "functions.functions"
-        f = open(functions_file_name, "w")
-        f.write("plan = []\n")
-        f.close()
-        
 
         working_functions_names = []
+
+        with open(functions_file_name, "w") as f:
+            f.write("\n")
+            f.close()
+        
+        belief_set_file = self.functions_file_path + "/belief_set.txt"
+        with open(belief_set_file, 'w') as f:
+            f.write(str(belief_set))
+            f.close()
         
         for id, intention in self.intentions.items():
             if intention.executable:
                 try:
-                    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'agent_dir')))
-                    functions_module = importlib.import_module(module_name)
-                    exec(intention.function_string, functions_module.__dict__)
-                    func = getattr(functions_module, intention.function_name)
-                    queue = multiprocessing.Queue()
-                    process = multiprocessing.Process(target=self.run_func, args=(func, queue, belief_set,))
-                    process.start()
-                    process.join(self.timeout)
-                    if process.is_alive():
-                        process.terminate()
-                        process.join()
-                        raise TimeoutError(f"Function execution timed out: cannot exceed {self.timeout} seconds")
-                    else:
-                        if not queue.empty():
-                            error = queue.get()
-                            raise error
+                    with open(functions_file_name, "r") as f:
+                        content = f.read()
+                        f.close()
+                    with open(functions_file_name, "w") as f:
+                        f.write(content)
+                        f.write("\n")
+                        f.write(intention.function_string)
+                        f.write("\n")
+                        f.write("\n")
+                        f.write(f"""with open('{belief_set_file}', 'r') as f:\n""")
+                        f.write("""    belief_set = eval(f.read())\n""")
+                        f.write("""    f.close()\n""")
+                        f.write("\n")
+                        f.write("\n")
+                        f.write(f"{intention.function_name}(belief_set)\n")
+                        f.close()
                     
-                    f = open(functions_file_name, "a")
-                    f.write("\n")
-                    f.write(intention.function_string)
-                    f.write("\n")
-                    f.close()
-                    working_functions_names.append(intention.function_name)
+                    process = subprocess.Popen(['python3', functions_file_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    stdout, stderr = process.communicate(timeout=5)
+                    if stderr == b'':
+                        with open(functions_file_name, "w") as f:
+                            f.write(content)
+                            f.write("\n")
+                            f.write(f"{intention.function_string}")
+                            f.write("\n")
+                            f.close()
+                        working_functions_names.append(intention.function_name)
+                    else:
+                        raise Exception(stderr)
                 except Exception as e:
+                    process.kill()
                     self.invalidate_intention(id)
         
         return working_functions_names
@@ -179,29 +199,52 @@ class ControlManager:
         if not self.intentions[id].executable:
             return None
         
+        functions_file_name = self.functions_file_path + "/functions.py"
+
+        belief_set_file = self.functions_file_path + "/belief_set.txt"
+        with open(belief_set_file, 'w') as f:
+            f.write(str(belief_set))
+            f.close()
+
+        
+        with open(self.plan_file, 'w') as f:
+            f.write("")
+            f.close()
+        
         try:
-            sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'agent_dir')))
-            functions_module = importlib.import_module('functions.functions')
-            exec(self.intentions[id].function_string, functions_module.__dict__)
-            func = getattr(functions_module, self.intentions[id].function_name)
-            queue = multiprocessing.Queue()
-            process = multiprocessing.Process(target=self.run_func, args=(func, queue, belief_set,))
-            process.start()
-            process.join(self.timeout)
-            if process.is_alive():
-                process.terminate()
-                process.join()
-                raise TimeoutError(f"Function execution timed out: cannot exceed {self.timeout} seconds")
-            else:
-                if not queue.empty():
-                    error = queue.get()
-                    raise error       
+            with open(functions_file_name, "a") as f:
+                f.write("\n")
+                f.write(self.intentions[id].function_string)
+                f.write("\n")
+                f.write("\n")
+                f.write(f"""with open('{belief_set_file}', 'r') as f:\n""")
+                f.write("""    belief_set = eval(f.read())\n""")
+                f.write("""    f.close()\n""")
+                f.write("\n")
+                f.write("\n")
+                f.write(f"{self.intentions[id].function_name}(belief_set)\n")
+                f.close()
+
+            process = subprocess.Popen(['python3', functions_file_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate(timeout=5)
+            if stderr != b'':
+                raise Exception(stderr)
+
             self.logger.log_info(f"Intention {id} has been executed.")
-            return functions_module.plan
+
+            return self.get_plan_from_file(self.plan_file)
         except Exception as e:
+            process.kill()
             self.invalidate_intention(id)
             self.logger.log_error(f"Intention {id} is invalid. Error: {e}")
             return None
+    
+    def get_plan_from_file(self, file_path):
+        plan = []
+        with open(file_path, 'r') as f:
+            plan = f.read().splitlines()
+            f.close()
+        return plan
 
     def invalidate_intention(self, id):
         self.logger.log_info(f"Invalidating intention {id} ...")
@@ -309,9 +352,7 @@ class ControlManager:
     def is_valid_function(self, function_string):
         try:
             tree = ast.parse(function_string)
-
-            if len(tree.body) != 1:
-                return "The code does not contain exactly one function definition."
+            
             if not isinstance(tree.body[0], ast.FunctionDef):
                 return "The code does not contain a function definition."
             if not tree.body[0].name:
@@ -349,12 +390,12 @@ class ControlManager:
         new_func_str = astor.to_source(tree)
         return new_func_str
 
-    def get_library(self, include_only_base_actions):
+    def get_library(self, stateless_intention_generation):
         intentions = {}
         for id, intention in self.intentions.items():
                 if intention.executable:
                     intentions[id] = intention
-                if include_only_base_actions:
+                if stateless_intention_generation:
                     if id == self.base_actions_max_id:
                         break
         return intentions
@@ -376,7 +417,7 @@ class ControlManager:
         for id, desire in self.desires.items():
             out += f"Desire {id}: {desire.description}\n"
             for intention in desire.intentions:
-                out += f"    [{id}]\n"
+                out += f"    Intention ID: [{intention.id}]\n"
                 out += f"    Executable: {intention.executable}\n"
                 out += f"    Description: {intention.description}\n"
                 out += self.add_tab(intention.function_string, 4)
@@ -393,9 +434,3 @@ class ControlManager:
     
     def add_tab(self, string, n_tabs):
         return "\n".join(["    " * n_tabs + line for line in string.split("\n")])
-
-    def run_func(self, func, queue, belief_set):
-        try:
-            func(belief_set)
-        except Exception as e:
-            queue.put(e)
