@@ -190,7 +190,7 @@ class Control:
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q2] Error while making request: {error}")
-            return None, function_string, error
+            return None, None, error
         
         intention = extracted_elements[0]
         function_string = extracted_elements[1]
