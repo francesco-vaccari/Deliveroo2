@@ -5,11 +5,30 @@ User provided deve saltare generazione del desire, evaluation del desire (richie
 Stateless intention generation devo solo modificare la funzione manager.get_library() per includere solo le azioni base (da testare).
 No desire triggering semplicemente no chiamo la prima parte della funzione (da testare).
 
+Aggiungere desire implementati (funzionanti) alla desire generation control question 1, così da evitare che generi sempre lo stesso desire.
+
+Adattare descrizioni delle azioni base per renderle "This function ..." e poi continuare con la descrizione, e mettere le informazioni sull'ambiente nel contesto.
+
+Nel caso l'ambiente cambiasse, come faccio con i desire già implementati? In quel caso non posso più utilizzarli sicuramente. Per quanto riguarda invece le intention già implementate devo avere il meccanismo della memoria che mi dice di non utilizzarla.
+
+Scrivere meglio l'evento della mappa aggiugendo le coordinate per ogni cella.
 
 
-Implementare memoria?
+Creare stima di costo per esperimento?
+
+
+Implementare memoria? In questo caso tolgo la descrizione delle azioni base, tolgo le informazioni dal contesto, e permetto alla LLM di scrivere delle frasi su cosa ha imparato riguardo il belief set, le azioni implementate, come interagiscono con il mondo, gli eventi che riceve. Questo step potrebbe essere inserito nell'intention evaluation, però magari da staccare senza includere l'intention e solo dando il belief set iniziale e le azioni compiute con i loro eventi. In questo modo però non so a quali azioni corrispondono le funzioni già implementate, quindi magari sarebbe da incitare la LLM in control question 2, o nel contesto, a scoprire inizialmente cosa fanno le azioni base.
 
 Per avere i replay della finestra di pygame, potrei utilizzare seed per riprodurre le stesse generazioni di elementi casuali, e per le azioni invece posso salvare lato server le azioni che ricevo da ogni agente in quale frame sono state ricevute e poi nel replay simulare la loro ricezione, utilizzando già l'architettura che ho nel file server.py.
+
+
+Idealmente vorrei un ambiente con pochi elementi, per evitare di creare complessità inutile, e per tenere la lunghezza dei prompt bassa. Quindi mappa piccola, basso spawn rate delle parcelle, decay lento o nullo, magari con punteggio basso delle parcelle.
+
+Provare ancora a migliorare la descrizione che fornisce delle intention prodotte. Ad esempio istruendo la LLM di iniziare con "This function ..." e poi continuare con la descrizione. In questo caso dovrei anche cambiare la descrizione delle azioni base. E in questo caso magari stacco le informazioni dell'ambiente e le metto in una sezione a parte del prompt.
+
+Rivedere desire evaluation e aggiungere altre informazioni, magari riguardanti le intention eseguite, o solo l'ultima con la sua descrizione?
+
+A quanto pare la mia idea che il desire può essere eseguito utilizzando tutte le intenzioni che contiene è sbagliata, sembrerebbe che sia sufficiente eseguire solamente l'ultima intenzione che scrive. Cambiare in run_desire
 
 
 
@@ -20,3 +39,20 @@ Cambiare nel prompting il self.stop quando pronto per esperimenti.
 Per poter runnare il progetto serve: pygame, astor, python-dotenv, PyQt5, openai e ovviamente il file .env con le variablili di ambiente. Aggiornare magari la descrizione della repo così da spiegare come farlo partire.
 
 https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/
+
+
+Cose di cui parlare:
+- a che punto sono con il progetto
+- nuovo meccanismo della memoria dato dal problema della conoscenza dell'utente sulle azioni e come modificano l'ambiente (ed eventi)
+- come eseguire gli esperimenti
+- mostrare esempio di esperimento
+- modello di azure
+
+Note su incontro:
+evoluzione dell'ambiente con cambiamenti della mappa, o aggiunta di nuovi elementi
+
+provare senza score, o con delivery zones che danno più punti
+
+capire se ci possono essere evoluzioni diverse con lo stesso gioco, capire se ci sono diverse direzioni di evoluzione
+
+reward negativo per azioni sbagliate
