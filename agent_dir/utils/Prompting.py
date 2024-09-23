@@ -71,6 +71,12 @@ class Prompting:
                 else:
                     for event in events:
                         string += f"\t*  {event}\n"
+        elif element_name == "descriptions":
+            if len(element) == 0:
+                string = "No long term goal has been implemented yet."
+            else:
+                for i, description in enumerate(element):
+                    string += f"- {description}\n"
         else:
             string = str(element)
         

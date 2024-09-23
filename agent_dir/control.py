@@ -53,7 +53,23 @@ class Control:
                     self.logger.log_info(f"[LOOP] Desire triggered : {self.manager.get_desire_description(desire_id)}")
                     self.logger.log_info(f"[LOOP] Plan generated: {plan}")
                     self.status = f"Desire triggered : {self.manager.get_desire_description(desire_id)}"
+                    belief_set_before_execution = self.get_belief_set()
                     self.execute_plan(plan, wait_for_events=False)
+                    self.logger.log_info("[LOOP] Plan executed, asking for desire evaluation...")
+                    self.status = "Plan executed, asking for desire evaluation"
+                    desire_evaluation = self.question_5(self.manager.get_desire_description(desire_id), belief_set_before_execution, self.get_belief_set())
+                    if desire_evaluation is None:
+                        self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
+                        self.status = "Unable to obtain evaluation for desire"
+                        self.manager.invalidate_desire(desire_id)
+                    else:
+                        if desire_evaluation == "True":
+                            self.logger.log_info(f"[LOOP] Desire triggered evaluated positively")
+                            self.status = "Desire triggered evaluated positively"
+                        else:
+                            self.logger.log_info(f"[LOOP] Desire triggered evaluated negatively")
+                            self.status = "Desire triggered evaluated negatively"
+                            self.manager.invalidate_desire(desire_id)
                 else:
                     self.logger.log_info("[LOOP] Generating new desire")
                     self.status = "Generating new desire"
@@ -62,7 +78,8 @@ class Control:
                         self.status = "Please input in the terminal the desire you want to generate..."
                         desire_description = input("Enter a desire: ")
                     else:
-                        desire_description = self.question_1(belief_set_prior)
+                        implemented_desires_descriptions = self.manager.get_desires_descriptions()
+                        desire_description = self.question_1(belief_set_prior, implemented_desires_descriptions)
                     if desire_description is None:
                         self.logger.log_error("[LOOP] Error while generating desire")
                         intention_negative_evaluations = 0
@@ -160,12 +177,12 @@ class Control:
         self.logger.log_debug("[LOOP] Stopped loop thread")
         self.alive[0] = False
     
-    def question_1(self, belief_set):
+    def question_1(self, belief_set, descriptions):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_1.txt'
 
-        elements = [belief_set]
-        elements_names = ["belief_set"]
+        elements = [belief_set, descriptions]
+        elements_names = ["belief_set", "descriptions"]
         elements_to_extract = ["description"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q1")

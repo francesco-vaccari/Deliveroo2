@@ -280,16 +280,26 @@ class ControlManager:
         if id is None:
             return None
         self.logger.log_info(f"Generating plan for desire {id} ...")
-        concat_plans = []
-        for intention in self.desires[id].intentions:
+        if True: # get the plan by executing only last intention
+            intention = self.desires[id].intentions[-1]
             plan = self.run_intention(intention.id, belief_set)
             if plan is None:
                 self.desires[id].executable = False
                 self.logger.log_error(f"Desire {id} is now invalid.")
                 return None
-            concat_plans += plan
-        self.logger.log_info(f"Desire {id} plan has been generated.")
-        return concat_plans
+            self.logger.log_info(f"Desire {id} plan has been generated.")
+            return plan
+        else: # get the plan by executing all intentions and concatenating the plans [WRONG]
+            concat_plans = []
+            for intention in self.desires[id].intentions:
+                plan = self.run_intention(intention.id, belief_set)
+                if plan is None:
+                    self.desires[id].executable = False
+                    self.logger.log_error(f"Desire {id} is now invalid.")
+                    return None
+                concat_plans += plan
+            self.logger.log_info(f"Desire {id} plan has been generated.")
+            return concat_plans
     
     def add_trigger_function(self, desire_id, function_string):
         self.desires[desire_id].trigger_function_string = function_string
@@ -349,6 +359,10 @@ class ControlManager:
             self.logger.log_error(f"Trigger function for desire {id} is invalid. Error: {e}")
             return False
     
+    def invalidate_desire(self, id):
+        self.logger.log_info(f"Invalidating desire {id} ...")
+        self.desires[id].executable = False
+    
     def is_valid_function(self, function_string):
         try:
             tree = ast.parse(function_string)
@@ -399,6 +413,13 @@ class ControlManager:
                     if id == self.base_actions_max_id:
                         break
         return intentions
+    
+    def get_desires_descriptions(self):
+        descriptions = []
+        for desire in self.desires.values():
+            if desire.executable:
+                descriptions.append(desire.description)
+        return descriptions
 
     def get_printable_intentions(self):
         out = "\n"
