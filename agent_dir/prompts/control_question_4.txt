@@ -2,7 +2,7 @@ The agent has just finished executing a plan. The plan had the objective of achi
 ```intention```
 
 
-During execution, the agente performed sequencially the actions in the plan. After performing an action, the agent receives some events that inform the agent about how the world has changed. Not all events are a direct result of the action. Keep in mind that an action can fail if its preconditions are not met in the environment.
+During execution, the agent performed sequencially the actions in the plan. After performing an action, the agent receives some events that inform the agent about how the world has changed. Not all events are a direct result of the action. Keep in mind that an action can fail if its preconditions are not met in the environment.
 
 
 The following is the belief set that the agent had before executing the plan:
@@ -16,5 +16,10 @@ The following list contains all the actions performed as part of the plan, in th
 
 
 Provide a boolean evaluation on whether the agent has achieved the short term goal or not.
+
+
+The agent has learned the following information, you can use this information to provide a better response:
+```memory```
+
 
 Provide the response in a single line in JSON format with the field 'evaluation' containing only one of the following values: 'True' or 'False'.

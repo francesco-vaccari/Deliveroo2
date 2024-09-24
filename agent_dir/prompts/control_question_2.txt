@@ -21,4 +21,8 @@ Do not modify the belief set in the function that you provide. The belief set is
 When generating the short term goal description and the function, keep in mind that the function should not be of much higher complexity than the functions from the library: this is just a single step of an iterative process to populate the library. Implement a function that is simple and general, and that can be used in a variety of situations.
 
 
+The agent has learned the following information, you can use this information to provide a better response:
+```memory```
+
+
 Provide the response in JSON format with the field 'description' containing the short term goal description and the field 'function' containing the function that achieves the short term goal description.

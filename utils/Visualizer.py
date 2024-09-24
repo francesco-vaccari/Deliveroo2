@@ -46,18 +46,21 @@ class RealTimeVisualizer(QWidget):
         self.button3 = QPushButton("Show Intentions")
         self.button4 = QPushButton("Show Desires")
         self.button5 = QPushButton("Show Intentions Graph")
+        self.button6 = QPushButton("Show Memory")
         
         self.button1.clicked.connect(lambda: self.show_widget(self.scroll1))
         self.button2.clicked.connect(lambda: self.show_widget(self.scroll2))
         self.button3.clicked.connect(lambda: self.show_widget(self.scroll3))
         self.button4.clicked.connect(lambda: self.show_widget(self.scroll4))
         self.button5.clicked.connect(lambda: self.show_widget(self.scroll5))
+        self.button6.clicked.connect(lambda: self.show_widget(self.scroll6))
         
         self.buttons_layout.addWidget(self.button1)
         self.buttons_layout.addWidget(self.button2)
         self.buttons_layout.addWidget(self.button3)
         self.buttons_layout.addWidget(self.button4)
         self.buttons_layout.addWidget(self.button5)
+        self.buttons_layout.addWidget(self.button6)
         
         self.layout.addLayout(self.buttons_layout)
 
@@ -66,6 +69,7 @@ class RealTimeVisualizer(QWidget):
         self.scroll3 = self.create_scrollable_label("Intentions")
         self.scroll4 = self.create_scrollable_label("Desires")
         self.scroll5 = self.create_scrollable_label("Intentions Graph")
+        self.scroll6 = self.create_scrollable_label("Memory")
 
         self.layout.addWidget(self.API_calls)
         self.layout.addWidget(self.perception_status)
@@ -75,6 +79,7 @@ class RealTimeVisualizer(QWidget):
         self.layout.addWidget(self.scroll3)
         self.layout.addWidget(self.scroll4)
         self.layout.addWidget(self.scroll5)
+        self.layout.addWidget(self.scroll6)
         
         self.setLayout(self.layout)
 
@@ -102,6 +107,7 @@ class RealTimeVisualizer(QWidget):
         self.scroll3.setVisible(False)
         self.scroll4.setVisible(False)
         self.scroll5.setVisible(False)
+        self.scroll6.setVisible(False)
         widget.setVisible(True)
 
     def update_labels(self):
@@ -118,12 +124,14 @@ class RealTimeVisualizer(QWidget):
         var3_value = self.control.manager.get_printable_intentions()
         var4_value = self.control.manager.get_printable_desires()
         var5_value = self.control.manager.get_printable_intentions_graph()
+        var6_value = self.control.get_memory()
 
         self.scroll1.widget().setText(f"{var1_value}")
         self.scroll2.widget().setText(f"{var2_value}")
         self.scroll3.widget().setText(f"{var3_value}")
         self.scroll4.widget().setText(f"{var4_value}")
         self.scroll5.widget().setText(f"{var5_value}")
+        self.scroll6.widget().setText(f"{var6_value}")
 
         if self.self_close:
             os.makedirs(f"{self.folder}/result", exist_ok=True)
@@ -144,6 +152,9 @@ class RealTimeVisualizer(QWidget):
                 f.close()
             with open(f"{self.folder}/result/intentions_graph.txt", "w") as f:
                 f.write(var5_value)
+                f.close()
+            with open(f"{self.folder}/result/memory.txt", "w") as f:
+                f.write(var6_value)
                 f.close()
             self.timer.stop()
             self.close()

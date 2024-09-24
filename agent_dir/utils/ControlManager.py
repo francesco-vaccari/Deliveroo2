@@ -248,10 +248,13 @@ class ControlManager:
 
     def invalidate_intention(self, id):
         self.logger.log_info(f"Invalidating intention {id} ...")
-        self.intentions[id].executable = False
-        for intention_id, intention_calls in self.intentions_graph.items():
-            if id in intention_calls:
-                self.invalidate_intention(intention_id)
+        if id > self.base_actions_max_id:
+            self.intentions[id].executable = False
+            for intention_id, intention_calls in self.intentions_graph.items():
+                if id in intention_calls:
+                    self.invalidate_intention(intention_id)
+        else:
+            self.logger.log_info(f"Intention {id} is a base action. It cannot be invalidated.")
 
     def extract_function_calls(self, function_string):
         tree = ast.parse(function_string)
@@ -420,6 +423,13 @@ class ControlManager:
             if desire.executable:
                 descriptions.append(desire.description)
         return descriptions
+
+    def get_intentions_called_by(self, id):
+        intentions_called_ids = self.intentions_graph[id]
+        for intention_id in intentions_called_ids:
+            more_ids = self.get_intentions_called_by(intention_id)
+            intentions_called_ids += more_ids
+        return set(intentions_called_ids)
 
     def get_printable_intentions(self):
         out = "\n"

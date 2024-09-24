@@ -2,32 +2,32 @@
     "actions": [
         {
             "function_name": "move_up", 
-            "description": "The agent moves up by 1 cell, decreasing its x coordinate by 1. The agent can move into 'walkable' or 'delivery' cells, but cannot move into 'wall' cells. The agent cannot move into cells occupied by other agents.",
+            "description": "This is a wrapper function for the moveup action.",
             "action_name": "moveup"
         },
         {
             "function_name": "move_down",
-            "description": "The agent moves down by 1 cell, increasing its x coordinate by 1. The agent can move into 'walkable' or 'delivery' cells, but cannot move into 'wall' cells. The agent cannot move into cells occupied by other agents.",
+            "description": "This is a wrapper function for the movedown action.",
             "action_name": "movedown"
         },
         {
             "function_name": "move_left",
-            "description": "The agent moves left by 1 cell, decreasing its y coordinate by 1. The agent can move into 'walkable' or 'delivery' cells, but cannot move into 'wall' cells. The agent cannot move into cells occupied by other agents.",
+            "description": "This is a wrapper function for the moveleft action.",
             "action_name": "moveleft"
         },
         {
             "function_name": "move_right",
-            "description": "The agent moves right by 1 cell, increasing its y coordinate by 1. The agent can move into 'walkable' or 'delivery' cells, but cannot move into 'wall' cells. The agent cannot move into cells occupied by other agents.",
+            "description": "This is a wrapper function for the moveright action.",
             "action_name": "moveright"
         },
         {
             "function_name": "pick_up",
-            "description": "The agent picks up all the parcels on the ground. The agent has to be in the same cell of the parcels to pick them up. The agent can carry multiple parcels. The agent cannot pick up parcels carried by other agents.",
+            "description": "This is a wrapper function for the pickup action.",
             "action_name": "pickup"
         },
         {
             "function_name": "put_down",
-            "description": "The agent puts down all the parcels it is carrying on the ground. The agent will put down the parcels in the cell it is currently in. If the cell is a 'delivery' cell, the score of the parcels will be added to the agent.",
+            "description": "This is a wrapper function for the putdown action.",
             "action_name": "putdown"
         }
     ]

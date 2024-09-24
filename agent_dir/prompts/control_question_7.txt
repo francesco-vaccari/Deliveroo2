@@ -1,0 +1,20 @@
+The agent just finished executing a plan. The actions in the plan were performed sequencially and with each action the agent received some events that informed the agent about how the world has changed. Not all events are a direct result of the action.
+
+Given the belief set representing the state of the environment before the execution of the plan, and given the actions performed with the associated events, you have to write down information about the environment that the agent has learned after executing the plan. This information will be used to generate future goals and plans. This information should be about the interactions between the agent and the environment, and about any other relevant facts that can be used to improve performance. This information will be saved in the agent's memory.
+
+This is the belief set prior to the execution of the plan:
+```belief_set_prior```
+
+These are the actions performed as part of the plan, with the associated events:
+```actions```
+
+This is the belief set after the execution of the plan:
+```belief_set```
+
+
+This is the current memory of the agent:
+```memory```
+
+Your response should also include the information currently stored in the agent's memory. You can correct or remove parts from the current memory.
+
+Provide the response in a single line in JSON format with the field 'information' containing the textual information that you want to store in the agent's memory. The information should be a string.

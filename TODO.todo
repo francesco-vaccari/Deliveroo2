@@ -7,28 +7,25 @@ Testare:
 - A quanto pare la mia idea che il desire può essere eseguito utilizzando tutte le intenzioni che contiene è sbagliata, sembrerebbe che sia sufficiente eseguire solamente l'ultima intenzione che scrive, cambiato in run_desire nel manager
 - desire implementati listati nella control question 1
 - desire trigger evaluation se è positiva o negativa per supportare l'ambiente che cambia nel tempo
-
-Aggiungere desire implementati (funzionanti) alla desire generation control question 1, così da evitare che generi sempre lo stesso desire. Nel caso l'ambiente cambiasse può essere che non diano errore e che solamente il piano generato non raggiunga più l'effetto desiderato. Per quel caso devo aggiungere un altro prompt che chiede alla LLM se un desire appena eseguito (già generato, e quindi triggerato soltanto) ha portato al risultato aspettato. E in questo modo posso controllare che continuino ad avere senso anche se l'ambiente cambia. Per questo prompt posso usare la control question 5 che è quella usata per verificare se un nuovo desire funziona.
-
-
-Nel caso l'ambiente cambiasse alcune intention potrebbero non funzionare più. Se danno errore allora vengono eliminate dalla libreria, ma se solo generano un piano che non funziona più allora deve essere la LLM ad accorgersi e segnarsi di non utilizzare quella intention. Per quanto riguarda invece le intention già implementate devo avere il meccanismo della memoria che mi dice di non utilizzarla, nel caso una intention non dia errore ma semplicemente generi un piano che no porta al risultato previsto quando la funzione era stata scritta.
+- testare invalidazione di called intentions dopo 3 valutazioni negative (per gestire cambiamenti dell'ambiente)
+- testare memoria, con nuove descrizioni delle azioni base, logging
 
 
+Migliorare prompt per cosa inserire nella memoria?
 
-Adattare descrizioni delle azioni base per renderle "This function ..." e poi continuare con la descrizione, e mettere le informazioni sull'ambiente nel contesto.
+Potrebbe essere interessante anche permettere alla LLM di modificare la memoria in ogni prompt così in step come valutazione delle intention o del desire, può aggiungere informazioni che servono negli step successivi per migliorare la generazione di desire e intention.
+
+Forse dovrei specificare nel context prompt la pipeline di step che viene utilizzata, per guidare meglio che tipo di informazioni dovrebbero essere salvate nella memoria.
+
+
+
 
 Scrivere meglio l'evento della mappa aggiugendo le coordinate per ogni cella.
 
 
-
 Creare stima di costo per esperimento?
 
-
-
-Implementare memoria? In questo caso tolgo la descrizione delle azioni base, tolgo le informazioni dal contesto, e permetto alla LLM di scrivere delle frasi su cosa ha imparato riguardo il belief set, le azioni implementate, come interagiscono con il mondo, gli eventi che riceve. Questo step potrebbe essere inserito nell'intention evaluation, però magari da staccare senza includere l'intention e solo dando il belief set iniziale e le azioni compiute con i loro eventi. In questo modo però non so a quali azioni corrispondono le funzioni già implementate, quindi magari sarebbe da incitare la LLM in control question 2, o nel contesto, a scoprire inizialmente cosa fanno le azioni base.
-
 Per avere i replay della finestra di pygame, potrei utilizzare seed per riprodurre le stesse generazioni di elementi casuali, e per le azioni invece posso salvare lato server le azioni che ricevo da ogni agente in quale frame sono state ricevute e poi nel replay simulare la loro ricezione, utilizzando già l'architettura che ho nel file server.py.
-
 
 Idealmente vorrei un ambiente con pochi elementi, per evitare di creare complessità inutile, e per tenere la lunghezza dei prompt bassa. Quindi mappa piccola, basso spawn rate delle parcelle, decay lento o nullo, magari con punteggio basso delle parcelle.
 
