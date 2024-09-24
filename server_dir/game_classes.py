@@ -298,8 +298,17 @@ class Map:
 
     def get_event(self, event_type):
         grid = []
-        for row in self.grid:
-            grid.append(['wall' if cell == 0 else 'walkable' if cell == 1 else 'delivery' for cell in row])
+        for x, row in enumerate(self.grid):
+            for y, cell in enumerate(row):
+                cell_type = ''
+                if cell == 1:
+                    cell_type = 'walkable'
+                elif cell == 2:
+                    cell_type = 'delivery'
+                else:
+                    cell_type = 'wall'
+                grid.append({'cell_coordinates': [x, y], 'cell_type': cell_type})
+        print(grid)
         event = {
             "event_type": event_type,
             "object_type": "map",
