@@ -7,12 +7,17 @@ During execution, the agent performed sequencially the actions in the plan. Afte
 
 The following is the belief set that the agent had before executing the plan:
 
-```belief_set```
+```belief_set_prior```
 
 
 The following list contains all the actions performed as part of the plan, in the order they were performed. Each action is associated with the events that were received shortly after the action was performed.
 
 ```actions```
+
+
+The following is the belief set that the agent has after executing the plan:
+
+```belief_set_after```
 
 
 Provide a boolean evaluation on whether the agent has achieved the short term goal or not.

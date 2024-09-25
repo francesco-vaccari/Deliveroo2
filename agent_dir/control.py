@@ -128,14 +128,15 @@ class Control:
                         self.status = f"Executing plan"
                         belief_set_before_execution = self.get_belief_set()
                         events = self.execute_plan(plan)
+                        belief_set_after_execution = self.get_belief_set()
                         self.logger.log_info(f"[LOOP] Plan executed with events {events}")
                         self.logger.log_info(f"[LOOP] Updating memory with knowledge learned from plan execution")
                         self.status = f"Updating memory with knowledge learned from plan execution"
-                        new_memory = self.question_7(belief_set_prior, plan, events, self.get_belief_set(), self.get_memory())
+                        new_memory = self.question_7(belief_set_before_execution, plan, events, belief_set_after_execution, self.get_memory())
                         self.logger.log_info(f"[LOOP] Memory update: {new_memory}")
                         self.update_memory(new_memory)
                         self.logger.log_info(f"[LOOP] Asking for intention evaluation...")
-                        intention_evaluation = self.question_4(intention_description, plan, events, belief_set_before_execution, self.get_memory())
+                        intention_evaluation = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution, self.get_memory())
                     if intention_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for intention")
                         self.status = "Unable to obtain evaluation for intention"
@@ -272,14 +273,14 @@ class Control:
         
         return function_string, None
 
-    def question_4(self, intention, plan, events, belief_set, memory):
+    def question_4(self, intention, plan, events, belief_set_prior, belief_set_after, memory):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_4.txt'
 
         actions = [(action, events[i]) for i, action in enumerate(plan)]
 
-        elements = [intention, belief_set, actions, memory]
-        elements_names = ["intention", "belief_set", "actions", "memory"]
+        elements = [intention, belief_set_prior, actions, belief_set_after, memory]
+        elements_names = ["intention", "belief_set_prior", "actions", "belief_set_after", "memory"]
         elements_to_extract = ["evaluation"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q4")
