@@ -193,7 +193,7 @@ class Control:
                                         new_called_intentions.append(called_intention)
                                 called_intentions = new_called_intentions
                             self.manager.invalidate_intention(intention_id)
-                            if intention_negative_evaluations < 3:
+                            if intention_negative_evaluations < 2:
                                 intention_negative_evaluations += 1
                             else:
                                 self.logger.log_info(f"[LOOP] Intention evaluation failed 3 times, generating new desire and invalidating called intentions: {called_intentions}")

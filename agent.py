@@ -50,6 +50,7 @@ if __name__ == "__main__":
 
     communication = Communication(args.folder, args.host, args.port, args.server_port)
     
+    id = None
     while running:
         communication.send_to_server("connect")
         time.sleep(0.1)
@@ -58,12 +59,13 @@ if __name__ == "__main__":
             msg = msg.split()
             if msg[0] == "connected":
                 logger.log_info(f"Connected to server as agent ID: {msg[1]}")
+                id = msg[1]
                 break
     
     logger.log_debug(f"Agent started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}")
     print(f"Agent started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}")
     
-    prompting = Prompting(args.folder)
+    prompting = Prompting(args.folder, id)
     perception = Perception(args.folder, communication, prompting, args.perception_generation_only_on_error)
     control = Control(args.folder, communication, prompting, perception.get_control_events, perception.get_belief_set, args.user_generated_desire, args.stateless_intention_generation, args.no_desire_triggering)
     logger.log_debug("Perception and control units started")

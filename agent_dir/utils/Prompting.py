@@ -4,11 +4,12 @@ from agent_dir.utils.AzureOpenAIClient import AzureOpenAIClient
 from utils.Logger import ExperimentLogger
 
 class Prompting:
-    def __init__(self, folder):
+    def __init__(self, folder, agent_id):
         self.client = AzureOpenAIClient()
         self.logger = ExperimentLogger(folder, 'prompting.log')
         self.stop = True # change to False when ready to use
         self.requests_made = 0
+        self.agent_id = agent_id
     
     def send_request(self, context, question, tag, temperature=0.7):
         log = f"\n[{tag}]\nContext: {context}\nQuestion: {question}\nTemperature: {temperature}"
@@ -85,7 +86,7 @@ class Prompting:
         return prompt_template
 
     def make_request(self, context_path, question_path, elements, elements_names, elements_to_extract, tag):
-        context = self.create_prompt(context_path)
+        context = self.create_prompt(context_path, [self.agent_id], ["id"])
         question = self.create_prompt(question_path, elements, elements_names)
         response = self.send_request(context, question, tag)
         try:
