@@ -13,13 +13,14 @@ class Control:
         self.get_belief_set = get_belief_set
         self.logger = ExperimentLogger(folder, 'control.log')
         self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'))
-        self.memory = ""
         self.prompting = prompting
         self.user_generated_desire = user_generated_desire
         self.stateless_intention_generation = stateless_intention_generation
         self.no_desire_triggering = no_desire_triggering
 
         self.initial_waiting_time = 20
+
+        self.initialize_memory()
 
         thread = threading.Thread(target=self.loop)
         thread.start()
@@ -368,6 +369,12 @@ class Control:
                 events = self.get_events()
                 events_plan.append(events)
         return events_plan
+    
+    def initialize_memory(self):
+        initial_memory_path = 'agent_dir/prompts/initial_memory.txt'
+        with open(initial_memory_path, 'r') as file:
+            self.memory = file.read()
+            file.close()
 
     def update_memory(self, new_memory):
         if new_memory is not None:

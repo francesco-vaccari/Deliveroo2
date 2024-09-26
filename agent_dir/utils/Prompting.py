@@ -78,6 +78,11 @@ class Prompting:
             else:
                 for i, description in enumerate(element):
                     string += f"- {description}\n"
+        elif element_name == "memory":
+            if element == "":
+                string = "The memory is currently empty."
+            else:
+                string = element
         else:
             string = str(element)
         

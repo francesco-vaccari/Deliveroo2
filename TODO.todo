@@ -11,7 +11,7 @@ Testare:
 - testare memoria, con nuove descrizioni delle azioni base, logging
 
 
-Potrei mettere nella memoria iniziale come suggerimento di scoprire cosa fanno le azioni base, con l'aggiunta sempre nella memoria di poi escludere questa informazione nella memoria una volta che l'agente ha capito cosa fanno.
+Potrei mettere nella memoria iniziale come suggerimento di scoprire cosa fanno le azioni base, con l'aggiunta sempre nella memoria di poi escludere questa informazione nella memoria una volta che l'agente ha capito cosa fanno. Il problema attuale è che la LLM assume che per aumentare la coordinata x bisogna eseguire una moveright, ma non è detto. O posso rendere anonime le azioni base (action_1, ...), o aggiungo nella memoria che bisogna prima capire cosa fanno le varie azioni come scritto sopra. Ora la LLM crede che moveright aumenti la coordinata x, mentre invece aumenta la coordinata y.
 
 
 Migliorare prompt per cosa inserire nella memoria? Ho detto di fare le cose più generali senza fare riferimenti a istanze di oggetti o eventi.
