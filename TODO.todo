@@ -11,11 +11,19 @@ Testare:
 - testare memoria, con nuove descrizioni delle azioni base, logging
 
 
+Potrei mettere nella memoria iniziale come suggerimento di scoprire cosa fanno le azioni base, con l'aggiunta sempre nella memoria di poi escludere questa informazione nella memoria una volta che l'agente ha capito cosa fanno.
+
+
 Migliorare prompt per cosa inserire nella memoria? Ho detto di fare le cose più generali senza fare riferimenti a istanze di oggetti o eventi.
 
 Potrebbe essere interessante anche permettere alla LLM di modificare la memoria in ogni prompt così in step come valutazione delle intention o del desire, può aggiungere informazioni che servono negli step successivi per migliorare la generazione di desire e intention.
 
 Forse dovrei specificare nel context prompt la pipeline di step che viene utilizzata, per guidare meglio che tipo di informazioni dovrebbero essere salvate nella memoria.
+
+
+Migliorare prompt per creare perception functions? Magari dire di strutturare il belief set in modo che sia facile da usare nella parte di control.
+
+Aggiungere un meccanismo che permette di rifare da zero il belief set? Salvano magari gli ultimi n eventi per ogni object type, e con dei prompt apposta che capiscono come è meglio ristrutturare il belief set ora che hanno un esempio di belief set.
 
 
 
