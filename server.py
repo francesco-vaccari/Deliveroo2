@@ -65,32 +65,32 @@ def handle_actions(communication, logger, agents_ports_to_ids, actions):
         msg, agent_port = action
         msg = msg.split()
         
-        if msg[0] == 'moveleft':
+        if msg[0] == 'action_3': # moveleft
             id = agents_ports_to_ids[agent_port]
             res = game.agent_move_left(id)
             logger.log_info(f"Agent {id} moved left: {res}")
         
-        if msg[0] == 'moveright':
+        if msg[0] == 'action_4': # moveright
             id = agents_ports_to_ids[agent_port]
             res = game.agent_move_right(id)
             logger.log_info(f"Agent {id} moved right: {res}")
         
-        if msg[0] == 'moveup':
+        if msg[0] == 'action_1': # moveup
             id = agents_ports_to_ids[agent_port]
             res = game.agent_move_up(id)
             logger.log_info(f"Agent {id} moved up: {res}")
         
-        if msg[0] == 'movedown':
+        if msg[0] == 'action_2': # movedown
             id = agents_ports_to_ids[agent_port]
             res = game.agent_move_down(id)
             logger.log_info(f"Agent {id} moved down: {res}")
         
-        if msg[0] == 'pickup':
+        if msg[0] == 'action_5': # pickup
             id = agents_ports_to_ids[agent_port]
             res = game.agent_pick_up(id)
             logger.log_info(f"Agent {id} picked up: {res}")
         
-        if msg[0] == 'putdown':
+        if msg[0] == 'action_6': # putdown
             id = agents_ports_to_ids[agent_port]
             res = game.agent_put_down(id)
             logger.log_info(f"Agent {id} put down: {res}")
