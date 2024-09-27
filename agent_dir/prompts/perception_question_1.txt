@@ -18,7 +18,7 @@ The belief set is a python dictionary. Update it with the information from the e
 ```belief_set```
 
 
-The belief set should be structured in a way that makes it easy to use later. Multiple objects in the environment might belong to the same object type, keep this in mind when structuring the belief set. If you think that the way the information about the object type '```object_type```' is not structured in the best way, you can change it by removing or changing parts of the belief set, but only regarding the object type '```object_type```'.
+The belief set should be structured in a way that makes it easy to use later. Multiple objects in the environment might belong to the same object type, using the object type is recommended to divide the belief set into different sections. If you think that the way the information about the object type '```object_type```' is not structured in the best way, you can change it by removing or changing parts of the belief set, but only regarding the object type '```object_type```'.
 
 
 Provide the response in JSON format with the field 'function' containing the function.

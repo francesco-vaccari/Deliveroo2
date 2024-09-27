@@ -14,6 +14,8 @@ Testare:
 Potrei mettere nella memoria iniziale come suggerimento di scoprire cosa fanno le azioni base, con l'aggiunta sempre nella memoria di poi escludere questa informazione nella memoria una volta che l'agente ha capito cosa fanno. Il problema attuale è che la LLM assume che per aumentare la coordinata x bisogna eseguire una moveright, ma non è detto. O posso rendere anonime le azioni base (action_1, ...), o aggiungo nella memoria che bisogna prima capire cosa fanno le varie azioni come scritto sopra. Ora la LLM crede che moveright aumenti la coordinata x, mentre invece aumenta la coordinata y. Ora rendo le azioni anonime così da no permettere alla LLM di assumere che fare una moveleft diminuisca la x (ad esempio).
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown
 
+Ora il problema è che comunque la LLM fa assunzioni basandosi sui nomi dei campi degli eventi. Sarebbe da anonimizzare anche i campi degli eventi, però in questo caso mi servirebbe una specie di feedback tra la la parte di perception e la parte di control in modo che magari poi le funzioni di perception rendano le cose più semplici poi per le funzioni di control. Il problema è sempre quello che l'agente non riesce a muoversi sulla mappa.
+
 
 Migliorare prompt per cosa inserire nella memoria? Ho detto di fare le cose più generali senza fare riferimenti a istanze di oggetti o eventi.
 
