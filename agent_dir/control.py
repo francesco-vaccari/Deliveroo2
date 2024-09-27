@@ -374,7 +374,7 @@ class Control:
         initial_memory_path = 'agent_dir/prompts/initial_memory.txt'
         self.memory = []
         with open(initial_memory_path, 'r') as file:
-            self.memory.append(file.read())
+            self.memory.append(str(file.read()))
             file.close()
 
     def update_memory(self, new_memory):
@@ -388,6 +388,7 @@ class Control:
         out = ""
         for memory in self.memory:
             out += f"- {memory}\n"
+        return out
     
     def is_alive(self):
         return any(self.alive)

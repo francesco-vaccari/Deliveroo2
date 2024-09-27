@@ -453,7 +453,8 @@ class ControlManager:
                 out += f"    Description: {intention.description}\n"
                 out += self.add_tab(intention.function_string, 4)
                 out += "\n"
-        out += "Trigger function:\n" + (desire.trigger_function_string if desire.trigger_function_string is not None else "None")
+        out += f"Executable: {desire.executable}\n"
+        out += f"Trigger function: {desire.trigger_function_string}\n"
         out += "\n"
         return out
 
