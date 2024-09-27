@@ -124,7 +124,7 @@ class RealTimeVisualizer(QWidget):
         var3_value = self.control.manager.get_printable_intentions()
         var4_value = self.control.manager.get_printable_desires()
         var5_value = self.control.manager.get_printable_intentions_graph()
-        var6_value = self.control.get_memory()
+        var6_value = self.control.get_printable_memory()
 
         self.scroll1.widget().setText(f"{var1_value}")
         self.scroll2.widget().setText(f"{var2_value}")

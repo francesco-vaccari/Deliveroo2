@@ -372,16 +372,22 @@ class Control:
     
     def initialize_memory(self):
         initial_memory_path = 'agent_dir/prompts/initial_memory.txt'
+        self.memory = []
         with open(initial_memory_path, 'r') as file:
-            self.memory = file.read()
+            self.memory.append(file.read())
             file.close()
 
     def update_memory(self, new_memory):
         if new_memory is not None:
-            self.memory = new_memory
+            self.memory.append(new_memory)
     
     def get_memory(self):
-        return self.memory
+        return self.memory[-1]
+    
+    def get_printable_memory(self):
+        out = ""
+        for memory in self.memory:
+            out += f"- {memory}\n"
     
     def is_alive(self):
         return any(self.alive)
