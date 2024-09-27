@@ -155,7 +155,7 @@ class Control:
                             if self.user_generated_desire:
                                 desire_evaluation = None
                                 while desire_evaluation is None or desire_evaluation not in ["True", "False"]:
-                                    desire_evaluation = input("Enter evaluation for intention (True/False): ")
+                                    desire_evaluation = input("Enter evaluation for the desire (True/False): ")
                             else:
                                 desire_evaluation = self.question_5(desire_description, belief_set_prior, self.get_belief_set(), self.get_memory())
                             if desire_evaluation is None:

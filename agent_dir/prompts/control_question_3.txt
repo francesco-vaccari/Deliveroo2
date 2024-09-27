@@ -19,7 +19,7 @@ You have to modify and fix the function in order to achieve the short term goal 
 
 To include one of the functions from the library in your function you need to call them with 'belief_set' as argument. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions must be called with the belief set as the only argument. The functions from the library do not return any value.
 
-Do not modify the belief set in the function that you provide. The belief set is a copy of the original and is not updated when the agent executes the functions from the library.
+Do not modify the belief set in the function that you provide. The belief set is a static copy of the original and is not updated when the agent executes the functions from the library.
 
 Implement a function that is simple and general, and that can be used in a variety of situations.
 

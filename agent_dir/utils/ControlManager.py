@@ -453,9 +453,9 @@ class ControlManager:
                 out += f"    Description: {intention.description}\n"
                 out += self.add_tab(intention.function_string, 4)
                 out += "\n"
-        out += f"Executable: {desire.executable}\n"
-        out += f"Trigger function: {desire.trigger_function_string}\n"
-        out += "\n"
+            out += f"Executable: {desire.executable}\n"
+            out += f"Trigger function: {desire.trigger_function_string}\n"
+            out += "\n\n"
         return out
 
     def get_printable_intentions_graph(self):
