@@ -304,9 +304,9 @@ class Map:
                 if cell == 1:
                     cell_type = 'walkable'
                 elif cell == 2:
-                    cell_type = 'delivery'
+                    cell_type = 'deliverable'
                 else:
-                    cell_type = 'wall'
+                    cell_type = 'non-walkable'
                 grid.append({'cell_coordinates': [x, y], 'cell_type': cell_type})
         print(grid)
         event = {
@@ -361,8 +361,7 @@ class Agent:
             "object_type": "agent",
             "object": {
                 "id": self.id,
-                "x": self.x,
-                "y": self.y,
+                "coordinates": [self.x, self.y],
                 "parcels_carried_ids": self.parcels_carried,
                 "score": self.score
             }
@@ -405,8 +404,7 @@ class Parcel:
             "object_type": "parcel",
             "object": {
                 "id": self.id,
-                "x": self.x,
-                "y": self.y,
+                "coordinates": [self.x, self.y],
                 "score": self.score,
                 "carried_by_id": self.carried_by
             }

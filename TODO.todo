@@ -15,6 +15,8 @@ Potrei mettere nella memoria iniziale come suggerimento di scoprire cosa fanno l
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown
 
 Devo anonimizzare almeno le coordinate (es. coordinates=[0,1] senza fare riferimento a x o y)
+Ora in ogni evento non si fa riferimento a x o y, le coordinate sono espresse con coordinates = [0, 0], e ho anche cambiato il nome dei tipi di celle in walkable, non-walkable e deliverable.
+
 
 
 Migliorare prompt per cosa inserire nella memoria? Ho detto di fare le cose più generali senza fare riferimenti a istanze di oggetti o eventi.
