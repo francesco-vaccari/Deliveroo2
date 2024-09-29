@@ -31,6 +31,9 @@ class Perception:
         self.scaling_factor_by_type = {}
         self.belief_set = {}
 
+        self.events_by_type_lock = threading.Lock()
+        self.belief_set_lock = threading.Lock()
+
         storing_thread = threading.Thread(target=self.store_events)
         storing_thread.start()
         processing_thread = threading.Thread(target=self.process_events)
@@ -46,6 +49,8 @@ class Perception:
                 event = json.loads(event)
                 self.control_events.append(event)
                 object_type = event['object_type']
+                # lock events_by_type
+                self.events_by_type_lock.acquire(blocking=True)
                 if object_type not in self.events_by_type:
                     self.logger.log_info(f"[STORE_EVENTS] New object type detected: {object_type}")
                     self.status = f"New object type detected: {object_type}"
@@ -55,6 +60,8 @@ class Perception:
                     self.scaling_factor_by_type[object_type] = self.initial_scaling_factor
                     self.manager.initialize_function(object_type)
                 self.events_by_type[object_type].append(event)
+                self.events_by_type_lock.release()
+                # unlock events_by_type
                 self.update_example_events(object_type, event)
         
         self.logger.log_debug("[STORE_EVENTS] Stopped storing events thread")
@@ -63,13 +70,16 @@ class Perception:
     def process_events(self):
         self.logger.log_debug("[PROCESS_EVENTS] Started processing events thread")
         while not self.stop:
-            events_by_type_copy = copy.deepcopy(self.events_by_type)
-            for object_type in events_by_type_copy:
+            # lock events_by_type
+            self.events_by_type_lock.acquire(blocking=True)
+            for object_type in self.events_by_type:
                 if self.manager.is_function_ready(object_type):
-                    if len(events_by_type_copy[object_type]) > 0:
+                    if len(self.events_by_type[object_type]) > 0:
                         self.logger.log_info(f"[PROCESS_EVENTS] Processing events for object type: {object_type}")
-                        while len(events_by_type_copy[object_type]) > 0:
-                            event = events_by_type_copy[object_type].pop(0)
+                        while len(self.events_by_type[object_type]) > 0:
+                            event = self.events_by_type[object_type].pop(0)
+                            # lock belief_set
+                            self.belief_set_lock.acquire(blocking=True)
                             res, updated_belief_set = self.manager.run_function(object_type, event, copy.deepcopy(self.belief_set))
                             if res:
                                 self.belief_set = updated_belief_set
@@ -79,6 +89,10 @@ class Perception:
                                 self.error_event_by_type[object_type] = event
                                 self.manager.remove_function(object_type)
                                 break
+                            self.belief_set_lock.release()
+                            # unlock belief_set
+            self.events_by_type_lock.release()
+            # unlock events_by_type
         
         self.logger.log_debug("[PROCESS_EVENTS] Stopped processing events thread")
         self.alive[1] = False
@@ -86,7 +100,11 @@ class Perception:
     def loop(self):
         self.logger.log_debug("[LOOP] Started loop thread")
         while not self.stop:
+            # lock events_by_type
+            self.events_by_type_lock.acquire(blocking=True)
             events_by_type_copy = copy.deepcopy(self.events_by_type)
+            self.events_by_type_lock.release()
+            # unlock events_by_type
             for object_type in events_by_type_copy:
                 if self.generation_only_on_error:
                     trigger = not self.manager.is_function_ready(object_type)
@@ -99,12 +117,22 @@ class Perception:
                     error = "error"
                     for i in range(3):
                         if error is not None:
-                            function_string, error = self.question_1(object_type, self.get_example_events(object_type), copy.deepcopy(self.belief_set))
+                            # lock belief_set
+                            self.belief_set_lock.acquire(blocking=True)
+                            belief_set_copy = copy.deepcopy(self.belief_set)
+                            self.belief_set_lock.release()
+                            # unlock belief_set
+                            function_string, error = self.question_1(object_type, self.get_example_events(object_type), belief_set_copy)
                             for j in range(2):
                                 if error is not None:
                                     self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for object type {object_type} failed with error {error}, retrying...")
                                     self.status = f"Generation attempt {i+1}:{j+1} for object type {object_type} failed, retrying..."
-                                    function_string, error = self.question_2(object_type, self.get_example_events(object_type), copy.deepcopy(self.belief_set), function_string, error)
+                                    # lock belief_set
+                                    self.belief_set_lock.acquire(blocking=True)
+                                    belief_set_copy = copy.deepcopy(self.belief_set)
+                                    self.belief_set_lock.release()
+                                    # unlock belief_set
+                                    function_string, error = self.question_2(object_type, self.get_example_events(object_type), belief_set_copy, function_string, error)
 
                     if error is None:
                         self.logger.log_info(f"[LOOP] Adding perception function for object type: {object_type}\n{function_string}")
@@ -200,7 +228,12 @@ class Perception:
         return events
     
     def get_belief_set(self):
-        return copy.deepcopy(self.belief_set)
+        # lock belief_set
+        self.belief_set_lock.acquire(blocking=True)
+        belief_set_copy = copy.deepcopy(self.belief_set)
+        self.belief_set_lock.release()
+        # unlock belief_set
+        return belief_set_copy
     
     def get_printable_belief_set(self):
         if not bool(self.belief_set):
