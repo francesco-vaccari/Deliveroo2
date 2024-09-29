@@ -1,5 +1,6 @@
 import random
 import json
+import copy
 
 class Game:
     def __init__(self, map_conf_path, parcels_conf_path, folder):
@@ -202,17 +203,17 @@ class Game:
     def set_initial_state(self):
         for element in self.entities_to_track:
             if type(element) is list:
-                self.environment_state.append([object.copy() for object in element])
+                self.environment_state.append([copy.deepcopy(object) for object in element])
             else:
-                self.environment_state.append(element.copy())
+                self.environment_state.append(copy.deepcopy(element))
 
     def set_new_state(self):
         new_state = []
         for element in self.entities_to_track:
             if type(element) is list:
-                new_state.append([object.copy() for object in element])
+                new_state.append([copy.deepcopy(object) for object in element])
             else:
-                new_state.append(element.copy())
+                new_state.append(copy.deepcopy(element))
         
         self.diff_state = []
         self.diff_types = []
@@ -293,7 +294,7 @@ class Map:
         map = Map()
         map.width = self.width
         map.height = self.height
-        map.grid = self.grid.copy()
+        map.grid = copy.deepcopy(self.grid)
         return map
 
     def get_event(self, event_type):
@@ -350,7 +351,7 @@ class Agent:
         agent = Agent(self.id)
         agent.x = self.x
         agent.y = self.y
-        agent.parcels_carried = self.parcels_carried.copy()
+        agent.parcels_carried = copy.deepcopy(self.parcels_carried)
         agent.score = self.score
         return agent
     

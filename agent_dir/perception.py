@@ -1,6 +1,7 @@
 import time
 import json
 import math
+import copy
 import threading
 from utils.Logger import ExperimentLogger
 from agent_dir.utils.PerceptionManager import PerceptionManager
@@ -62,14 +63,14 @@ class Perception:
     def process_events(self):
         self.logger.log_debug("[PROCESS_EVENTS] Started processing events thread")
         while not self.stop:
-            events_by_type_copy = self.events_by_type.copy()
+            events_by_type_copy = copy.deepcopy(self.events_by_type)
             for object_type in events_by_type_copy:
                 if self.manager.is_function_ready(object_type):
                     if len(events_by_type_copy[object_type]) > 0:
                         self.logger.log_info(f"[PROCESS_EVENTS] Processing events for object type: {object_type}")
                         while len(events_by_type_copy[object_type]) > 0:
                             event = events_by_type_copy[object_type].pop(0)
-                            res, updated_belief_set = self.manager.run_function(object_type, event, self.belief_set.copy())
+                            res, updated_belief_set = self.manager.run_function(object_type, event, copy.deepcopy(self.belief_set))
                             if res:
                                 self.belief_set = updated_belief_set
                             else:
@@ -85,7 +86,7 @@ class Perception:
     def loop(self):
         self.logger.log_debug("[LOOP] Started loop thread")
         while not self.stop:
-            events_by_type_copy = self.events_by_type.copy()
+            events_by_type_copy = copy.deepcopy(self.events_by_type)
             for object_type in events_by_type_copy:
                 if self.generation_only_on_error:
                     trigger = not self.manager.is_function_ready(object_type)
@@ -98,12 +99,12 @@ class Perception:
                     error = "error"
                     for i in range(3):
                         if error is not None:
-                            function_string, error = self.question_1(object_type, self.get_example_events(object_type), self.belief_set.copy())
+                            function_string, error = self.question_1(object_type, self.get_example_events(object_type), copy.deepcopy(self.belief_set))
                             for j in range(2):
                                 if error is not None:
                                     self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for object type {object_type} failed with error {error}, retrying...")
                                     self.status = f"Generation attempt {i+1}:{j+1} for object type {object_type} failed, retrying..."
-                                    function_string, error = self.question_2(object_type, self.get_example_events(object_type), self.belief_set.copy(), function_string, error)
+                                    function_string, error = self.question_2(object_type, self.get_example_events(object_type), copy.deepcopy(self.belief_set), function_string, error)
 
                     if error is None:
                         self.logger.log_info(f"[LOOP] Adding perception function for object type: {object_type}\n{function_string}")
@@ -199,7 +200,7 @@ class Perception:
         return events
     
     def get_belief_set(self):
-        return self.belief_set.copy()
+        return copy.deepcopy(self.belief_set)
     
     def get_printable_belief_set(self):
         if not bool(self.belief_set):
