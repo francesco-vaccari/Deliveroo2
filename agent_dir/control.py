@@ -131,13 +131,11 @@ class Control:
                         events = self.execute_plan(plan)
                         belief_set_after_execution = self.get_belief_set()
                         self.logger.log_info(f"[LOOP] Plan executed with events {events}")
-                        self.logger.log_info(f"[LOOP] Updating memory with knowledge learned from plan execution")
-                        self.status = f"Updating memory with knowledge learned from plan execution"
-                        new_memory = self.question_7(belief_set_before_execution, plan, events, belief_set_after_execution, self.get_memory())
-                        self.logger.log_info(f"[LOOP] Memory update: {new_memory}")
+                        self.logger.log_info(f"[LOOP] Asking for intention evaluation and memory update...")
+                        self.status = "Asking for intention evaluation"
+                        intention_evaluation, new_memory = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution, self.get_memory())
                         self.update_memory(new_memory)
-                        self.logger.log_info(f"[LOOP] Asking for intention evaluation...")
-                        intention_evaluation = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution, self.get_memory())
+                        self.logger.log_info(f"[LOOP] Memory update: {new_memory}")
                     if intention_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for intention")
                         self.status = "Unable to obtain evaluation for intention"
@@ -282,17 +280,18 @@ class Control:
 
         elements = [intention, belief_set_prior, actions, belief_set_after, memory]
         elements_names = ["intention", "belief_set_prior", "actions", "belief_set_after", "memory"]
-        elements_to_extract = ["evaluation"]
+        elements_to_extract = ["evaluation", "information"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q4")
 
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q4] Error while making request: {error}")
-            return None
+            return None, None
         
         self.logger.log_info(f"[LOOP] Obtained evaluation for intention: {extracted_elements[0]}")
+        self.logger.log_info(f"[LOOP] Obtained memory update: {extracted_elements[1]}")
 
-        return extracted_elements[0]
+        return extracted_elements[0], extracted_elements[1]
 
     def question_5(self, desire, belief_set_prior, belief_set_current, memory):
         context_prompt_path = 'agent_dir/prompts/context.txt'
@@ -335,26 +334,6 @@ class Control:
             return None
         
         return function_string
-
-    def question_7(self, belief_set_prior, plan, events, belief_set, memory):
-        context_prompt_path = 'agent_dir/prompts/context.txt'
-        question_prompt_path = 'agent_dir/prompts/control_question_7.txt'
-
-        actions = [(action, events[i]) for i, action in enumerate(plan)]
-
-        elements = [belief_set_prior, actions, belief_set, memory]
-        elements_names = ["belief_set_prior", "actions", "belief_set", "memory"]
-        elements_to_extract = ["information"]
-
-        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q7")
-
-        if error is not None:
-            self.logger.log_error(f"[LOOP] [Q7] Error while making request: {error}")
-            return None
-        
-        self.logger.log_info(f"[LOOP] Obtained information: {extracted_elements[0]}")
-
-        return extracted_elements[0]
     
     def execute_plan(self, plan, wait_for_events=True):
         events_plan = []

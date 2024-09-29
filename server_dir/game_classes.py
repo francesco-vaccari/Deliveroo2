@@ -308,7 +308,6 @@ class Map:
                 else:
                     cell_type = 'non-walkable'
                 grid.append({'cell_coordinates': [x, y], 'cell_type': cell_type})
-        print(grid)
         event = {
             "event_type": event_type,
             "object_type": "map",

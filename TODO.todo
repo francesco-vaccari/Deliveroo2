@@ -18,6 +18,11 @@ Devo anonimizzare almeno le coordinate (es. coordinates=[0,1] senza fare riferim
 Ora in ogni evento non si fa riferimento a x o y, le coordinate sono espresse con coordinates = [0, 0], e ho anche cambiato il nome dei tipi di celle in walkable, non-walkable e deliverable.
 
 
+Comunque non funziona perché non capisce cosa fanno le singole azioni. E se fallisce una intention non sa perché. Devo unire la control question 7 con la 4, in questo modo oltre a dare una evaluation della intention, può utilizzare l'informazione del perché non ha funzione e integrarla alla memoria in modo che alla prossima iterazione le cose funzionino meglio. Ho unito le due control questions, ma putroppo continua a non funzionare. Credo che l'unico modo sia di reintrodurre le descrizioni delle azioni che descrivono in che modo modificano l'envoronment. Oppure devo pensare a qualche altra soluzione (magari memoria per gli effetti delle azioni specifiche, o migliorare i prompt)
+Per adesso ho solo modificato il prompt specificando di investigare gli effetti di ogni singola azione.
+
+Il problema è che non mi segna cosa fanno le azioni, o è troppo difficile, o devo ancora migliorare il prompt rendendo chiaro che deve segnarsi cosa fanno le azioni, quali sono le precondizioni e quali sono gli effetti. Faccio una ultima prova a migliorare i prompt. Dopodiché rimetto le descrizioni delle azioni specificando quali sono gli effetti.
+
 
 Migliorare prompt per cosa inserire nella memoria? Ho detto di fare le cose più generali senza fare riferimenti a istanze di oggetti o eventi.
 
