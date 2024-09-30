@@ -22,10 +22,10 @@ The following is the belief set that the agent has after executing the plan:
 Provide a boolean evaluation on whether the agent has achieved the short term goal or not.
 
 
-Also, you need to provide information that can be inferred from these elements. This information will be remembered by the agent and will be used to generate future goals and plans. If the agent has failed to achieve the goal, you should provide information about what went wrong in order to avoid the same mistake in the future. The most important thing is to learn what each action does, what could be its preconditions, and what could be its effects. Understanding and remembering how the actions change the state of the environment, reflected in the events received, is crucial.
-
-Your response should also include the information currently stored in the agent's memory. This is the current memory:
+The agent has learned the following information, this is the current memory:
 ```memory```
+
+You nned to inlcude the information stored in the current memory and you can add other information that you can infer from the provided data to the memory. This information should be about the effects of each different action from the plan. If your evaluation is 'False', this information should help the agent to understand why the goal was not achieved. If you think that a statement in the current memory is not true, you can ignore it or modify it.
 
 
 
