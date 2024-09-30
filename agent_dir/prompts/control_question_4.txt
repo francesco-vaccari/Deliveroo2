@@ -22,12 +22,11 @@ The following is the belief set that the agent has after executing the plan:
 Provide a boolean evaluation on whether the agent has achieved the short term goal or not.
 
 
-Also, you need to provide information that can be inferred from these elements. This information will be remembered by the agent and will be used to generate future goals and plans. If the agent has failed to achieve the goal, you should provide information about what went wrong in order to avoid the same mistake in the future. The most important thing is to learn what each action does, what could be its preconditions, and what could be its effects. Understanding how the actions change the state of the environment, reflected in the events received, is crucial.
+Also, you need to provide information that can be inferred from these elements. This information will be remembered by the agent and will be used to generate future goals and plans. If the agent has failed to achieve the goal, you should provide information about what went wrong in order to avoid the same mistake in the future. The most important thing is to learn what each action does, what could be its preconditions, and what could be its effects. Understanding and remembering how the actions change the state of the environment, reflected in the events received, is crucial.
 
-Your response should also include the information currently stored in the agent's memory. You can correct or remove parts from the current memory if you think they are incorrect. This is the current memory:
+Your response should also include the information currently stored in the agent's memory. This is the current memory:
 ```memory```
 
 
 
-
-Provide the response in a single line in JSON format with the field 'evaluation' containing only one of the following values: 'True' or 'False', and the field 'information' containing the textual information that you want to store in the agent's memory.
+Provide the response in a single line in JSON format with the field 'evaluation' containing only one of the following values: 'True' or 'False', and the field 'information' containing the information that you want to store in the agent's memory.

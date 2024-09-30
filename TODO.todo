@@ -1,39 +1,21 @@
 Controllare e sistemare lo pseudo codice con tutto aggiornato e magari guardare come è fatto quello BDI standard per confrontare.
 
 Testare:
-- User provided deve saltare generazione del desire e evaluation del desire (richiedere all'utente) e generazione della trigger function
 - Stateless intention generation devo solo modificare la funzione manager.get_library() per includere solo le azioni base
 - No desire triggering semplicemente non chiamo la prima parte in nel loop in control
 - A quanto pare la mia idea che il desire può essere eseguito utilizzando tutte le intenzioni che contiene è sbagliata, sembrerebbe che sia sufficiente eseguire solamente l'ultima intenzione che scrive, cambiato in run_desire nel manager
 - desire implementati listati nella control question 1
 - desire trigger evaluation se è positiva o negativa per supportare l'ambiente che cambia nel tempo
 - testare invalidazione di called intentions dopo 3 valutazioni negative (per gestire cambiamenti dell'ambiente)
-- testare memoria, con nuove descrizioni delle azioni base, logging
 
 
-Potrei mettere nella memoria iniziale come suggerimento di scoprire cosa fanno le azioni base, con l'aggiunta sempre nella memoria di poi escludere questa informazione nella memoria una volta che l'agente ha capito cosa fanno. Il problema attuale è che la LLM assume che per aumentare la coordinata x bisogna eseguire una moveright, ma non è detto. O posso rendere anonime le azioni base (action_1, ...), o aggiungo nella memoria che bisogna prima capire cosa fanno le varie azioni come scritto sopra. Ora la LLM crede che moveright aumenti la coordinata x, mentre invece aumenta la coordinata y. Ora rendo le azioni anonime così da no permettere alla LLM di assumere che fare una moveleft diminuisca la x (ad esempio).
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown
 
-Devo anonimizzare almeno le coordinate (es. coordinates=[0,1] senza fare riferimento a x o y)
-Ora in ogni evento non si fa riferimento a x o y, le coordinate sono espresse con coordinates = [0, 0], e ho anche cambiato il nome dei tipi di celle in walkable, non-walkable e deliverable.
 
 
-Comunque non funziona perché non capisce cosa fanno le singole azioni. E se fallisce una intention non sa perché. Devo unire la control question 7 con la 4, in questo modo oltre a dare una evaluation della intention, può utilizzare l'informazione del perché non ha funzione e integrarla alla memoria in modo che alla prossima iterazione le cose funzionino meglio. Ho unito le due control questions, ma putroppo continua a non funzionare. Credo che l'unico modo sia di reintrodurre le descrizioni delle azioni che descrivono in che modo modificano l'envoronment. Oppure devo pensare a qualche altra soluzione (magari memoria per gli effetti delle azioni specifiche, o migliorare i prompt)
-Per adesso ho solo modificato il prompt specificando di investigare gli effetti di ogni singola azione.
-
-Il problema è che non mi segna cosa fanno le azioni, o è troppo difficile, o devo ancora migliorare il prompt rendendo chiaro che deve segnarsi cosa fanno le azioni, quali sono le precondizioni e quali sono gli effetti. Faccio una ultima prova a migliorare i prompt. Dopodiché rimetto le descrizioni delle azioni specificando quali sono gli effetti.
 
 
-Migliorare prompt per cosa inserire nella memoria? Ho detto di fare le cose più generali senza fare riferimenti a istanze di oggetti o eventi.
-
-Potrebbe essere interessante anche permettere alla LLM di modificare la memoria in ogni prompt così in step come valutazione delle intention o del desire, può aggiungere informazioni che servono negli step successivi per migliorare la generazione di desire e intention.
-
-Forse dovrei specificare nel context prompt la pipeline di step che viene utilizzata, per guidare meglio che tipo di informazioni dovrebbero essere salvate nella memoria.
-
-
-Migliorare prompt per creare perception functions? Magari dire di strutturare il belief set in modo che sia facile da usare nella parte di control.
-
-Aggiungere un meccanismo che permette di rifare da zero il belief set? Salvano magari gli ultimi n eventi per ogni object type, e con dei prompt apposta che capiscono come è meglio ristrutturare il belief set ora che hanno un esempio di belief set.
+Aggiungere un meccanismo che permette di rifare da zero il belief set? Salvando magari gli ultimi n eventi per ogni object type, e con dei prompt apposta che capiscono come è meglio ristrutturare il belief set ora che hanno un esempio di belief set.
 
 
 
@@ -42,8 +24,6 @@ Creare stima di costo per esperimento?
 Per avere i replay della finestra di pygame, potrei utilizzare seed per riprodurre le stesse generazioni di elementi casuali, e per le azioni invece posso salvare lato server le azioni che ricevo da ogni agente in quale frame sono state ricevute e poi nel replay simulare la loro ricezione, utilizzando già l'architettura che ho nel file server.py.
 
 Idealmente vorrei un ambiente con pochi elementi, per evitare di creare complessità inutile, e per tenere la lunghezza dei prompt bassa. Quindi mappa piccola, basso spawn rate delle parcelle, decay lento o nullo, magari con punteggio basso delle parcelle.
-
-Provare ancora a migliorare la descrizione che fornisce delle intention prodotte. Ad esempio istruendo la LLM di iniziare con "This function ..." e poi continuare con la descrizione. In questo caso dovrei anche cambiare la descrizione delle azioni base. E in questo caso magari stacco le informazioni dell'ambiente e le metto in una sezione a parte del prompt.
 
 Rivedere desire evaluation e aggiungere altre informazioni, magari riguardanti le intention eseguite, o solo l'ultima con la sua descrizione?
 
