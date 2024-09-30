@@ -65,13 +65,16 @@ class Prompting:
             for i, (_, intention) in enumerate(element.items()):
                 string += f"- {intention.function_name}()\tDescription: {intention.description}\n"
         elif element_name == "actions":
-            for i, (name_action, events) in enumerate(element):
-                string += f"- Action: {name_action} , Events received:\n"
-                if len(events) == 0:
-                    string += "None\n"
-                else:
-                    for event in events:
-                        string += f"\t*  {event}\n"
+            if len(element) == 0:
+                string = "The plan was empty: no actions executed and no events received."
+            else:
+                for i, (name_action, events) in enumerate(element):
+                    string += f"- Action: {name_action} , Events received:\n"
+                    if len(events) == 0:
+                        string += "None\n"
+                    else:
+                        for event in events:
+                            string += f"\t*  {event}\n"
         elif element_name == "descriptions":
             if len(element) == 0:
                 string = "No long term goal has been implemented yet."
