@@ -6,6 +6,7 @@ import json
 import astor
 import importlib
 import subprocess
+import threading
 
 class Intention:
     def __init__(self, id, function_name, function_string, description):
@@ -34,7 +35,10 @@ class ControlManager:
         self.logger = logger
         self.base_actions_max_id = 0
         self.functions_file_path = 'agent_dir/functions'
+        self.functions_file = self.functions_file_path + "/functions.py"
+        self.belief_set_file = self.functions_file_path + "/belief_set.txt"
         self.plan_file = self.functions_file_path + "/plan.txt"
+        self.continue_file = self.functions_file_path + "/continue.txt"
         self.load_base_actions(self.functions_file_path + "/actions.json")
     
     def load_base_actions(self, actions_path):
@@ -44,7 +48,7 @@ class ControlManager:
             # function_name = action["function_name"]
             function_name = f"function_{self.intention_id}"
             description = action["description"]
-            function_string = f"""def {function_name}(belief_set):\n    with open('{self.plan_file}', 'a') as f:\n        f.write('{action["action_name"]}\\n')\n        f.close()\n\n"""
+            function_string = f"""def {function_name}():\n    with open('{self.plan_file}', 'a') as f:\n        f.write('{action["action_name"]}\\n')\n        f.close()\n    wait()\n\n"""
             self.intentions[self.intention_id] = Intention(self.intention_id, function_name, function_string, description)
             self.intentions_graph[self.intention_id] = []
             self.base_actions_max_id = self.intention_id
@@ -60,112 +64,17 @@ class ControlManager:
                     return id
         return None
     
-    def test_intention(self, function_string, belief_set):
+    def test_intention(self, function_string):
         self.logger.log_info(f"Testing intention \n{function_string}")
+
         error = self.is_valid_function(function_string)
         if error is not None:
-            self.logger.log_error("Intention is invalid.")
-            return error
-        
-        working_functions_names_before = self.get_implemented_intentions_names()
-        working_functions_names = self.test_implemented_intentions(belief_set, test=True)
-        self.logger.log_info(f"Tested implemented intentions. {self.get_printable_intentions()}")
-        
-        extracted_calls = self.extract_function_calls(function_string)
-        for function_called in extracted_calls:
-            if function_called in working_functions_names_before:
-                if function_called not in working_functions_names:
-                    self.logger.log_error(f"Intention is invalid. Contains call to broken functions.")
-                    return f"The function called {function_called} can no longer be used. Do not use {function_called}."
-
-        functions_file_name = self.functions_file_path + "/test_functions.py"
-
-        belief_set_file = self.functions_file_path + "/belief_set.txt"
-        with open(belief_set_file, 'w') as f:
-            f.write(str(belief_set))
-            f.close()
-
-        try:
-            with open(functions_file_name, "a") as f:
-                f.write("\n")
-                f.write(function_string)
-                f.write("\n")
-                f.write("\n")
-                f.write(f"""with open('{belief_set_file}', 'r') as f:\n""")
-                f.write("""    belief_set = eval(f.read())\n""")
-                f.write("""    f.close()\n""")
-                f.write("\n")
-                f.write("\n")
-                f.write(f"{self.get_function_name(function_string)}(belief_set)\n")
-                f.close()
-
-            process = subprocess.Popen(['python3', functions_file_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate(timeout=5)
-            if stderr != b'':
-                raise Exception(stderr)
-        except Exception as e:
-            process.kill()
-            self.logger.log_error(f"Intention is invalid. Error: {e}")
-            return f"Error: {e}"
+            self.logger.log_error(f"The intention is invalid. Error: {error}")
+            return f"Error: {error}"
         
         self.logger.log_info("The intention is valid.")
         return None
 
-    def test_implemented_intentions(self, belief_set, test):
-        if test:
-            functions_file_name = self.functions_file_path + "/test_functions.py"
-        else:
-            functions_file_name = self.functions_file_path + "/functions.py"
-
-        working_functions_names = []
-
-        with open(functions_file_name, "w") as f:
-            f.write("\n")
-            f.close()
-        
-        belief_set_file = self.functions_file_path + "/belief_set.txt"
-        with open(belief_set_file, 'w') as f:
-            f.write(str(belief_set))
-            f.close()
-        
-        for id, intention in self.intentions.items():
-            if intention.executable:
-                try:
-                    with open(functions_file_name, "r") as f:
-                        content = f.read()
-                        f.close()
-                    with open(functions_file_name, "w") as f:
-                        f.write(content)
-                        f.write("\n")
-                        f.write(intention.function_string)
-                        f.write("\n")
-                        f.write("\n")
-                        f.write(f"""with open('{belief_set_file}', 'r') as f:\n""")
-                        f.write("""    belief_set = eval(f.read())\n""")
-                        f.write("""    f.close()\n""")
-                        f.write("\n")
-                        f.write("\n")
-                        f.write(f"{intention.function_name}(belief_set)\n")
-                        f.close()
-                    
-                    process = subprocess.Popen(['python3', functions_file_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    stdout, stderr = process.communicate(timeout=5)
-                    if stderr == b'':
-                        with open(functions_file_name, "w") as f:
-                            f.write(content)
-                            f.write("\n")
-                            f.write(f"{intention.function_string}")
-                            f.write("\n")
-                            f.close()
-                        working_functions_names.append(intention.function_name)
-                    else:
-                        raise Exception(stderr)
-                except Exception as e:
-                    process.kill()
-                    self.invalidate_intention(id)
-        
-        return working_functions_names
-    
     def add_intention(self, desire_id, description, function_string):
         new_function_name = f'function_{self.intention_id}'
         function_string = self.rename_function(function_string, new_function_name)
@@ -187,58 +96,140 @@ class ControlManager:
         self.logger.log_info(f"Intention added to desire {desire_id}")
         return self.intention_id - 1
     
-    def run_intention(self, id, belief_set):
+    def run_intention(self, id, get_belief_set, execute_action):
         if not self.intentions[id].executable:
-            return None
+            self.logger.log_info(f"Intention {id} is not executable.")
+            return "Intention is not executable.", None, None
         
         self.logger.log_info(f"Running intention {id} ...")
 
-        working_functions_names = self.test_implemented_intentions(belief_set, test=False)
-        self.logger.log_info(f"Tested implemented intentions. {self.get_printable_intentions()}")
-
-        if not self.intentions[id].executable:
-            return None
-        
-        functions_file_name = self.functions_file_path + "/functions.py"
-
-        belief_set_file = self.functions_file_path + "/belief_set.txt"
-        with open(belief_set_file, 'w') as f:
-            f.write(str(belief_set))
+        with open(self.functions_file, 'w') as f:
+            f.write("")
             f.close()
-
+        
+        with open(self.belief_set_file, 'w') as f:
+            f.write("")
+            f.close()
+        
+        with open(self.continue_file, 'w') as f:
+            f.write("True")
+            f.close()
         
         with open(self.plan_file, 'w') as f:
             f.write("")
             f.close()
         
-        try:
-            with open(functions_file_name, "a") as f:
-                f.write("\n")
-                f.write(self.intentions[id].function_string)
-                f.write("\n")
-                f.write("\n")
-                f.write(f"""with open('{belief_set_file}', 'r') as f:\n""")
-                f.write("""    belief_set = eval(f.read())\n""")
-                f.write("""    f.close()\n""")
-                f.write("\n")
-                f.write("\n")
-                f.write(f"{self.intentions[id].function_name}(belief_set)\n")
-                f.close()
+        with open(self.functions_file, 'a') as f:
+            f.write(f"import time\n\n")
+            f.write(f"belief_set = None\n\n")
+            f.write(f"def wait():\n")
+            f.write(f"    with open('{self.continue_file}', 'w') as file:\n")
+            f.write(f"        file.write('False')\n")
+            f.write(f"        file.close()\n")
+            f.write(f"    content = False\n")
+            f.write(f"    while not content:\n")
+            f.write(f"        with open('{self.continue_file}', 'r') as file:\n")
+            f.write(f"            content = eval(file.read())\n")
+            f.write(f"            file.close()\n")
+            f.write(f"        time.sleep(0.02)\n\n")
+            
+            f.write(f"import threading\n")
+            f.write(f"thread_alive = True\n")
+            f.write(f"def update_belief_set():\n")
+            f.write(f"    global belief_set\n")
+            f.write(f"    global thread_alive:\n")
+            f.write(f"    while thread_alive:\n")
+            f.write(f"        file = open('{self.belief_set_file}', 'r')\n")
+            f.write(f"        belief_set = eval(file.read())\n")
+            f.write(f"        file.close()\n")
+            f.write(f"        time.sleep(0.02)\n")
+            f.write(f"thread = threading.Thread(target=update_belief_set)\n")
+            f.write(f"thread.start()\n")
+            f.write(f"time.sleep(0.2)\n")
 
-            process = subprocess.Popen(['python3', functions_file_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate(timeout=5)
+            for id, intention in self.intentions.items():
+                f.write("\n")
+                f.write(intention.function_string)
+                f.write("\n")
+            
+            f.write(f"\n")
+            f.write(f"{self.intentions[id].function_name}()\n")
+            f.write(f"\n")
+            f.write(f"thread_alive = False\n")
+            f.write(f"thread.join()\n")
+        
+        self.last_content = ""
+        self.thread_alive = True
+        self.plan = []
+        self.events = []
+
+        thread1 = threading.Thread(target=self.belief_set_thread, args=(get_belief_set,))
+        thread1.start()
+        thread2 = threading.Thread(target=self.plan_thread, args=(execute_action,))
+        thread2.start()
+
+        error = None
+
+        self.logger.log_info(f"Started subprocess...")
+
+        try:
+            process = subprocess.Popen(['python3', self.functions_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate(timeout=30)
             if stderr != b'':
                 raise Exception(stderr)
-
-            self.logger.log_info(f"Intention {id} has been executed.")
-
-            return self.get_plan_from_file(self.plan_file)
         except Exception as e:
             process.kill()
             self.invalidate_intention(id)
-            self.logger.log_error(f"Intention {id} is invalid. Error: {e}")
-            return None
+            error = e
+            self.logger.log_error(f"Error during intention {id} execution. Intention {id} is now invalid. Error: {e}")
+        
+        self.thread_alive = False
+        thread1.join()
+        thread2.join()
+
+        self.logger.log_info(f"Intention {id} execution has finished. Threads and subprocess terminated. Plan: {self.plan}. Events: {self.events}")
+
+        if error is not None:
+            return error, None, None
+        
+        return None, self.plan, self.events
     
+    def plan_thread(self, execute_action):
+        self.logger.log_info(f"Plan thread started ...")
+        while self.thread_alive:
+            with open(self.plan_file, "r") as file:
+                plan = file.read()
+                file.close()
+            
+            if plan != self.last_content:
+                self.last_content = plan
+                plan = plan.replace("\n", " ").split()
+                action = plan[-1]
+                self.logger.log_info(f"Executing action {action} ...")
+
+                events = execute_action(action) # waits 0.2 to receive the events
+                self.logger.log_info(f"Action {action} executed. Events received: {events}")
+                self.plan.append(action)
+                self.events.append(events)
+                
+                time.sleep(0.2) # make sure that the belief set integrates the events received with perception functions
+
+                with open(self.continue_file, "w") as file:
+                    file.write("True")
+                    file.close()
+            
+            time.sleep(0.02)
+        self.logger.log_info(f"Plan thread terminated.")
+
+    def belief_set_thread(self, get_belief_set):
+        self.logger.log_info(f"Belief set thread started ...")
+        while self.thread_alive:
+            with open(self.belief_set_file, "w") as file:
+                file.write(str(get_belief_set()))
+                file.close()
+            time.sleep(0.02)
+        self.logger.log_info(f"Belief set thread terminated.")
+        
     def get_plan_from_file(self, file_path):
         plan = []
         with open(file_path, 'r') as f:
@@ -279,30 +270,31 @@ class ControlManager:
         self.desire_id += 1
         return self.desire_id - 1
 
-    def run_desire(self, id, belief_set):
+    def run_desire(self, id, get_belief_set, execute_action):
         if id is None:
-            return None
+            self.logger.log_info("No desire triggered.")
+            return "No desire triggered.", None, None
         self.logger.log_info(f"Generating plan for desire {id} ...")
         if True: # get the plan by executing only last intention
             intention = self.desires[id].intentions[-1]
-            plan = self.run_intention(intention.id, belief_set)
-            if plan is None:
+            error, plan, events = self.run_intention(intention.id, get_belief_set, execute_action)
+            if error is None:
+                self.logger.log_info(f"Desire {id} plan has been executed.")
+            else:
                 self.desires[id].executable = False
-                self.logger.log_error(f"Desire {id} is now invalid.")
-                return None
-            self.logger.log_info(f"Desire {id} plan has been generated.")
-            return plan
-        else: # get the plan by executing all intentions and concatenating the plans [WRONG]
-            concat_plans = []
-            for intention in self.desires[id].intentions:
-                plan = self.run_intention(intention.id, belief_set)
-                if plan is None:
-                    self.desires[id].executable = False
-                    self.logger.log_error(f"Desire {id} is now invalid.")
-                    return None
-                concat_plans += plan
-            self.logger.log_info(f"Desire {id} plan has been generated.")
-            return concat_plans
+                self.logger.log_error(f"Error during plan execution of desire {id}. Desire {id} is now invalid.")
+            return error, plan, events
+        # else: # get the plan by executing all intentions and concatenating the plans [WRONG]
+            # concat_plans = []
+            # for intention in self.desires[id].intentions:
+            #     plan = self.run_intention(intention.id, belief_set)
+            #     if plan is None:
+            #         self.desires[id].executable = False
+            #         self.logger.log_error(f"Desire {id} is now invalid.")
+            #         return None
+            #     concat_plans += plan
+            # self.logger.log_info(f"Desire {id} plan has been generated.")
+            # return concat_plans
     
     def add_trigger_function(self, desire_id, function_string):
         self.desires[desire_id].trigger_function_string = function_string

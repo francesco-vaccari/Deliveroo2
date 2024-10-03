@@ -9,13 +9,18 @@ Propose a short term goal description in natural language and a function that ac
 
 The short term goal description should be aligned with the long term goal description, and should be simple, brief and general without referring specific objects of the belief set.
 
-The function has to take as input 'belief_set' and must not modify it. The function can contain calls to already implemented functions from the following library:
+The function can contain calls to already implemented functions from the following library:
 
 ```library```
 
-To include one of the library functions, you need to call them with 'belief_set' as argument. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions from the library do not return any value.
+You can include calls to one or more of the functions from the library. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions from the library do not return any value and do not take any input arguments. The functions from the library can be called multiple times in the function that you provide.
 
-Do not modify the belief set in the function that you provide. The belief set is a static copy of the original and is not updated when the agent executes the functions from the library.
+You can access the belief set using the variable belief_set in the function that you provide. DO NOT modify the belief set. The variable is updated in real-time as the agent interacts with the environment.
+
+The function that you provide should start with the following code snippet:
+def function():
+    global belief_set
+    ...
 
 
 The agent has learned the following information, you can use this information to provide a better response:

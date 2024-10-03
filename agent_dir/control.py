@@ -51,16 +51,15 @@ class Control:
                     self.logger.log_info("[LOOP] Checking if any desire is triggered")
                     self.status = "Checking if any desire is triggered"
                     desire_id = self.manager.check_if_desire_triggered(self.get_belief_set())
-                    plan = self.manager.run_desire(desire_id, self.get_belief_set())
-                if plan is not None:
-                    self.logger.log_info(f"[LOOP] Desire triggered : {self.manager.get_desire_description(desire_id)}")
-                    self.logger.log_info(f"[LOOP] Plan generated: {plan}")
-                    self.status = f"Desire triggered : {self.manager.get_desire_description(desire_id)}"
                     belief_set_before_execution = self.get_belief_set()
-                    self.execute_plan(plan, wait_for_events=False)
+                    error, plan, events = self.manager.run_desire(desire_id, self.get_belief_set, self.execute_action)
+                    belief_set_after_execution = self.get_belief_set()
+                if error is None:
+                    self.logger.log_info(f"[LOOP] Desire triggered : {desire_id}")
+                    self.logger.log_info(f"[LOOP] Plan generated: {plan}")
                     self.logger.log_info("[LOOP] Plan executed, asking for desire evaluation...")
-                    self.status = "Plan executed, asking for desire evaluation"
-                    desire_evaluation = self.question_5(self.manager.get_desire_description(desire_id), belief_set_before_execution, self.get_belief_set(), self.get_memory())
+                    self.status = f"Desire triggered and executed: {desire_id}, asking for desire evaluation"
+                    desire_evaluation = self.question_5(self.manager.get_desire_description(desire_id), belief_set_before_execution, belief_set_after_execution, self.get_memory())
                     if desire_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
                         self.status = "Unable to obtain evaluation for desire"
@@ -119,20 +118,18 @@ class Control:
                     self.logger.log_info(f"[LOOP] Intention generated: {intention_description}\n{function_string}")
                     self.status = f"Intention generated: {intention_description}"
                     intention_id = self.manager.add_intention(desire_id, intention_description, function_string)
-                    plan = self.manager.run_intention(intention_id, self.get_belief_set())
-                    if plan is None:
-                        self.logger.log_error(f"[LOOP] Error while running intention generated")
-                        self.status = "Error while running intention generated"
+                    belief_set_before_execution = self.get_belief_set()
+                    error, plan, events = self.manager.run_intention(intention_id, self.get_belief_set, self.execute_action)
+                    belief_set_after_execution = self.get_belief_set()
+                    if error is not None:
+                        self.logger.log_error(f"[LOOP] Error while running intention generated: {error}")
+                        self.status = f"Error while running intention generated: {error}"
                         intention_evaluation = "False"
                     else:
-                        self.logger.log_info(f"[LOOP] Plan generated: {plan}")
-                        self.status = f"Executing plan"
-                        belief_set_before_execution = self.get_belief_set()
-                        events = self.execute_plan(plan)
-                        belief_set_after_execution = self.get_belief_set()
-                        self.logger.log_info(f"[LOOP] Plan executed with events {events}")
+                        self.logger.log_info(f"[LOOP] Plan executed: {plan}")
+                        self.logger.log_info(f"[LOOP] Events received: {events}")
                         self.logger.log_info(f"[LOOP] Asking for intention evaluation and memory update...")
-                        self.status = "Asking for intention evaluation"
+                        self.status = "Asking for intention evaluation and memory update..."
                         intention_evaluation, new_memory = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution, self.get_memory())
                         self.update_memory(new_memory)
                         self.logger.log_info(f"[LOOP] Memory update: {new_memory}")
@@ -181,8 +178,8 @@ class Control:
                                     self.logger.log_info(f"[LOOP] Desire not yet satisfied")
                                     self.status = f"Desire not yet satisfied: {desire_description}"
                         else:
-                            self.logger.log_info(f"[LOOP] Intention evaluation negative")
-                            self.status = "Intention evaluation negative"
+                            self.logger.log_info(f"[LOOP] Intention evaluated negatively or failed to run")
+                            self.status = "Intention evaluated negatively or failed to run"
                             if intention_negative_evaluations == 0:
                                 called_intentions = self.manager.get_intentions_called_by(intention_id)
                             else: 
@@ -196,8 +193,8 @@ class Control:
                             if intention_negative_evaluations < 2:
                                 intention_negative_evaluations += 1
                             else:
-                                self.logger.log_info(f"[LOOP] Intention evaluation failed 3 times, generating new desire and invalidating called intentions: {called_intentions}")
-                                self.status = f"Intention evaluation failed 3 times"
+                                self.logger.log_info(f"[LOOP] Intention evaluation or intention run failed 3 times, generating new desire and invalidating called intentions: {called_intentions}")
+                                self.status = f"Intention evaluation or intention run failed 3 times"
                                 intention_negative_evaluations = 0
                                 for called_intention in called_intentions: # intentions used in all three last failed attempts are invalidated
                                     self.manager.invalidate_intention(called_intention)
@@ -242,7 +239,7 @@ class Control:
         intention = extracted_elements[0]
         function_string = extracted_elements[1]
 
-        error = self.manager.test_intention(function_string, belief_set)
+        error = self.manager.test_intention(function_string)
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q2] Error while testing intention function: {error}")
             return intention, function_string, error
@@ -265,7 +262,7 @@ class Control:
 
         function_string = extracted_elements[0]
 
-        error = self.manager.test_intention(function_string, belief_set)
+        error = self.manager.test_intention(function_string)
         if error is not None:
             self.logger.log_error(f"[LOOP] [Q3] Error while testing intention function: {error}")
             return function_string, error
@@ -348,6 +345,12 @@ class Control:
                 events = self.get_events()
                 events_plan.append(events)
         return events_plan
+    
+    def execute_action(self, action):
+        self.get_events()
+        self.communication.send_to_server(action)
+        time.sleep(0.2)
+        return self.get_events()
     
     def initialize_memory(self):
         initial_memory_path = 'agent_dir/prompts/initial_memory.txt'

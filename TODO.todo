@@ -14,6 +14,22 @@ Testare:
 
 Ho bisogno di fare in modo che il belief set sia modificabile in tempo real dalla perception unit. E devo poter eseguire il piano man mano che le intention lo generano.
 
+Un problema è che se prima testavo la intention, ora non posso farlo perché può essere che la logica della funzione si basa su un belief set che si modifica. E quindi devo testare direttamente runnando le azioni generate. Quindi niente più test_intention. Posso solo controllare che la funzione sia effettivmanete valida in python.
+E il problema di mandare il runtime error alla LLM per provare a sistemare la funzione non è nemmeno possibile perché magari alcune azioni le ha eseguite e quindi alcuni eventi me li perdo. Insomma è un casino, eviterei di fare testing delle funzioni e se avvengono errori semplicemente non provo a correggere e genero la prossima intention.
+Anche il testare le funzioni già in libreria non è più possibile perché avrei bisogno di eseguire le azioni che generano. E quindi devo farmi bastare il meccanismo che se una intention viene usata da una nuova funzione per tre volte di fila ma la intention generata fallisce sempre, allora quella funzione viene rimossa.
+Però come faccio se una funzione già in libreria da errore? Boh direi che vale sempre il meccanismo del se fallisce 3 volte di fila una nuvoa intention che contiene una chiamata a quella già in libreria allora quella in libreria viene tolta. Anche se dovesse avvenire un errore a runtime vale lo stesso la regola. Devo controllare che questa cosa valga non solo quando la evaluation è negativa.
+
+Devo ricordarmi di cambiare nel prompt le istruzione per usare e creare funzioni. Ora invece di prendere in input il belief_set, le funzioni lo utilizzano come variabile globale. Quindi devo dare l'esempio di come cominciare la funzione.
+# posso indicare di cominciare la funzione con 
+# def function():
+#     global belief_set
+#     ...
+
+Aumentare il numero di tentativi per le intention da 3 a 5?
+
+Mi sono accorto che uno dei problemi che potrebbero accadere è che vado a leggere il belief set prima che le perception function lo vadano ad aggiornare con gli eventi appena ricevuti. Quindi ogni volta che uso la funzione get_belief_set() in control devo verificare se questo potrebbe essere un problema ed eventualmente aggiungere un time.sleep(0.2) ad esempio. Ho appena controllato e questo non è un problema perché tutte le volte che mi interessa andare a vedere il belief set è quando ho appena eseguito una azione e aspettato 0.2 per ricevere gli eventi, perciò il belief set è già aggiornato. Sia nel runnare un desire che una intention.
+
+
 
 Aggiungere un meccanismo che permette di rifare da zero il belief set? Salvando magari gli ultimi n eventi per ogni object type, e con dei prompt apposta che capiscono come è meglio ristrutturare il belief set ora che hanno un esempio di belief set.
 
