@@ -59,7 +59,7 @@ class Control:
                     self.logger.log_info(f"[LOOP] Plan generated: {plan}")
                     self.logger.log_info("[LOOP] Plan executed, asking for desire evaluation...")
                     self.status = f"Desire triggered and executed: {desire_id}, asking for desire evaluation"
-                    desire_evaluation = self.question_5(self.manager.get_desire_description(desire_id), belief_set_before_execution, belief_set_after_execution, self.get_memory())
+                    desire_evaluation = self.question_5(self.manager.get_desires_description(desire_id), belief_set_before_execution, belief_set_after_execution, self.get_memory())
                     if desire_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
                         self.status = "Unable to obtain evaluation for desire"

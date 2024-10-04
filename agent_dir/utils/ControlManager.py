@@ -129,7 +129,10 @@ class ControlManager:
             f.write(f"    content = False\n")
             f.write(f"    while not content:\n")
             f.write(f"        with open('{self.continue_file}', 'r') as file:\n")
-            f.write(f"            content = eval(file.read())\n")
+            f.write(f"            try:\n")
+            f.write(f"                content = eval(file.read())\n")
+            f.write(f"            except Exception as e:\n")
+            f.write(f"                pass\n")
             f.write(f"            file.close()\n")
             f.write(f"        time.sleep(0.02)\n\n")
             
@@ -137,11 +140,14 @@ class ControlManager:
             f.write(f"thread_alive = True\n")
             f.write(f"def update_belief_set():\n")
             f.write(f"    global belief_set\n")
-            f.write(f"    global thread_alive:\n")
+            f.write(f"    global thread_alive\n")
             f.write(f"    while thread_alive:\n")
-            f.write(f"        file = open('{self.belief_set_file}', 'r')\n")
-            f.write(f"        belief_set = eval(file.read())\n")
-            f.write(f"        file.close()\n")
+            f.write(f"        with open('{self.belief_set_file}', 'r') as file:\n")
+            f.write(f"            try:\n")
+            f.write(f"                belief_set = eval(file.read())\n")
+            f.write(f"            except Exception as e:\n")
+            f.write(f"                pass\n")
+            f.write(f"            file.close()\n")
             f.write(f"        time.sleep(0.02)\n")
             f.write(f"thread = threading.Thread(target=update_belief_set)\n")
             f.write(f"thread.start()\n")
@@ -179,9 +185,8 @@ class ControlManager:
                 raise Exception(stderr)
         except Exception as e:
             process.kill()
-            self.invalidate_intention(id)
             error = e
-            self.logger.log_error(f"Error during intention {id} execution. Intention {id} is now invalid. Error: {e}")
+            self.logger.log_error(f"Error during intention {id} execution. Intention {id} will be invalidated. Error: {e}")
         
         self.thread_alive = False
         thread1.join()
@@ -282,7 +287,8 @@ class ControlManager:
                 self.logger.log_info(f"Desire {id} plan has been executed.")
             else:
                 self.desires[id].executable = False
-                self.logger.log_error(f"Error during plan execution of desire {id}. Desire {id} is now invalid.")
+                self.invalidate_intention(intention.id)
+                self.logger.log_error(f"Error during plan execution of desire {id}. Desire {id} is now invalid and last intention has been invalidated.")
             return error, plan, events
         # else: # get the plan by executing all intentions and concatenating the plans [WRONG]
             # concat_plans = []
