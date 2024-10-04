@@ -422,6 +422,9 @@ class ControlManager:
                 descriptions.append(desire.description)
         return descriptions
 
+    def get_desire_description(self, id):
+        return self.desires[id].description
+
     def get_intentions_called_by(self, id):
         intentions_called_ids = self.intentions_graph[id]
         for intention_id in intentions_called_ids:
