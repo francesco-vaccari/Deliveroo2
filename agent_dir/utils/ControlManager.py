@@ -177,6 +177,7 @@ class ControlManager:
         error = None
 
         self.logger.log_info(f"Started subprocess...")
+        self.logger.log_info(f"Belief set before intention {id} execution:\n{get_belief_set()}")
 
         try:
             process = subprocess.Popen(['python3', self.functions_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -193,6 +194,7 @@ class ControlManager:
         thread2.join()
 
         self.logger.log_info(f"Intention {id} execution has finished. Threads and subprocess terminated. Plan: {self.plan}. Events: {self.events}")
+        self.logger.log_info(f"Belief set after intention {id} execution:\n{get_belief_set()}")
 
         if error is not None:
             return error, None, None
