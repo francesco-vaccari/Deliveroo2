@@ -23,6 +23,10 @@ Aumentare il numero di tentativi per le intention da 3 a 5?
 Aggiungere un meccanismo che permette di rifare da zero il belief set? Salvando magari gli ultimi n eventi per ogni object type, e con dei prompt apposta che capiscono come è meglio ristrutturare il belief set ora che hanno un esempio di belief set.
 
 
+Per quanto riguarda il replay basta che mi salvo il seed che è stato usato per i random in game_classes.py, poi mi salvo gli argomenti in input di main.py, e infine mi salvo le risposte della LLM. In questo modo posso riprodurre l'intero esperimento. Inoltre, devo salvarmi quanto tempo ci mette ogni prompt a ricevere una risposta perché anche quello importa.
+
+Altrimenti, devo salvarmi in ogni frame quali azioni ricevo, e poi salvarmi il seed per game_classes e gli argomenti in input di main.py. Poi invece di far partire l'agente faccio finta di ricevere le azioni nei frame corretti e le eseguo. Credo di poter lavorare solo con il file server.py, ma ho bisogno di un file di logging particolare in cui salvo i file di config che mi servono, il seed, e le azioni in ogni frame.
+
 
 Creare stima di costo per esperimento?
 
