@@ -165,6 +165,8 @@ def game_loop(communication, game, graphics, clock, logger):
         clock.tick(60)
 
     communication.close()
+    game.write_replay_file()
+    logger.log_debug("Replay file written")
     logger.log_debug("Server terminated")
 
 

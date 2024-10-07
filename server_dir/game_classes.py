@@ -4,6 +4,11 @@ import copy
 
 class Game:
     def __init__(self, map_conf_path, parcels_conf_path, folder):
+        self.replay = {}
+        self.replay_frame = 0
+        self.replay_file = folder + '/replay.json'
+        self.last_entities_string_values = ["", "", ""]
+
         self.map = Map(map_conf_path)
         self.parcels = []
         self.agents = []
@@ -21,9 +26,31 @@ class Game:
         self.spawn_timer = 0
 
         self.entities_to_track = [self.map, self.parcels, self.agents]
-        self.entities_labels = ["map", "parcel", "agent"]
+        self.entities_labels = ["map", "parcels", "agents"]
         self.environment_state = []
         self.set_initial_state()
+    
+    def log_state(self):
+        self.replay[str(self.replay_frame)] = {}
+
+        if str(self.map.dump()) != self.last_entities_string_values[0]:
+            self.replay[str(self.replay_frame)]['map'] = self.map.dump()
+            self.last_entities_string_values[0] = str(self.map.dump())
+            
+        if str([parcel.dump() for parcel in self.parcels]) != self.last_entities_string_values[1]:
+            self.replay[str(self.replay_frame)]['parcels'] = [parcel.dump() for parcel in self.parcels]
+            self.last_entities_string_values[1] = str([parcel.dump() for parcel in self.parcels])
+        
+        if str([agent.dump() for agent in self.agents]) != self.last_entities_string_values[2]:
+            self.replay[str(self.replay_frame)]['agents'] = [agent.dump() for agent in self.agents]
+            self.last_entities_string_values[2] = str([agent.dump() for agent in self.agents])
+        
+        self.replay_frame += 1
+
+    def write_replay_file(self):
+        with open(self.replay_file, 'w') as f:
+            json.dump(self.replay, f)
+            f.close()
     
     def new_agent(self):
         agent = Agent(self.agents_ids)
@@ -208,6 +235,7 @@ class Game:
                 self.environment_state.append(copy.deepcopy(element))
 
     def set_new_state(self):
+        self.log_state()
         new_state = []
         for element in self.entities_to_track:
             if type(element) is list:
@@ -267,6 +295,8 @@ class Game:
 
 class Map:
     def __init__(self, map_conf_path=None):
+        self.width = 0
+        self.height = 0
         self.grid = []
         if map_conf_path:
             with open(map_conf_path) as f:
@@ -319,6 +349,14 @@ class Map:
             }
         }
         return event
+    
+    def dump(self):
+        return {
+            "width": self.width,
+            "height": self.height,
+            "grid": self.grid
+        }
+
 
 class Agent:
     def __init__(self, id):
@@ -368,6 +406,15 @@ class Agent:
         }
         return event
 
+    def dump(self):
+        return {
+            "id": self.id,
+            "x": self.x,
+            "y": self.y,
+            "parcels_carried": self.parcels_carried,
+            "score": self.score
+        }
+
 class Parcel:
     def __init__(self, id, x, y, score):
         self.id = id
@@ -410,6 +457,17 @@ class Parcel:
             }
         }
         return event
+
+    def dump(self):
+        return {
+            "id": self.id,
+            "x": self.x,
+            "y": self.y,
+            "score": self.score,
+            "carried_by_id": self.carried_by if self.carried_by is not None else 0,
+            "to_draw": self.to_draw,
+            "to_draw_on_agent": self.to_draw_on_agent
+        }
 
 
 
