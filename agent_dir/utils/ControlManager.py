@@ -44,8 +44,10 @@ class ControlManager:
     def load_base_actions(self, actions_path):
         self.logger.log_info(f"Loading actions from {actions_path} ...")
         actions = json.load(open(actions_path))["actions"]
+        self.base_actions_names = []
         for action in actions:
             # function_name = action["function_name"]
+            self.base_actions_names.append(action["action_name"])
             function_name = f"function_{self.intention_id}"
             description = action["description"]
             function_string = f"""def {function_name}():\n    with open('{self.plan_file}', 'a') as f:\n        f.write('{action["action_name"]}\\n')\n        f.close()\n    wait()\n\n"""
@@ -375,6 +377,10 @@ class ControlManager:
             if not tree.body[0].name:
                 return "The function does not have a name."
             
+            function_defs = [node for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)]
+            if len(function_defs) != 1:
+                return "The code contains more than one function definition."
+            
             return None
         except SyntaxError as e:
             return f"Syntax error: {e}"
@@ -433,6 +439,9 @@ class ControlManager:
             more_ids = self.get_intentions_called_by(intention_id)
             intentions_called_ids += more_ids
         return set(intentions_called_ids)
+    
+    def get_base_actions_list(self):
+        return self.base_actions_names
 
     def get_printable_intentions(self):
         out = "\n"

@@ -22,10 +22,9 @@ The following is the belief set that the agent has after executing the plan:
 Provide a boolean evaluation on whether the agent has achieved the short term goal or not.
 
 
-The agent has learned the following information, this is the current memory:
-```memory```
 
-You need to inlcude the information stored in the current memory and you can add other information that you can infer from the provided data to the memory. This information should be about the effects of each different action from the plan. If your evaluation is 'False', this information should help the agent to understand why the goal was not achieved. If you think that a statement in the current memory is not true, you can ignore it or modify it. The information should be general and not specific to the current scenario.
+Also, you need to write general information that you can infer from the given data about the effects of each action in the plan executed. The possible actions are: ```base_actons_list```. For each action write about the effect that you observed, integrating the information with what was learned in previous plan executions. The following is the information that the agent has learned so far:
+```memory```
 
 
 
