@@ -12,11 +12,10 @@ Testare:
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown
 
 
+Questo branch è per la soluzione 1, ovvero reintroduco le descrizioni delle azioni, mantenendo però comunque i nomi delle azioni anonimi, e cambio i prompt in modo che la memoria venga utilizzata come feedback su cosa è andato storto durante la valutazione delle intention. Specifico che ciò che va in memoria deve essere generale e deve essere riguardo cosa ha imparato l'agente dalla esecuzione appena terminata. Oltre che ovviamente il perché il piano corrente è andato storto e come farlo andare bene la prossima volta.
+
+
 Specificare meglio che il belief set è aggiornato mano a mano che le azioni vengono eseguite?
-
-Cambiare il nome delle funzioni base in action_1(), action_2() ... e eventualmente la descrizione o cambiarla, così è ancora più chiaro che sono solo le azioni base.
-
-Migliorare il prompt per cosa ci va nella memoria? Magari aggiungere un template del tipo. The agent does not know what action_1 does, e stessa cosa per altre azioni. In modo che poi sia la LLM a correggere le frasi ma senza toglierle, e allo stesso tempo guidando che tipo di informazione voglio nella memoria. Addirittura potrei magari fare un tipo di memoria dove specifico solo quali pezzi la LLM può modificare. Tipo action_1 does [unknown for now][change here].
 
 Aumentare il numero di tentativi per le intention da 3 a 5?
 
