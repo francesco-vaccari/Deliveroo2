@@ -73,8 +73,8 @@ while True:
 
 CONTROL
 
-D = {}                                         # Desires
-DTF = {}                                       # Desire Trigger Functions
+D = {}                                         # Desires Library
+DTF = {}                                       # Desire Trigger Functions (one for each desire)
 I = {}                                         # Intentions Library
 P = 0                                          # Plan
 A = {moveup, pickup ... }                      # Actions
@@ -103,7 +103,8 @@ while True:
             if evaluation:
                 D' = add_intention_to_desire(I')
                 if desire_is_satisfied(D', B):                          # Prompt LLM
-                    D' = generate_trigger_function(D', B)               # Prompt LLM
+                    DTF' = generate_trigger_function(D', B)               # Prompt LLM
                     D = add_desire(D')
+                    DTF = add_trigger_function(DTF')
                     break
 
