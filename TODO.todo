@@ -1,5 +1,3 @@
-Controllare e sistemare lo pseudo codice con tutto aggiornato e magari guardare come è fatto quello BDI standard per confrontare.
-
 Testare:
 - Stateless intention generation devo solo modificare la funzione manager.get_library() per includere solo le azioni base
 - No desire triggering semplicemente non chiamo la prima parte in nel loop in control
@@ -12,25 +10,20 @@ Testare:
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown
 
 
+Questo branch è per la soluzione 1, ovvero reintroduco le descrizioni delle azioni, mantenendo però comunque i nomi delle azioni anonimi, e cambio i prompt in modo che la memoria venga utilizzata come feedback su cosa è andato storto durante la valutazione delle intention. Specifico che ciò che va in memoria deve essere generale e deve essere riguardo cosa ha imparato l'agente dalla esecuzione appena terminata. Oltre che ovviamente il perché il piano corrente è andato storto e come farlo andare bene la prossima volta.
+
+
 Specificare meglio che il belief set è aggiornato mano a mano che le azioni vengono eseguite?
-
-Cambiare il nome delle funzioni base in action_1(), action_2() ... e eventualmente la descrizione o cambiarla, così è ancora più chiaro che sono solo le azioni base.
-
-Migliorare il prompt per cosa ci va nella memoria? Magari aggiungere un template del tipo. The agent does not know what action_1 does, e stessa cosa per altre azioni. In modo che poi sia la LLM a correggere le frasi ma senza toglierle, e allo stesso tempo guidando che tipo di informazione voglio nella memoria. Addirittura potrei magari fare un tipo di memoria dove specifico solo quali pezzi la LLM può modificare. Tipo action_1 does [unknown for now][change here].
 
 Aumentare il numero di tentativi per le intention da 3 a 5?
 
 Aggiungere un meccanismo che permette di rifare da zero il belief set? Salvando magari gli ultimi n eventi per ogni object type, e con dei prompt apposta che capiscono come è meglio ristrutturare il belief set ora che hanno un esempio di belief set.
 
 
-
-Creare stima di costo per esperimento?
-
-Idealmente vorrei un ambiente con pochi elementi, per evitare di creare complessità inutile, e per tenere la lunghezza dei prompt bassa. Quindi mappa piccola, basso spawn rate delle parcelle, decay lento o nullo, magari con punteggio basso delle parcelle.
-
 Rivedere desire evaluation e aggiungere altre informazioni, magari riguardanti le intention eseguite, o solo l'ultima con la sua descrizione?
 
 
+Idealmente vorrei un ambiente con pochi elementi, per evitare di creare complessità inutile, e per tenere la lunghezza dei prompt bassa. Quindi mappa piccola, basso spawn rate delle parcelle, decay lento o nullo, magari con punteggio basso delle parcelle.
 
 
 Provare a vedere se cambiare la temperature per la request cambia le cose.
@@ -57,3 +50,19 @@ provare senza score, o con delivery zones che danno più punti
 capire se ci possono essere evoluzioni diverse con lo stesso gioco, capire se ci sono diverse direzioni di evoluzione
 
 reward negativo per azioni sbagliate
+
+
+
+Cose di cui parlare:
+- ho finito il progetto, pseudo code con la pipeline finale
+- come ho intenzione di espandere l'ambiente (porte, altri tipi di celle, parcelle che portano più score di altre, cose non legate allo score)
+- come ho intenzione di eseguire gli esperimenti (no desire triggering per learning, o score più alto in periodo di tempo, o massimo numero di chiamate) (probabilmente no perception generation dopo la prima funzione)
+- magari qualche esempio per mostrare lo user generated desire
+- chiedere riguardo a spesa per avere una stima più accurata di quanto costa il servizio così da potermi regolare su numero/tipo esperimenti
+- capire cosa c'è di interessante a capire come avviene software evolution, capire se può essere interessante la struttura in sé
+
+complessità che aumenta: anche due agenti
+5 esperimenti per ogni tipo
+analisi dell'evoluzione durante i vari step
+analisi di codice applicato a scenari differenti dallo scenario della generazione (più complessi)
+esperimenti con più agenti e analisi di evoluzione con più agenti (o con agente singolo applicato poi con più agenti)

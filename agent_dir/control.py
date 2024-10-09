@@ -130,7 +130,7 @@ class Control:
                         self.logger.log_info(f"[LOOP] Events received: {events}")
                         self.logger.log_info(f"[LOOP] Asking for intention evaluation and memory update...")
                         self.status = "Asking for intention evaluation and memory update..."
-                        intention_evaluation, new_memory = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution, self.manager.get_base_actions_list(), self.get_memory())
+                        intention_evaluation, new_memory = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution, self.get_memory())
                         self.update_memory(new_memory)
                         self.logger.log_info(f"[LOOP] Memory update: {new_memory}")
                     if intention_evaluation is None:
@@ -269,14 +269,14 @@ class Control:
         
         return function_string, None
 
-    def question_4(self, intention, plan, events, belief_set_prior, belief_set_after, base_actons_list, memory):
+    def question_4(self, intention, plan, events, belief_set_prior, belief_set_after, memory):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_4.txt'
 
         actions = [(action, events[i]) for i, action in enumerate(plan)]
 
-        elements = [intention, belief_set_prior, actions, belief_set_after, base_actons_list, memory]
-        elements_names = ["intention", "belief_set_prior", "actions", "belief_set_after", "base_actons_list", "memory"]
+        elements = [intention, belief_set_prior, actions, belief_set_after, memory]
+        elements_names = ["intention", "belief_set_prior", "actions", "belief_set_after", "memory"]
         elements_to_extract = ["evaluation", "information"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q4")

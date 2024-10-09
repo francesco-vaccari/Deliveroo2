@@ -34,6 +34,7 @@ class ControlManager:
         self.desires = {} # id -> Desire
         self.logger = logger
         self.base_actions_max_id = 0
+        self.last_triggered_desire = -1
         self.functions_file_path = 'agent_dir/functions'
         self.functions_file = self.functions_file_path + "/functions.py"
         self.belief_set_file = self.functions_file_path + "/belief_set.txt"
@@ -63,6 +64,11 @@ class ControlManager:
             if desire.executable and desire.trigger_function_string is not None:
                 if self.run_desire_trigger(id, belief_set):
                     self.logger.log_info(f"Desire {id} has been triggered.")
+                    if id == self.last_triggered_desire:
+                        self.logger.log_info(f"Desire {id} was last desire triggered. Avoiding repetition. No desire triggered.")
+                        self.last_triggered_desire = -1
+                        return None
+                    self.last_triggered_desire = id
                     return id
         return None
     
