@@ -2,32 +2,32 @@
     "actions": [
         {
             "function_name": "action_1", 
-            "description": "This is a wrapper function for action_1.",
+            "description": "This is a wrapper function for action_1. The agent moves by 1 cell, decreasing its first coordinate by 1. The agent can move into 'walkable' or 'deliverable' cells, but cannot move into 'non-walkable' cells. The agent cannot move into cells occupied by other agents.",
             "action_name": "action_1"
         },
         {
             "function_name": "action_2",
-            "description": "This is a wrapper function for action_2.",
+            "description": "This is a wrapper function for action_2. The agent moves by 1 cell, increasing its first coordinate by 1. The agent can move into 'walkable' or 'deliverable' cells, but cannot move into 'non-walkable' cells. The agent cannot move into cells occupied by other agents.",
             "action_name": "action_2"
         },
         {
             "function_name": "action_3",
-            "description": "This is a wrapper function for action_3.",
+            "description": "This is a wrapper function for action_3. The agent moves by 1 cell, decreasing its second coordinate by 1. The agent can move into 'walkable' or 'deliverable' cells, but cannot move into 'non-walkable' cells. The agent cannot move into cells occupied by other agents.",
             "action_name": "action_3"
         },
         {
             "function_name": "action_4",
-            "description": "This is a wrapper function for action_4.",
+            "description": "This is a wrapper function for action_4. The agent moves by 1 cell, increasing its second coordinate by 1. The agent can move into 'walkable' or 'deliverable' cells, but cannot move into 'non-walkable' cells. The agent cannot move into cells occupied by other agents.",
             "action_name": "action_4"
         },
         {
             "function_name": "action_5",
-            "description": "This is a wrapper function for action_5.",
+            "description": "This is a wrapper function for action_5. The agent picks up all the parcels on the ground. The agent has to be in the same cell of the parcels to pick them up. The agent can carry multiple parcels. The agent cannot pick up parcels carried by other agents.",
             "action_name": "action_5"
         },
         {
             "function_name": "action_6",
-            "description": "This is a wrapper function for action_6.",
+            "description": "This is a wrapper function for action_6. The agent puts down all the parcels it is carrying on the ground. The agent will put down the parcels in the cell it is currently in. If the cell is a 'delivery' cell, the score of the parcels will be added to the agent.",
             "action_name": "action_6"
         }
     ]

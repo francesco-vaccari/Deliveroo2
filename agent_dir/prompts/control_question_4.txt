@@ -23,7 +23,8 @@ Provide a boolean evaluation on whether the agent has achieved the short term go
 
 
 
-Also, you need to write general information that you can infer from the given data about the effects of each action in the plan executed. The possible actions are: ```base_actons_list```. For each action write about the effect that you observed, integrating the information with what was learned in previous plan executions. The following is the information that the agent has learned so far:
+You also need to infer information from the given data that can be used to improve plan generation in the future. This information should be general and not refer to specific instances of objects in the environment. Also, if you evaluate that the agent has not achieved the short term goal, you should write suggestions on how to improve the plan generation and execution; you can refer to the name of the actions. 
+All this information will be stored in the agent's memory, you need to integrate the informationthat you write now with the information that is already stored in the agent's memory. This is the current information stored in the agent's memory:
 ```memory```
 
 
