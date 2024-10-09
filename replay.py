@@ -9,6 +9,8 @@ from server_dir.Graphics import Graphics
 
 
 running = True
+frame_counter = 0
+framerate = 60
 
 def signal_handler(sig, frame):
     global running
@@ -53,22 +55,24 @@ class Game:
     def __init__(self, folder):
         self.replay_file = "experiments/" + folder + "/replay.json"
         self.replay = json.load(open(self.replay_file, 'r'))
-        self.frame_counter = 0
         self.map = None
         self.parcels = []
         self.agents = []
     
-    def update_state(self):
-        if str(self.frame_counter) in self.replay.keys():
-            if "map" in self.replay[str(self.frame_counter)].keys():
-                width = int(self.replay[str(self.frame_counter)]["map"]["width"])
-                height = int(self.replay[str(self.frame_counter)]["map"]["height"])
-                grid = list(self.replay[str(self.frame_counter)]["map"]["grid"])
+    def get_n_frames(self):
+        return len(self.replay.keys())
+    
+    def update_state(self, frame_counter):
+        if str(frame_counter) in self.replay.keys():
+            if "map" in self.replay[str(frame_counter)].keys():
+                width = int(self.replay[str(frame_counter)]["map"]["width"])
+                height = int(self.replay[str(frame_counter)]["map"]["height"])
+                grid = list(self.replay[str(frame_counter)]["map"]["grid"])
                 self.map = Map(width, height, grid)
 
-            if "parcels" in self.replay[str(self.frame_counter)].keys():
+            if "parcels" in self.replay[str(frame_counter)].keys():
                 self.parcels = []
-                for parcel in list(self.replay[str(self.frame_counter)]["parcels"]):
+                for parcel in list(self.replay[str(frame_counter)]["parcels"]):
                     id = int(parcel["id"])
                     x = int(parcel["x"])
                     y = int(parcel["y"])
@@ -78,24 +82,21 @@ class Game:
                     to_draw_on_agent = bool(parcel["to_draw_on_agent"])
                     self.parcels.append(Parcel(id, x, y, score, carried_by_id, to_draw, to_draw_on_agent))
             
-            if "agents" in self.replay[str(self.frame_counter)].keys():
+            if "agents" in self.replay[str(frame_counter)].keys():
                 self.agents = []
-                for agent in list(self.replay[str(self.frame_counter)]["agents"]):
+                for agent in list(self.replay[str(frame_counter)]["agents"]):
                     id = int(agent["id"])
                     x = int(agent["x"])
                     y = int(agent["y"])
                     parcels_carried = list(agent["parcels_carried"])
                     score = int(agent["score"])
                     self.agents.append(Agent(id, x, y, parcels_carried, score))
-        else:
-            print("End of replay file")
-            self.frame_counter = -1
-        
-        self.frame_counter += 1
-
 
 def game_loop(game, graphics, clock):
     global running
+    global frame_counter
+    global framerate
+    n_frames = game.get_n_frames()
     
     while running:
         for event in pygame.event.get():
@@ -114,9 +115,15 @@ def game_loop(game, graphics, clock):
             
             if event.type == pygame.MOUSEWHEEL:
                 graphics.scale_sizes(event.y)
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    framerate -= 30
+                if event.key == pygame.K_RIGHT:
+                    framerate += 30
                     
 
-        game.update_state()
+        game.update_state(frame_counter)
 
         graphics.draw_environment()
         graphics.display_info()
@@ -124,7 +131,13 @@ def game_loop(game, graphics, clock):
         graphics.display_fps(clock.get_fps())
         
         pygame.display.update()
-        clock.tick(60)
+
+        print(f"Framerate: {framerate:4d} \t Frame: {frame_counter:4d} / {n_frames:4d}", end="\r")
+
+        clock.tick(framerate)
+        frame_counter += 1
+        if frame_counter >= n_frames:
+            frame_counter = 0
 
 
 if __name__ == '__main__':

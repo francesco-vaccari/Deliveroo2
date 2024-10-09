@@ -1,56 +1,3 @@
-PERCEPTION
-
-function perception:
-    start_storing_events()
-    start_processing_events()
-    main_loop()
-
-function start_storing_events:
-    while not stop:
-        for event in events_queue:
-            divide events by object type and queue them separately
-
-function start_processing_events:
-    while not stop:
-        for object_type in objects_seen:
-            if there is a function available for that object_type:
-                for event in object_type's queue of events:
-                    update belief set with the function generated given the event
-                    if there is a runtime error save the event to trigger new generation
-
-function main_loop:
-    while not stop:
-        for object_type in objects_seen:
-            if above_threshold(object_type) or special_trigger(object_type):
-                example_events = get_example_events(object_type)
-                # the function has both to be a valid python function (parsing) and has to run without errors (testing)
-                while function not parsed correctly for max 3 tries:
-                    function = make_request(example_events, belief_set, object_type)
-                while function not working correctly for max 3 tries:
-                    function, error = test_function(function, example_events, belief_set)
-                    function = make_request(example_events, belief_set, object_type, error) # include error if failed to execute
-                if function generated successfully:
-                    save the function
-                    save generation time
-                    increase scaling for object_type
-
-function above_threshold(object_type):
-    n_events = number of events queued for object_type
-    last_generation = last time a function for object_type was generated
-    scaling = scaling value for object_type
-    return boolean function based on n_events, last_generation and scaling
-
-function special_trigger(object_type):
-    if last function for object_type had a runtime error:
-        add the erroring event to the example_events
-        return True
-
-function get_example_events(object_type):
-    return a list of last n events (+ erroring event if present)
-
-
-
-
 CONTROL
 
 function control:
@@ -103,3 +50,60 @@ function control:
                 if negative evaluation:
                     do nothing
                     # this means that the desire is not yet satisfied and new intentions will be generated
+
+
+
+
+
+
+
+
+
+PERCEPTION
+
+B = {}                                                # Belief Set
+PF = {}                                               # Perception Functions
+
+while True:
+    receive new events E
+    PF = generate_perception_functions(PF, E)         # Prompt LLM
+    B = revise_belief_set(B, PF, E)
+
+
+
+CONTROL
+
+D = {}                                         # Desires
+DTF = {}                                       # Desire Trigger Functions
+I = {}                                         # Intentions Library
+P = 0                                          # Plan
+A = {moveup, pickup ... }                      # Actions
+M = {}                                         # Memory
+
+I = add_actions_as_intentions(A, I)
+wait()
+
+while True:
+    D' = check_if_desire_triggered(D, DTF)
+
+    if D':
+        P = get_plan(D', B)
+        E = execute(P)
+        if not desire_is_satisfied(D', B):                              # Prompt LLM
+            invalidate_desire(D')
+    
+    if not D':
+        D' = generate_new_desire(D, B, M)                               # Prompt LLM
+        while True:
+            I' = generate_intention(D', I, B, M)                        # Prompt LLM
+            P = get_plan(I', B)
+            E = execute(P)
+            evaluation, M' = evaluate_execution(I', P, E, M)            # Prompt LLM
+            M = update_memory(M')
+            if evaluation:
+                D' = add_intention_to_desire(I')
+                if desire_is_satisfied(D', B):                          # Prompt LLM
+                    D' = generate_trigger_function(D', B)               # Prompt LLM
+                    D = add_desire(D')
+                    break
+
