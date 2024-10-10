@@ -25,7 +25,7 @@ class Desire:
         self.executable = False
 
 class ControlManager:
-    def __init__(self, logger):
+    def __init__(self, logger, agent_folder):
         self.intention_id = 1
         self.desire_id = 1
         self.timeout = 4
@@ -35,12 +35,13 @@ class ControlManager:
         self.logger = logger
         self.base_actions_max_id = 0
         self.last_triggered_desire = -1
-        self.functions_file_path = 'agent_dir/functions'
-        self.functions_file = self.functions_file_path + "/functions.py"
-        self.belief_set_file = self.functions_file_path + "/belief_set.txt"
-        self.plan_file = self.functions_file_path + "/plan.txt"
-        self.continue_file = self.functions_file_path + "/continue.txt"
-        self.load_base_actions(self.functions_file_path + "/actions.json")
+        if not os.path.exists("agent_dir/functions/" + agent_folder):
+            os.makedirs("agent_dir/functions/" + agent_folder)
+        self.functions_file = "agent_dir/functions/" + agent_folder + "/functions.py"
+        self.belief_set_file = "agent_dir/functions/" + agent_folder + "/belief_set.txt"
+        self.plan_file = "agent_dir/functions/" + agent_folder + "/plan.txt"
+        self.continue_file = "agent_dir/functions/" + agent_folder + "/continue.txt"
+        self.load_base_actions("agent_dir/actions.json")
     
     def load_base_actions(self, actions_path):
         self.logger.log_info(f"Loading actions from {actions_path} ...")

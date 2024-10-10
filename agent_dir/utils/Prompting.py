@@ -28,7 +28,12 @@ class Prompting:
             else:
                 log += f"\nResponse: {response.choices[0].message.content}"
             self.logger.log_info(log)
-            return response.choices[0].message.content
+            try:
+                return response.choices[0].message.content
+            except Exception as e:
+                self.logger.log_error(f"[{tag}] Failed to get response, error: {e}")
+                return ""
+
         self.logger.log_error(f"[{tag}] Prompting is stopped, cannot send request.")
         return ""
 

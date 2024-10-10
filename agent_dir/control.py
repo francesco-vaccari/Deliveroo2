@@ -12,7 +12,7 @@ class Control:
         self.get_events = get_events
         self.get_belief_set = get_belief_set
         self.logger = ExperimentLogger(folder, 'control.log')
-        self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'))
+        self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'), folder.split('/')[-1])
         self.prompting = prompting
         self.user_generated_desire = user_generated_desire
         self.stateless_intention_generation = stateless_intention_generation
