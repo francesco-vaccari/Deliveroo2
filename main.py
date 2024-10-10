@@ -14,6 +14,7 @@ parser.add_argument('--map', type=str, required=True, help="Path to the map conf
 parser.add_argument('--parcels', type=str, required=True, help="Path to the parcels config file")
 parser.add_argument('--host', type=str, required=False, default='127.0.0.1', help="Host address of the server")
 parser.add_argument('--port', type=int, required=False, default=8080, help="Port number of the server")
+parser.add_argument('--n-agents', type=int, required=False, default=1, help="Number of agents")
 args = parser.parse_args()
 
 experiment_folder = time.strftime("experiments/%Y-%m-%d-%H-%M-%S")
@@ -40,17 +41,23 @@ if args.no_desire_triggering:
     arguments.append('--no-desire-triggering')
 if args.perception_generation_only_on_error:
     arguments.append('--perception-generation-only-on-error')
-agent_args = ['--folder', experiment_folder, '--host', args.host, '--port', str(args.port+1), '--server-port', str(args.port)]
-process2 = subprocess.Popen(['python3', 'agent.py'] + agent_args + arguments)
-logger.log_debug("Agent started")
+
+agents_processes = []
+for i in range(args.n_agents):
+    agent_args = ['--folder', experiment_folder + f'/agent_{i+1}', '--host', args.host, '--port', str(args.port+i+1), '--server-port', str(args.port)]
+    process = subprocess.Popen(['python3', 'agent.py'] + agent_args + arguments)
+    agents_processes.append(process)
+    logger.log_debug(f"Agent {i} started")
 
 def signal_handler(sig, frame):
     process1.terminate()
-    process2.terminate()
+    for process in agents_processes:
+        process.terminate()
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
 process1.wait()
-process2.wait()
-logger.log_debug("Server and agent terminated. Experiment finished.")
+for process in agents_processes:
+    process.wait()
+logger.log_debug("Server and agents terminated. Experiment finished.")
