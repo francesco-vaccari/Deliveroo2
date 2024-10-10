@@ -87,7 +87,7 @@ class RealTimeVisualizer(QWidget):
         self.timer.timeout.connect(self.update_labels)
         self.timer.start(1000)
 
-        self.setWindowTitle(self.folder)
+        self.setWindowTitle(self.folder.split("/")[-1])
         self.show()
         
         self.show_widget(self.scroll1)  # Show the first widget by default

@@ -119,29 +119,17 @@ def game_loop(communication, game, graphics, clock, logger):
             
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    game.agent_move_left(0)
                     game.agent_move_left(1)
-                    game.agent_move_left(2)
                 if event.key == pygame.K_RIGHT:
-                    game.agent_move_right(0)
                     game.agent_move_right(1)
-                    game.agent_move_right(2)
                 if event.key == pygame.K_UP:
-                    game.agent_move_up(0)
                     game.agent_move_up(1)
-                    game.agent_move_up(2)
                 if event.key == pygame.K_DOWN:
-                    game.agent_move_down(0)
                     game.agent_move_down(1)
-                    game.agent_move_down(2)
                 if event.key == pygame.K_SPACE:
-                    game.agent_pick_up(0)
                     game.agent_pick_up(1)
-                    game.agent_pick_up(2)
                 if event.key == pygame.K_RETURN:
-                    game.agent_put_down(0)
                     game.agent_put_down(1)
-                    game.agent_put_down(2)
                     
         
         actions = handle_messages(communication, logger, agents_ports_to_ids)
