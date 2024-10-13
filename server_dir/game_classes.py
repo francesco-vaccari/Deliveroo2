@@ -79,6 +79,18 @@ class Game:
             self.replay[str(self.replay_frame)]['agents'] = [agent.dump() for agent in self.agents]
             self.last_entities_string_values[2] = str([agent.dump() for agent in self.agents])
         
+        if str([battery.dump() for battery in self.batteries]) != self.last_entities_string_values[3]:
+            self.replay[str(self.replay_frame)]['batteries'] = [battery.dump() for battery in self.batteries]
+            self.last_entities_string_values[3] = str([battery.dump() for battery in self.batteries])
+
+        if str([key.dump() for key in self.keys]) != self.last_entities_string_values[4]:
+            self.replay[str(self.replay_frame)]['keys'] = [key.dump() for key in self.keys]
+            self.last_entities_string_values[4] = str([key.dump() for key in self.keys])
+
+        if str([door.dump() for door in self.doors]) != self.last_entities_string_values[5]:
+            self.replay[str(self.replay_frame)]['doors'] = [door.dump() for door in self.doors]
+            self.last_entities_string_values[5] = str([door.dump() for door in self.doors])
+        
         self.replay_frame += 1
 
     def write_replay_file(self):
