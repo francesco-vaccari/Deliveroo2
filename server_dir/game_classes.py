@@ -3,30 +3,64 @@ import json
 import copy
 
 class Game:
-    def __init__(self, map_conf_path, parcels_conf_path, folder):
+    def __init__(self, conf_folder, folder):
         self.replay = {}
         self.replay_frame = 0
         self.replay_file = folder + '/replay.json'
-        self.last_entities_string_values = ["", "", ""]
+
+        map_conf_path = conf_folder + '/map.conf'
+        parcels_conf_path = conf_folder + '/parcels.conf'
+        batteries_conf_path = conf_folder + '/batteries.conf'
+        agents_conf_path = conf_folder + '/agents.conf'
+        keys_conf_path = conf_folder + '/keys.conf'
+        doors_conf_path = conf_folder + '/doors.conf'
 
         self.map = Map(map_conf_path)
-        self.parcels = []
-        self.agents = []
-        
-        with open(parcels_conf_path) as f:
-            self.spawning_rate = int(f.readline())
-            self.score_range = f.readline().split()
-            self.decay_rate = int(f.readline())
-        
-        
-        self.agents_ids = 1
-        self.parcels_ids = 1
 
+        self.parcels = []
+        self.parcels_ids = 1
         self.decay_timer = 0
         self.spawn_timer = 0
+        with open(parcels_conf_path) as f:
+            self.spawning_rate = int(f.readline().split()[0])
+            self.score_range = list(f.readline().split()[0:2])
+            self.decay_rate = int(f.readline().split()[0])
+        
+        self.batteries = []
+        self.batteries_ids = 1
+        self.batteries_spawn_timer = 0
+        with open(batteries_conf_path) as f:
+            self.batteries_spawning_rate = int(f.readline().split()[0])
 
-        self.entities_to_track = [self.map, self.parcels, self.agents]
-        self.entities_labels = ["map", "parcels", "agents"]
+        self.agents = []
+        self.agents_ids = 1
+        with open(agents_conf_path) as f:
+            self.n_agents = int(f.readline().split()[0])
+            self.init_battery = int(f.readline().split()[0])
+            self.energy_consumption = int(f.readline().split()[0])
+            self.init_positions = eval(f.readline().split()[0])
+        
+        self.keys = []
+        self.keys_ids = 1
+        with open(keys_conf_path) as f:
+            self.n_keys = int(f.readline().split()[0])
+            if self.n_keys > 0:
+                self.keys_init_positions = eval(f.readline().split()[0])
+            else:
+                self.n_keys = -1
+        
+        self.doors = []
+        self.doors_ids = 1
+        with open(doors_conf_path) as f:
+            self.n_doors = int(f.readline().split()[0])
+            if self.n_doors > 0:
+                self.doors_init_positions = eval(f.readline().split()[0])
+            else:
+                self.n_doors = -1
+
+        self.entities_to_track = [self.map, self.parcels, self.agents, self.keys, self.doors]
+        self.entities_labels = ["map", "parcels", "agents", "batteries", "keys", "doors"]
+        self.last_entities_string_values = [""] * len(self.entities_labels)
         self.environment_state = []
         self.set_initial_state()
     
@@ -53,49 +87,39 @@ class Game:
             f.close()
     
     def new_agent(self):
-        agent = Agent(self.agents_ids)
-        self.agents_ids += 1
-        count = 0
-        for row in self.map.grid:
-            for cell in row:
-                if cell == 1 or cell == 2:
-                    count += 1
-        if count == 0:
+        if self.agents_ids > self.n_agents:
             return 0
-        rand = random.randint(0, count-1)
-        count = 0
-        for x, row in enumerate(self.map.grid):
-            for y, cell in enumerate(row):
-                if cell == 1 or cell == 2:
-                    if count == rand:
-                        agent.x = x
-                        agent.y = y
-                        self.agents.append(agent)
-                        return agent.id
-                    count += 1
+        x, y = self.init_positions[self.agents_ids - 1]
+        if self.n_keys == -1:
+            agent = Agent(self.agents_ids, x, y, None, self.init_battery)
+        else:
+            agent = Agent(self.agents_ids, x, y, False, self.init_battery)
+        self.agents.append(agent)
+        self.agents_ids += 1
+        return agent.id
     
     def new_parcel(self):
-        parcel = Parcel(self.parcels_ids, 0, 0, random.randint(int(self.score_range[0]), int(self.score_range[1])))
-        self.parcels_ids += 1
-        count = 0
-        for row in self.map.grid:
-            for cell in row:
-                if cell == 1:
-                    count += 1
-        if count == 0:
-            return 0
-        rand = random.randint(0, count-1)
-        count = 0
+        coords = []
         for x, row in enumerate(self.map.grid):
             for y, cell in enumerate(row):
-                if cell == 1:
-                    if count == rand:
-                        parcel.x = x
-                        parcel.y = y
-                        self.parcels.append(parcel)
-                        return parcel.id
-                    count += 1
+                if cell == 4:
+                    coords.append([x, y])
+        for (x, y) in coords:
+            parcel = Parcel(self.parcels_ids, x, y, random.randint(int(self.score_range[0]), int(self.score_range[1])))
+            self.parcels_ids += 1
+            self.parcels.append(parcel)
     
+    def new_battery(self):
+        coords = []
+        for x, row in enumerate(self.map.grid):
+            for y, cell in enumerate(row):
+                if cell == 5:
+                    coords.append([x, y])
+        for (x, y) in coords:
+            battery = Battery(self.batteries_ids, x, y)
+            self.batteries_ids += 1
+            self.batteries.append(battery)
+
     def remove_agent(self, id):
         for agent in self.agents:
             if agent.id == id:
@@ -110,10 +134,22 @@ class Game:
                             for someone_else in self.agents:
                                 if someone_else.x == agent.x and someone_else.y == agent.y - 1:
                                     return False
+                            for door in self.doors:
+                                if door.x == agent.x and door.y == agent.y - 1:
+                                    if not agent.has_key:
+                                        return False
+                            if self.init_battery != -1:
+                                agent.energy -= self.energy_consumption
+                                if agent.energy < 0:
+                                    agent.energy = 0
+                                    return False
                             agent.y -= 1
                             for parcel in self.parcels:
                                 if parcel.carried_by == agent.id:
                                     parcel.y -= 1
+                            for key in self.keys:
+                                if key.carried_by == agent.id:
+                                    key.y -= 1
                             return True
         return False
     
@@ -125,10 +161,22 @@ class Game:
                             for someone_else in self.agents:
                                 if someone_else.x == agent.x and someone_else.y == agent.y + 1:
                                     return False
+                            for door in self.doors:
+                                if door.x == agent.x and door.y == agent.y + 1:
+                                    if not agent.has_key:
+                                        return False
+                            if self.init_battery != -1:
+                                agent.energy -= self.energy_consumption
+                                if agent.energy < 0:
+                                    agent.energy = 0
+                                    return False
                             agent.y += 1
                             for parcel in self.parcels:
                                 if parcel.carried_by == agent.id:
                                     parcel.y += 1
+                            for key in self.keys:
+                                if key.carried_by == agent.id:
+                                    key.y += 1
                             return True
         return False
 
@@ -140,10 +188,22 @@ class Game:
                             for someone_else in self.agents:
                                 if someone_else.x == agent.x - 1 and someone_else.y == agent.y:
                                     return False
+                            for door in self.doors:
+                                if door.x == agent.x - 1 and door.y == agent.y:
+                                    if not agent.has_key:
+                                        return False
+                            if self.init_battery != -1:
+                                agent.energy -= self.energy_consumption
+                                if agent.energy < 0:
+                                    agent.energy = 0
+                                    return False
                             agent.x -= 1
                             for parcel in self.parcels:
                                 if parcel.carried_by == agent.id:
                                     parcel.x -= 1
+                            for key in self.keys:
+                                if key.carried_by == agent.id:
+                                    key.x -= 1
                             return True
         return False
     
@@ -155,10 +215,22 @@ class Game:
                             for someone_else in self.agents:
                                 if someone_else.x == agent.x + 1 and someone_else.y == agent.y:
                                     return False
+                            for door in self.doors:
+                                if door.x == agent.x + 1 and door.y == agent.y:
+                                    if not agent.has_key:
+                                        return False
+                            if self.init_battery != -1:
+                                agent.energy -= self.energy_consumption
+                                if agent.energy < 0:
+                                    agent.energy = 0
+                                    return False
                             agent.x += 1
                             for parcel in self.parcels:
                                 if parcel.carried_by == agent.id:
                                     parcel.x += 1
+                            for key in self.keys:
+                                if key.carried_by == agent.id:
+                                    key.x += 1
                             return True
         return False
 
@@ -166,6 +238,11 @@ class Game:
         res = False
         for agent in self.agents:
             if agent.id == agent_id:
+                if self.init_battery != -1:
+                    agent.energy -= self.energy_consumption
+                    if agent.energy < 0:
+                        agent.energy = 0
+                        return False
                 for parcel in self.parcels:
                     if parcel.x == agent.x and parcel.y == agent.y and parcel.carried_by == None:
                         parcel.carried_by = agent.id
@@ -173,17 +250,38 @@ class Game:
                         parcel.to_draw_on_agent = True
                         agent.parcels_carried.append(parcel.id)
                         res = True
-        return res # True if at least one parcel was picked up
+                for battery in self.batteries:
+                    if battery.x == agent.x and battery.y == agent.y:
+                        agent.energy = self.init_battery
+                        battery.to_draw = False
+                        self.batteries.remove(battery)
+                        res = True
+                for key in self.keys:
+                    if key.x == agent.x and key.y == agent.y and key.carried_by == None:
+                        key.carried_by = agent.id
+                        key.to_draw = False
+                        key.to_draw_on_agent = True
+                        agent.has_key = True
+                        res = True
+        return res # True if at least one object (parcel, battery, key) was picked up
 
     def agent_put_down(self, agent_id):
         res = False
         for agent in self.agents:
             if agent.id == agent_id:
+                if self.init_battery != -1:
+                    agent.energy -= self.energy_consumption
+                    if agent.energy < 0:
+                        agent.energy = 0
+                        return False
                 for parcel_id in agent.parcels_carried:
                     for parcel in self.parcels:
                         if parcel.id == parcel_id:
-                            if self.map.grid[agent.x][agent.y] == 2:
-                                agent.score += parcel.score
+                            if self.map.grid[agent.x][agent.y] == 2 or self.map.grid[agent.x][agent.y] == 3:
+                                if self.map.grid[agent.x][agent.y] == 2:
+                                    agent.score += parcel.score
+                                if self.map.grid[agent.x][agent.y] == 3:
+                                    agent.score += 2*parcel.score
                                 self.parcels.remove(parcel)
                                 res = True
                             else:
@@ -194,6 +292,13 @@ class Game:
                                 parcel.to_draw_on_agent = False
                                 res = True
                 agent.parcels_carried = []
+                for key in self.keys:
+                    if key.carried_by == agent.id:
+                        key.carried_by = None
+                        key.to_draw = True
+                        key.to_draw_on_agent = False
+                        res = True
+                agent.has_key = False
         return res # True if at least one parcel was put down
 
     def print_map(self):
@@ -222,10 +327,53 @@ class Game:
                 self.decay_timer = 0
 
     def spawn_parcels(self):
-        self.spawn_timer += 1
-        if self.spawn_timer == self.spawning_rate:
+        if self.spawning_rate == -1:
+            pass
+        if self.spawning_rate == 0:
             self.new_parcel()
-            self.spawn_timer = 0
+            self.spawning_rate = -1
+        if self.spawning_rate > 0:
+            self.spawn_timer += 1
+            if self.spawn_timer == self.spawning_rate:
+                self.new_parcel()
+                self.spawn_timer = 0
+
+    def spawn_batteries(self):
+        if self.batteries_spawning_rate == -1:
+            pass
+        if self.batteries_spawning_rate == 0:
+            self.new_battery()
+            self.batteries_spawning_rate = -1
+        if self.batteries_spawning_rate > 0:
+            self.batteries_spawn_timer += 1
+            if self.batteries_spawn_timer == self.batteries_spawning_rate:
+                self.new_battery()
+                self.batteries_spawn_timer = 0
+
+    def spawn_keys(self):
+        if self.n_keys == -1:
+            return
+        for i in range(self.n_keys):
+            key = Key(self.keys_ids, self.keys_init_positions[i][0], self.keys_init_positions[i][1])
+            self.keys_ids += 1
+            self.keys.append(key)
+        self.n_keys = 0
+
+    def spawn_doors(self):
+        if self.n_doors == -1:
+            return
+        for i in range(self.n_doors):
+            door = Door(self.doors_ids, self.doors_init_positions[i][0], self.doors_init_positions[i][1])
+            self.doors_ids += 1
+            self.doors.append(door)
+        self.n_doors = 0
+
+    def next_frame(self):
+        self.decay_parcels()
+        self.spawn_parcels()
+        self.spawn_batteries()
+        self.spawn_keys()
+        self.spawn_doors()
 
     def set_initial_state(self):
         for element in self.entities_to_track:
@@ -291,7 +439,7 @@ class Game:
             else:
                 state.append(json.dumps(element.get_event('object added')))
         return state
-    
+
 
 class Map:
     def __init__(self, map_conf_path=None):
@@ -300,8 +448,7 @@ class Map:
         self.grid = []
         if map_conf_path:
             with open(map_conf_path) as f:
-                self.width = int(f.readline())
-                self.height = int(f.readline())
+                self.width = self.height = int(f.readline().split()[0])
                 for line in f:
                     self.grid.append([int(cell) for cell in line.split()])
     
@@ -335,9 +482,15 @@ class Map:
                 if cell == 1:
                     cell_type = 'walkable'
                 elif cell == 2:
-                    cell_type = 'deliverable'
+                    cell_type = 'delivery_cell'
+                elif cell == 3:
+                    cell_type = 'double_delivery_cell'
+                elif cell == 4:
+                    cell_type = 'parcels_spawn'
+                elif cell == 5:
+                    cell_type = 'batteries_spawn'
                 else:
-                    cell_type = 'non-walkable'
+                    cell_type = 'non_walkable'
                 grid.append({'cell_coordinates': [x, y], 'cell_type': cell_type})
         event = {
             "event_type": event_type,
@@ -357,21 +510,31 @@ class Map:
             "grid": self.grid
         }
 
-
 class Agent:
-    def __init__(self, id):
+    def __init__(self, id, x, y, has_key, energy):
         self.id = id
-        self.x = None
-        self.y = None
+        self.x = x
+        self.y = y
         self.parcels_carried = []
+        self.has_key = has_key
         self.score = 0
+        self.energy = energy
     
     def print_agent(self):
-        text = "Agent id: " + str(self.id) + " x: " + str(self.x) + " y: " + str(self.y) + " score: " + str(self.score) + " carrying: " + str(self.parcels_carried)
+        if self.has_key == None:
+            if self.energy != -1:
+                text = "Agent id: " +    str(self.id) + " x: " + str(self.x) + " y: " + str(self.y) + " parcels carried: " + str(self.parcels_carried) + " score: " + str(self.score) + " energy: " + str(self.energy)
+            else:
+                text = "Agent id: " +    str(self.id) + " x: " + str(self.x) + " y: " + str(self.y) + " parcels carried: " + str(self.parcels_carried) + " score: " + str(self.score)
+        else:
+            if self.energy != -1:
+                text = "Agent id: " +    str(self.id) + " x: " + str(self.x) + " y: " + str(self.y) + " parcels carried: " + str(self.parcels_carried) + " has key: " + str(self.has_key) + " score: " + str(self.score) + " energy: " + str(self.energy)
+            else:
+                text = "Agent id: " +    str(self.id) + " x: " + str(self.x) + " y: " + str(self.y) + " parcels carried: " + str(self.parcels_carried) + " has key: " + str(self.has_key) + " score: " + str(self.score)
         return text
     
     def is_equal(self, agent):
-        if self.id == agent.id and self.x == agent.x and self.y == agent.y and self.score == agent.score:
+        if self.id == agent.id and self.x == agent.x and self.y == agent.y and self.score == agent.score and self.energy == agent.energy and self.has_key == agent.has_key:
             if len(self.parcels_carried) == len(agent.parcels_carried):
                 for parcel in self.parcels_carried:
                     if parcel not in agent.parcels_carried:
@@ -390,20 +553,62 @@ class Agent:
         agent.x = self.x
         agent.y = self.y
         agent.parcels_carried = copy.deepcopy(self.parcels_carried)
+        agent.has_key = self.has_key
         agent.score = self.score
+        agent.energy = self.energy
         return agent
     
     def get_event(self, event_type):
-        event = {
-            "event_type": event_type,
-            "object_type": "agent",
-            "object": {
-                "id": self.id,
-                "coordinates": [self.x, self.y],
-                "parcels_carried_ids": self.parcels_carried,
-                "score": self.score
-            }
-        }
+        if self.has_key == None:
+            if self.energy == -1:
+                event = {
+                    "event_type": event_type,
+                    "object_type": "agent",
+                    "object": {
+                        "id": self.id,
+                        "coordinates": [self.x, self.y],
+                        "parcels_carried_ids": self.parcels_carried,
+                        "score": self.score
+                    }
+                }
+            else:
+                event = {
+                    "event_type": event_type,
+                    "object_type": "agent",
+                    "object": {
+                        "id": self.id,
+                        "coordinates": [self.x, self.y],
+                        "parcels_carried_ids": self.parcels_carried,
+                        "score": self.score,
+                        "energy": self.energy
+                    }
+                }
+        else:
+            if self.energy == -1:
+                event = {
+                    "event_type": event_type,
+                    "object_type": "agent",
+                    "object": {
+                        "id": self.id,
+                        "coordinates": [self.x, self.y],
+                        "parcels_carried_ids": self.parcels_carried,
+                        "has_key": self.has_key,
+                        "score": self.score
+                    }
+                }
+            else:
+                event = {
+                    "event_type": event_type,
+                    "object_type": "agent",
+                    "object": {
+                        "id": self.id,
+                        "coordinates": [self.x, self.y],
+                        "parcels_carried_ids": self.parcels_carried,
+                        "has_key": self.has_key,
+                        "score": self.score,
+                        "energy": self.energy
+                    }
+                }
         return event
 
     def dump(self):
@@ -412,7 +617,9 @@ class Agent:
             "x": self.x,
             "y": self.y,
             "parcels_carried": self.parcels_carried,
-            "score": self.score
+            "has_key": self.has_key,
+            "score": self.score,
+            "energy": self.energy
         }
 
 class Parcel:
@@ -469,7 +676,150 @@ class Parcel:
             "to_draw_on_agent": self.to_draw_on_agent
         }
 
+class Battery:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.to_draw = True
+        self.to_draw_on_agent = False
+    
+    def print_battery(self):
+        text = "Battery id: " + str(self.id) + " x: " + str(self.x) + " y: " + str(self.y)
+        return text
 
+    def is_equal(self, battery):
+        if self.id == battery.id and self.x == battery.x and self.y == battery.y:
+            return True
+        return False
+
+    def is_in_list(self, batteries):
+        for i, battery in enumerate(batteries):
+            if self.id == battery.id:
+                return i
+        return -1
+
+    def copy(self):
+        battery = Battery(self.id, self.x, self.y)
+        return battery
+    
+    def get_event(self, event_type):
+        event = {
+            "event_type": event_type,
+            "object_type": "battery",
+            "object": {
+                "id": self.id,
+                "coordinates": [self.x, self.y]
+            }
+        }
+        return event
+
+    def dump(self):
+        return {
+            "id": self.id,
+            "x": self.x,
+            "y": self.y,
+            "to_draw": self.to_draw,
+            "to_draw_on_agent": self.to_draw_on_agent
+        }
+
+class Key:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.carried_by = None
+        self.to_draw = True
+        self.to_draw_on_agent = False
+
+    def print_key(self):
+        text = "Key id: " + str(self.id) + " x: " + str(self.x) + " y: " + str(self.y) + " carried by: " + str(self.carried_by)
+        return text
+    
+    def is_equal(self, key):
+        if self.id == key.id and self.x == key.x and self.y == key.y and self.carried_by == key.carried_by:
+            return True
+        return False
+    
+    def is_in_list(self, keys):
+        for i, key in enumerate(keys):
+            if self.id == key.id:
+                return i
+        return -1
+    
+    def copy(self):
+        key = Key(self.id, self.x, self.y)
+        key.carried_by = self.carried_by
+        return key
+    
+    def get_event(self, event_type):
+        event = {
+            "event_type": event_type,
+            "object_type": "key",
+            "object": {
+                "id": self.id,
+                "coordinates": [self.x, self.y],
+                "carried_by_id": self.carried_by
+            }
+        }
+        return event
+    
+    def dump(self):
+        return {
+            "id": self.id,
+            "x": self.x,
+            "y": self.y,
+            "carried_by_id": self.carried_by if self.carried_by is not None else 0,
+            "to_draw": self.to_draw,
+            "to_draw_on_agent": self.to_draw_on_agent
+        }
+
+class Door:
+    def __init__(self, id, x, y):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.to_draw = True
+        self.to_draw_on_agent = False
+    
+    def print_door(self):
+        text = "Door id: " + str(self.id) + " x: " + str(self.x) + " y: " + str(self.y)
+        return text
+    
+    def is_equal(self, door):
+        if self.id == door.id and self.x == door.x and self.y == door.y:
+            return True
+        return False
+    
+    def is_in_list(self, doors):
+        for i, door in enumerate(doors):
+            if self.id == door.id:
+                return i
+        return -1
+    
+    def copy(self):
+        door = Door(self.id, self.x, self.y)
+        return door
+    
+    def get_event(self, event_type):
+        event = {
+            "event_type": event_type,
+            "object_type": "door",
+            "object": {
+                "id": self.id,
+                "coordinates": [self.x, self.y]
+            }
+        }
+        return event
+    
+    def dump(self):
+        return {
+            "id": self.id,
+            "x": self.x,
+            "y": self.y,
+            "to_draw": self.to_draw,
+            "to_draw_on_agent": self.to_draw_on_agent
+        }
 
 '''
 Traccio lo stato dell'ambiente, ovvero gli agenti, le parcelle e la mappa.

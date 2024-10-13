@@ -10,11 +10,9 @@ parser.add_argument('--user-generated-desire', action='store_true', help="Use us
 parser.add_argument('--stateless-intention-generation', action='store_true', help="Use stateless intention generation")
 parser.add_argument('--no-desire-triggering', action='store_true', help="Disable desire triggering")
 parser.add_argument('--perception-generation-only-on-error', action='store_true', help="Generate perception only on error")
-parser.add_argument('--map', type=str, required=True, help="Path to the map config file")
-parser.add_argument('--parcels', type=str, required=True, help="Path to the parcels config file")
+parser.add_argument('--conf', type=str, required=True, help="Path to the configuration folder")
 parser.add_argument('--host', type=str, required=False, default='127.0.0.1', help="Host address of the server")
 parser.add_argument('--port', type=int, required=False, default=8080, help="Port number of the server")
-parser.add_argument('--n-agents', type=int, required=False, default=1, help="Number of agents")
 args = parser.parse_args()
 
 experiment_folder = time.strftime("experiments/%Y-%m-%d-%H-%M-%S")
@@ -25,10 +23,9 @@ if args.desc:
     description = "Experiment Description: " + input("Please enter a description of the experiment: ")
     logger.log_info(description)
 
-maps_path = 'server_dir/conf/maps/' + args.map
-parcels_path = 'server_dir/conf/parcels/' + args.parcels
+conf_path = 'server_dir/conf/' + args.conf
 
-server_args = ['--map', maps_path, '--parcels', parcels_path, '--folder', experiment_folder, '--host', args.host , '--port', str(args.port)]
+server_args = ['--conf', conf_path, '--folder', experiment_folder, '--host', args.host , '--port', str(args.port)]
 process1 = subprocess.Popen(['python3', 'server.py'] + server_args)
 logger.log_debug("Server started")
 
@@ -43,7 +40,9 @@ if args.perception_generation_only_on_error:
     arguments.append('--perception-generation-only-on-error')
 
 agents_processes = []
-for i in range(args.n_agents):
+with open(conf_path + '/agents.conf', 'r') as file:
+    n_agents = int(file.readline().split()[0])
+for i in range(n_agents):
     agent_args = ['--folder', experiment_folder + f'/agent_{i+1}', '--host', args.host, '--port', str(args.port+i+1), '--server-port', str(args.port)]
     process = subprocess.Popen(['python3', 'agent.py'] + agent_args + arguments)
     agents_processes.append(process)

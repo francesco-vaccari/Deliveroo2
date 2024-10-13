@@ -138,8 +138,7 @@ def game_loop(communication, game, graphics, clock, logger):
         graphics.draw_environment()
         graphics.display_info()
 
-        game.decay_parcels()
-        game.spawn_parcels()
+        game.next_frame()
         
         game.set_new_state()
         game.create_events()
@@ -161,8 +160,7 @@ def game_loop(communication, game, graphics, clock, logger):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Deliveroo2 Server")
-    parser.add_argument('--map', type=str, required=True, help="Path to the map config file")
-    parser.add_argument('--parcels', type=str, required=True, help="Path to the parcels config file")
+    parser.add_argument('--conf', type=str, required=True, help="Path to the configuration folder")
     parser.add_argument('--folder', type=str, required=True, help="Path to the experiment folder")
     parser.add_argument('--host', type=str, required=False, default='127.0.0.1', help="Host address of the server")
     parser.add_argument('--port', type=int, required=False, default=8080, help="Port number of the server")
@@ -173,7 +171,7 @@ if __name__ == '__main__':
     logger.log_debug("Server started")
 
     communication = Communication(args.folder, args.host, args.port)
-    game = Game(args.map, args.parcels, args.folder)
+    game = Game(args.conf, args.folder)
     
     pygame.init()
     

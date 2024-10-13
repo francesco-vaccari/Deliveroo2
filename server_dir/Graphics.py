@@ -33,15 +33,22 @@ class Graphics:
         for x, row in enumerate(self.game.map.grid):
             for y, cell in enumerate(row):
                 if cell == 1:
-                    pygame.draw.rect(self.screen, 'Green', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
+                    pygame.draw.rect(self.screen, 'cornsilk', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
                 if cell == 2:
-                    pygame.draw.rect(self.screen, 'Red', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
+                    pygame.draw.rect(self.screen, 'firebrick1', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
+                if cell == 3:
+                    pygame.draw.rect(self.screen, 'firebrick4', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
+                if cell == 4:
+                    pygame.draw.rect(self.screen, 'darkgoldenrod1', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
+                if cell == 5:
+                    pygame.draw.rect(self.screen, 'chartreuse4', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
         
         # can draw max 12 elements on the border of a cell (4 on each side)
         self.elements = [
-            (self.game.parcels, 'Brown'),
-            # (self.game.parcels, 'Purple'),
-            # (self.game.parcels, 'Yellow'),
+            (self.game.parcels, 'khaki1'),
+            (self.game.batteries, 'green'),
+            (self.game.keys, 'gray42'),
+            (self.game.doors, 'chocolate4'),
             # (self.game.parcels, 'Orange'),
             # (self.game.parcels, 'Blue'),
             # (self.game.parcels, 'Pink'),
@@ -140,11 +147,15 @@ class Graphics:
         if x < len(self.game.map.grid) and y < len(self.game.map.grid[0]) and x >= 0 and y >= 0:
             text = "Cell (" + str(x) + ", " + str(y) + "): "
             if self.game.map.grid[x][y] == 0:
-                text += "Non-Walkable"
+                text += "Non-Walkable Cell"
             elif self.game.map.grid[x][y] == 1:
-                text += "Walkable"
+                text += "Walkable Cell"
             elif self.game.map.grid[x][y] == 2:
-                text += "Deliverable"
+                text += "Delivery Cell"
+            elif self.game.map.grid[x][y] == 3:
+                text += "Double Delivery Cell"
+            elif self.game.map.grid[x][y] == 4:
+                text += "Parcels Spawn Cell"
             text_surf = self.font_info.render(text, False, 'White')
             text_rect = text_surf.get_rect(topleft = (self.get_pos(drawing_pos, self.INFO_TEXT_FONT_SIZE)))
             self.screen.blit(text_surf, text_rect)
