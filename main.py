@@ -9,6 +9,7 @@ parser.add_argument('--desc', action='store_true', help="Add a description to th
 parser.add_argument('--user-generated-desire', action='store_true', help="Use user-generated desire")
 parser.add_argument('--stateless-intention-generation', action='store_true', help="Use stateless intention generation")
 parser.add_argument('--no-desire-triggering', action='store_true', help="Disable desire triggering")
+parser.add_argument('--no-evaluation-triggered-desires', action='store_true', help="Disable evaluation of triggered desires")
 parser.add_argument('--perception-generation-only-on-error', action='store_true', help="Generate perception only on error")
 parser.add_argument('--conf', type=str, required=True, help="Path to the configuration folder")
 parser.add_argument('--host', type=str, required=False, default='127.0.0.1', help="Host address of the server")
@@ -38,6 +39,8 @@ if args.no_desire_triggering:
     arguments.append('--no-desire-triggering')
 if args.perception_generation_only_on_error:
     arguments.append('--perception-generation-only-on-error')
+if args.no_evaluation_triggered_desires:
+    arguments.append('--no-evaluation-triggered-desires')
 
 agents_processes = []
 with open(conf_path + '/agents.conf', 'r') as file:

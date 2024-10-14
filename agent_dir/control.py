@@ -4,7 +4,7 @@ from utils.Logger import ExperimentLogger
 from agent_dir.utils.ControlManager import ControlManager
 
 class Control:
-    def __init__(self, folder, communication, prompting, get_events, get_belief_set, user_generated_desire, stateless_intention_generation, no_desire_triggering):
+    def __init__(self, folder, communication, prompting, get_events, get_belief_set, user_generated_desire, stateless_intention_generation, no_desire_triggering, no_evaluation_triggered_desires):
         self.communication = communication
         self.stop = False
         self.alive = [True]
@@ -17,6 +17,7 @@ class Control:
         self.user_generated_desire = user_generated_desire
         self.stateless_intention_generation = stateless_intention_generation
         self.no_desire_triggering = no_desire_triggering
+        self.no_evaluation_triggered_desires = no_evaluation_triggered_desires
 
         self.initial_waiting_time = 20
 
@@ -46,6 +47,7 @@ class Control:
 
         while not self.stop:
             if generate_new_desire:
+                # everytime it generates a new desire or checks for triggers, passes here
                 plan = None
                 if not self.no_desire_triggering:
                     self.logger.log_info("[LOOP] Checking if any desire is triggered")
@@ -59,7 +61,12 @@ class Control:
                     self.logger.log_info(f"[LOOP] Plan generated: {plan}")
                     self.logger.log_info("[LOOP] Plan executed, asking for desire evaluation...")
                     self.status = f"Desire triggered and executed: {desire_id}, asking for desire evaluation"
-                    desire_evaluation = self.question_5(self.manager.get_desire_description(desire_id), belief_set_before_execution, belief_set_after_execution, self.get_memory())
+                    if self.no_evaluation_triggered_desires:
+                        self.logger.log_info("[LOOP] Evaluation of triggered desires disabled")
+                        self.status = "Evaluation of triggered desires disabled"
+                        desire_evaluation = "True"
+                    else:
+                        desire_evaluation = self.question_5(self.manager.get_desire_description(desire_id), belief_set_before_execution, belief_set_after_execution, self.get_memory())
                     if desire_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
                         self.status = "Unable to obtain evaluation for desire"
@@ -95,6 +102,7 @@ class Control:
                         called_intentions = []
                         generate_new_desire = False
             else:
+                # everytime it generates a new intention, passes here
                 self.logger.log_info("[LOOP] Generating new intention ...")
                 self.status = "Generating new intention"
                 intention_description = None

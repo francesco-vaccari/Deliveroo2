@@ -42,6 +42,7 @@ if __name__ == "__main__":
     parser.add_argument('--user-generated-desire', action='store_true', help="Use user-generated desire")
     parser.add_argument('--stateless-intention-generation', action='store_true', help="Use stateless intention generation")
     parser.add_argument('--no-desire-triggering', action='store_true', help="Disable desire triggering")
+    parser.add_argument('--no-evaluation-triggered-desires', action='store_true', help="Disable evaluation of triggered desires")
     parser.add_argument('--perception-generation-only-on-error', action='store_true', help="Generate perception only on error")
     args = parser.parse_args()
 
@@ -62,12 +63,12 @@ if __name__ == "__main__":
                 id = msg[1]
                 break
     
-    logger.log_debug(f"Agent started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}")
-    print(f"Agent started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}")
+    logger.log_debug(f"Agent started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}\n\tno evaluation of triggered desires: {args.no_evaluation_triggered_desires}")
+    print(f"Agent started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}\n\tno evaluation of triggered desires: {args.no_evaluation_triggered_desires}")
     
     prompting = Prompting(args.folder, id)
     perception = Perception(args.folder, communication, prompting, args.perception_generation_only_on_error)
-    control = Control(args.folder, communication, prompting, perception.get_control_events, perception.get_belief_set, args.user_generated_desire, args.stateless_intention_generation, args.no_desire_triggering)
+    control = Control(args.folder, communication, prompting, perception.get_control_events, perception.get_belief_set, args.user_generated_desire, args.stateless_intention_generation, args.no_desire_triggering, args.no_evaluation_triggered_desires)
     logger.log_debug("Perception and control units started")
 
 
