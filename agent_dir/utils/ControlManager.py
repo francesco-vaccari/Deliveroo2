@@ -490,17 +490,21 @@ class ControlManager:
     
     def get_analyzable_intentions_functions(self):
         string = ""
+        intentions = {}
         for _, intention in self.intentions.items():
             string += intention.function_string
             string += "\n\n"
-        return string
+            intentions[intention.function_name] = intention.description
+        return string, intentions
 
     def get_analyzable_desires_trigger_functions(self):
         string = ""
+        dtfs = {}
         for _, desire in self.desires.items():
             string += desire.trigger_function_string
             string += "\n\n"
-        return string
+            dtfs[self.get_function_name(desire.trigger_function_string)] = desire.trigger_function_string
+        return string, dtfs
 
     def add_tab(self, string, n_tabs):
         return "\n".join(["    " * n_tabs + line for line in string.split("\n")])
