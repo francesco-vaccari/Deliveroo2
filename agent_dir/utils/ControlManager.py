@@ -28,6 +28,7 @@ class ControlManager:
     def __init__(self, logger, agent_folder):
         self.intention_id = 1
         self.desire_id = 1
+        self.dtf_number = 1
         self.timeout = 4
         self.intentions = {} # id -> Intention
         self.intentions_graph = {} # id -> [id] the function id contains calls to the functions [id]
@@ -314,6 +315,8 @@ class ControlManager:
             # return concat_plans
     
     def add_trigger_function(self, desire_id, function_string):
+        function_string = self.rename_function(function_string, f"function_dtf_{self.dtf_number}")
+        self.dtf_number += 1
         self.desires[desire_id].trigger_function_string = function_string
         self.desires[desire_id].executable = True
         self.logger.log_info(f"Trigger function added to desire {desire_id}.")
@@ -473,7 +476,7 @@ class ControlManager:
                 out += self.add_tab(intention.function_string, 4)
                 out += "\n"
             out += f"Executable: {desire.executable}\n"
-            out += f"Trigger function: {desire.trigger_function_string}\n"
+            out += f"Trigger function:\n{desire.trigger_function_string}\n"
             out += "\n\n"
         return out
 
