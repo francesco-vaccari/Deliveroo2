@@ -488,5 +488,19 @@ class ControlManager:
             out += f"    - [{id}] calls : {calls}\n"
         return out
     
+    def get_analyzable_intentions_functions(self):
+        string = ""
+        for _, intention in self.intentions.items():
+            string += intention.function_string
+            string += "\n\n"
+        return string
+
+    def get_analyzable_desires_trigger_functions(self):
+        string = ""
+        for _, desire in self.desires.items():
+            string += desire.trigger_function_string
+            string += "\n\n"
+        return string
+
     def add_tab(self, string, n_tabs):
         return "\n".join(["    " * n_tabs + line for line in string.split("\n")])

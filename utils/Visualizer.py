@@ -156,5 +156,13 @@ class RealTimeVisualizer(QWidget):
             with open(f"{self.folder}/result/memory.txt", "w") as f:
                 f.write(var6_value)
                 f.close()
+            var7_value = self.control.manager.get_analyzable_intentions_functions()
+            var8_value = self.control.manager.get_analyzable_desires_trigger_functions()
+            with open(f"{self.folder}/result/analyzable_IF.txt", "w") as f:
+                f.write(var7_value)
+                f.close()
+            with open(f"{self.folder}/result/analyzable_DTF.txt", "w") as f:
+                f.write(var8_value)
+                f.close()
             self.timer.stop()
             self.close()
