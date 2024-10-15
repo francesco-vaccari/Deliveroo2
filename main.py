@@ -25,6 +25,7 @@ if args.desc:
     logger.log_info(description)
 
 conf_path = 'server_dir/conf/' + args.conf
+logger.log_info(f"Starting experiment with configuration: {args.conf}")
 
 server_args = ['--conf', conf_path, '--folder', experiment_folder, '--host', args.host , '--port', str(args.port)]
 process1 = subprocess.Popen(['python3', 'server.py'] + server_args)
