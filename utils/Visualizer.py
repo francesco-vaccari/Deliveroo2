@@ -187,9 +187,39 @@ class RealTimeVisualizer(QWidget):
             with open(f"{self.folder}/result/analyzable_DTF.txt", "w") as f:
                 f.write(string)
                 f.close()
+            os.makedirs(f"{self.folder}/result/analyzable_DTFs", exist_ok=True)
             for key, value in dictionary.items():
                 with open(f"{self.folder}/result/analyzable_DTFs/{key}.txt", "w") as f:
                     f.write(value)
                     f.close()
+            
+            desire_steps = []
+            intention_steps = []
+            number_api_calls = []
+            number_desires_working = []
+            number_desires_not_working = []
+            number_intentions_working = []
+            number_intentions_not_working = []
+
+            desire_steps.append(self.control.desire_steps)
+            intention_steps.append(self.control.intention_steps)
+            number_api_calls.append(self.prompting.requests_made)
+            working, not_working = self.control.manager.get_number_desires()
+            number_desires_working.append(working)
+            number_desires_not_working.append(not_working)
+            working, not_working = self.control.manager.get_number_intentions()
+            number_intentions_working.append(working)
+            number_intentions_not_working.append(not_working)
+
+            with open(f"{self.folder}/result/evolution_steps.txt", "w") as f:
+                f.write(str(desire_steps) + "\n")
+                f.write(str(intention_steps) + "\n")
+                f.write(str(number_api_calls) + "\n")
+                f.write(str(number_desires_working) + "\n")
+                f.write(str(number_desires_not_working) + "\n")
+                f.write(str(number_intentions_working) + "\n")
+                f.write(str(number_intentions_not_working) + "\n")
+                f.close()
+            
             self.timer.stop()
             self.close()

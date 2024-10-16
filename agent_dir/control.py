@@ -12,6 +12,10 @@ class Control:
         self.get_events = get_events
         self.get_belief_set = get_belief_set
         self.logger = ExperimentLogger(folder, 'control.log')
+        self.evolution_logger = ExperimentLogger(folder, 'evolution.log')
+        self.desire_steps = 0
+        self.intention_steps = 0
+        self.cumulative_intention_steps = 0
         self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'), folder.split('/')[-1])
         self.prompting = prompting
         self.user_generated_desire = user_generated_desire
@@ -19,7 +23,7 @@ class Control:
         self.no_desire_triggering = no_desire_triggering
         self.no_evaluation_triggered_desires = no_evaluation_triggered_desires
 
-        self.initial_waiting_time = 20
+        self.initial_waiting_time = 30
 
         self.initialize_memory()
 
@@ -48,8 +52,11 @@ class Control:
         while not self.stop:
             if generate_new_desire:
                 # everytime it generates a new desire or checks for triggers, passes here
+                self.desire_steps += 1
+                self.intention_steps = 0
                 plan = None
                 if not self.no_desire_triggering:
+                    self.evolution_logger.log_info(f"[{self.desire_steps}]\tChecking desire triggers...")
                     self.logger.log_info("[LOOP] Checking if any desire is triggered")
                     self.status = "Checking if any desire is triggered"
                     desire_id = self.manager.check_if_desire_triggered(self.get_belief_set())
@@ -57,6 +64,7 @@ class Control:
                     error, plan, events = self.manager.run_desire(desire_id, self.get_belief_set, self.execute_action)
                     belief_set_after_execution = self.get_belief_set()
                 if error is None:
+                    self.evolution_logger.log_info(f"[{self.desire_steps}]\tDesire triggered: {desire_id}")
                     self.logger.log_info(f"[LOOP] Desire triggered : {desire_id}")
                     self.logger.log_info(f"[LOOP] Plan generated: {plan}")
                     self.logger.log_info("[LOOP] Plan executed, asking for desire evaluation...")
@@ -80,6 +88,7 @@ class Control:
                             self.status = "Desire triggered evaluated negatively"
                             self.manager.invalidate_desire(desire_id)
                 else:
+                    self.evolution_logger.log_info(f"[{self.desire_steps}]\tGenerating new desire...")
                     self.logger.log_info("[LOOP] Generating new desire")
                     self.status = "Generating new desire"
                     belief_set_prior = self.get_belief_set()
@@ -98,11 +107,15 @@ class Control:
                         self.logger.log_info(f"[LOOP] Desire generated: {desire_description}")
                         self.status = f"Desire generated: {desire_description}"
                         desire_id = self.manager.add_desire(desire_description)
+                        self.evolution_logger.log_info(f"[{self.desire_steps}]\tDesire generated: {desire_id}")
                         intention_negative_evaluations = 0
                         called_intentions = []
                         generate_new_desire = False
             else:
                 # everytime it generates a new intention, passes here
+                self.intention_steps += 1
+                self.cumulative_intention_steps += 1
+                self.evolution_logger.log_info(f"[{self.desire_steps}]\t[{self.intention_steps}]\tGenerating new intention...")
                 self.logger.log_info("[LOOP] Generating new intention ...")
                 self.status = "Generating new intention"
                 intention_description = None
@@ -126,6 +139,7 @@ class Control:
                     self.logger.log_info(f"[LOOP] Intention generated: {intention_description}\n{function_string}")
                     self.status = f"Intention generated: {intention_description}"
                     intention_id = self.manager.add_intention(desire_id, intention_description, function_string)
+                    self.evolution_logger.log_info(f"[{self.desire_steps}]\t[{self.intention_steps}]\Intention generated: {intention_id}")
                     belief_set_before_execution = self.get_belief_set()
                     error, plan, events = self.manager.run_intention(intention_id, self.get_belief_set, self.execute_action)
                     belief_set_after_execution = self.get_belief_set()

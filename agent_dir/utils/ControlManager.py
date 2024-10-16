@@ -519,5 +519,25 @@ class ControlManager:
                 dtfs[self.get_function_name(desire.trigger_function_string)] = desire.trigger_function_string
         return string, dtfs
 
+    def get_number_desires(self):
+        working = 0
+        not_working = 0
+        for desire in self.desires.values():
+            if desire.executable:
+                working += 1
+            else:
+                not_working += 1
+        return working, not_working
+    
+    def get_number_intentions(self):
+        working = 0
+        not_working = 0
+        for intention in self.intentions.values():
+            if intention.executable:
+                working += 1
+            else:
+                not_working += 1
+        return working, not_working
+
     def add_tab(self, string, n_tabs):
         return "\n".join(["    " * n_tabs + line for line in string.split("\n")])
