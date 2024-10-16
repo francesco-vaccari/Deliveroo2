@@ -489,21 +489,32 @@ class ControlManager:
         return out
     
     def get_analyzable_intentions_functions(self):
-        string = ""
+        all = ""
         intentions = {}
+        all_working = ""
+        working_intentions = {}
+        all_not_working = ""
+        not_working_intentions = {}
         for _, intention in self.intentions.items():
             string += intention.function_string
             string += "\n\n"
             intentions[intention.function_name] = intention.description
-        return string, intentions
+            if intention.executable:
+                all_working += intention.function_string
+                working_intentions[intention.function_name] = intention.function_string
+            else:
+                all_not_working += intention.function_string
+                not_working_intentions[intention.function_name] = intention.function_string
+        return all, all_working, all_not_working, intentions, working_intentions, not_working_intentions
 
     def get_analyzable_desires_trigger_functions(self):
         string = ""
         dtfs = {}
         for _, desire in self.desires.items():
-            string += desire.trigger_function_string
-            string += "\n\n"
-            dtfs[self.get_function_name(desire.trigger_function_string)] = desire.trigger_function_string
+            if desire.trigger_function_string is not None:
+                string += desire.trigger_function_string
+                string += "\n\n"
+                dtfs[self.get_function_name(desire.trigger_function_string)] = desire.trigger_function_string
         return string, dtfs
 
     def add_tab(self, string, n_tabs):

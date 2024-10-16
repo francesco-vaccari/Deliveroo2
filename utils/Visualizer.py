@@ -157,14 +157,29 @@ class RealTimeVisualizer(QWidget):
                 f.write(var6_value)
                 f.close()
                 
-            string, dictionary = self.control.manager.get_analyzable_intentions_functions()
-            with open(f"{self.folder}/result/analyzable_IF.txt", "w") as f:
-                f.write(string)
+            all, all_working, all_not_working, intentions, working_intentions, not_working_intentions = self.control.manager.get_analyzable_intentions_functions()
+            with open(f"{self.folder}/result/analyzable_IF_all.txt", "w") as f:
+                f.write(all)
                 f.close()
-            for key, value in dictionary.items():
+            with open(f"{self.folder}/result/analyzable_IF_all_working.txt", "w") as f:
+                f.write(all_working)
+                f.close()
+            with open(f"{self.folder}/result/analyzable_IF_all_not_working.txt", "w") as f:
+                f.write(all_not_working)
+                f.close()
+            for key, value in intentions.items():
                 with open(f"{self.folder}/result/analyzable_IFs/{key}.txt", "w") as f:
                     f.write(value)
                     f.close()
+            for key, value in working_intentions.items():
+                with open(f"{self.folder}/result/analyzable_IFs_working/{key}.txt", "w") as f:
+                    f.write(value)
+                    f.close()
+            for key, value in not_working_intentions.items():
+                with open(f"{self.folder}/result/analyzable_IFs_not_working/{key}.txt", "w") as f:
+                    f.write(value)
+                    f.close()
+            
             string, dictionary = self.control.manager.get_analyzable_desires_trigger_functions()
             with open(f"{self.folder}/result/analyzable_DTF.txt", "w") as f:
                 f.write(string)
