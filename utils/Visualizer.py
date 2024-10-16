@@ -167,14 +167,17 @@ class RealTimeVisualizer(QWidget):
             with open(f"{self.folder}/result/analyzable_IF_all_not_working.txt", "w") as f:
                 f.write(all_not_working)
                 f.close()
+            os.makedirs(f"{self.folder}/result/analyzable_IFs", exist_ok=True)
             for key, value in intentions.items():
                 with open(f"{self.folder}/result/analyzable_IFs/{key}.txt", "w") as f:
                     f.write(value)
                     f.close()
+            os.makedirs(f"{self.folder}/result/analyzable_IFs_working", exist_ok=True)
             for key, value in working_intentions.items():
                 with open(f"{self.folder}/result/analyzable_IFs_working/{key}.txt", "w") as f:
                     f.write(value)
                     f.close()
+            os.makedirs(f"{self.folder}/result/analyzable_IFs_not_working", exist_ok=True)
             for key, value in not_working_intentions.items():
                 with open(f"{self.folder}/result/analyzable_IFs_not_working/{key}.txt", "w") as f:
                     f.write(value)

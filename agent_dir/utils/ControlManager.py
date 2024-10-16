@@ -496,14 +496,16 @@ class ControlManager:
         all_not_working = ""
         not_working_intentions = {}
         for _, intention in self.intentions.items():
-            string += intention.function_string
-            string += "\n\n"
-            intentions[intention.function_name] = intention.description
+            all += intention.function_string
+            all += "\n"
+            intentions[intention.function_name] = intention.function_string
             if intention.executable:
                 all_working += intention.function_string
+                all_working += "\n"
                 working_intentions[intention.function_name] = intention.function_string
             else:
                 all_not_working += intention.function_string
+                all_not_working += "\n"
                 not_working_intentions[intention.function_name] = intention.function_string
         return all, all_working, all_not_working, intentions, working_intentions, not_working_intentions
 
