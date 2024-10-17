@@ -111,7 +111,7 @@ class RealTimeVisualizer(QWidget):
         widget.setVisible(True)
 
     def update_labels(self):
-        api_calls = self.prompting.requests_made
+        api_calls = self.prompting.get_estimate()
         perception_status = self.perception.status
         control_status = self.control.status
 
@@ -158,38 +158,48 @@ class RealTimeVisualizer(QWidget):
                 f.close()
                 
             all, all_working, all_not_working, intentions, working_intentions, not_working_intentions = self.control.manager.get_analyzable_intentions_functions()
-            with open(f"{self.folder}/result/analyzable_IF_all.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_IFs.txt", "w") as f:
                 f.write(all)
                 f.close()
-            with open(f"{self.folder}/result/analyzable_IF_all_working.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_IFs_working.txt", "w") as f:
                 f.write(all_working)
                 f.close()
-            with open(f"{self.folder}/result/analyzable_IF_all_not_working.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_IFs_not_working.txt", "w") as f:
                 f.write(all_not_working)
                 f.close()
-            os.makedirs(f"{self.folder}/result/analyzable_IFs", exist_ok=True)
+            os.makedirs(f"{self.folder}/result/analyzable_IFs_singles", exist_ok=True)
             for key, value in intentions.items():
-                with open(f"{self.folder}/result/analyzable_IFs/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_IFs_singles/{key}.txt", "w") as f:
                     f.write(value)
                     f.close()
-            os.makedirs(f"{self.folder}/result/analyzable_IFs_working", exist_ok=True)
+            os.makedirs(f"{self.folder}/result/analyzable_IFs_singles_working", exist_ok=True)
             for key, value in working_intentions.items():
-                with open(f"{self.folder}/result/analyzable_IFs_working/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_IFs_singles_working/{key}.txt", "w") as f:
                     f.write(value)
                     f.close()
-            os.makedirs(f"{self.folder}/result/analyzable_IFs_not_working", exist_ok=True)
+            os.makedirs(f"{self.folder}/result/analyzable_IFs_singles_not_working", exist_ok=True)
             for key, value in not_working_intentions.items():
-                with open(f"{self.folder}/result/analyzable_IFs_not_working/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_IFs_singles_not_working/{key}.txt", "w") as f:
                     f.write(value)
                     f.close()
             
             string, dictionary = self.control.manager.get_analyzable_desires_trigger_functions()
-            with open(f"{self.folder}/result/analyzable_DTF.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_DTFs.txt", "w") as f:
                 f.write(string)
                 f.close()
-            os.makedirs(f"{self.folder}/result/analyzable_DTFs", exist_ok=True)
+            os.makedirs(f"{self.folder}/result/analyzable_DTFs_singles", exist_ok=True)
             for key, value in dictionary.items():
-                with open(f"{self.folder}/result/analyzable_DTFs/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_DTFs_singles/{key}.txt", "w") as f:
+                    f.write(value)
+                    f.close()
+            
+            string, dictionary = self.perception.manager.get_analyzable_perception_functions()
+            with open(f"{self.folder}/result/analyzable_PFs.txt", "w") as f:
+                f.write(string)
+                f.close()
+            os.makedirs(f"{self.folder}/result/analyzable_PFs_singles", exist_ok=True)
+            for key, value in dictionary.items():
+                with open(f"{self.folder}/result/analyzable_PFs_singles/{key}.txt", "w") as f:
                     f.write(value)
                     f.close()
             
@@ -200,6 +210,7 @@ class RealTimeVisualizer(QWidget):
             number_desires_not_working = []
             number_intentions_working = []
             number_intentions_not_working = []
+            number_perception_functions = []
 
             desire_steps.append(self.control.desire_steps)
             intention_steps.append(self.control.intention_steps)
@@ -210,6 +221,7 @@ class RealTimeVisualizer(QWidget):
             working, not_working = self.control.manager.get_number_intentions()
             number_intentions_working.append(working)
             number_intentions_not_working.append(not_working)
+            number_perception_functions.append(len(self.perception.manager.get_number_perception_functions()))
 
             with open(f"{self.folder}/result/evolution_steps.txt", "w") as f:
                 f.write(str(desire_steps) + "\n")
@@ -219,6 +231,7 @@ class RealTimeVisualizer(QWidget):
                 f.write(str(number_desires_not_working) + "\n")
                 f.write(str(number_intentions_working) + "\n")
                 f.write(str(number_intentions_not_working) + "\n")
+                f.write(str(number_perception_functions) + "\n")
                 f.close()
             
             self.timer.stop()

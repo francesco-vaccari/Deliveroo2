@@ -123,3 +123,6 @@ class Prompting:
             extracted_elements.append(response[name])
 
         return extracted_elements
+    
+    def get_estimate(self):
+        return f"Requests made: {self.requests_made}  Estimated cost: ${self.client.get_estimate()}"

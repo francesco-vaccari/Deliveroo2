@@ -1,4 +1,5 @@
 import ast
+import astor
 
 class PerceptionFunction:
     def __init__(self, type, function_string):
@@ -9,6 +10,7 @@ class PerceptionManager:
     def __init__(self, logger):
         self.functions = {} # type -> [PerceptionFunction]
         self.logger = logger
+        self.function_ids = 1
 
     def test_function(self, function_string, belief_set, test_events):
         self.logger.log_info(f"Testing function:\n{function_string}")
@@ -50,6 +52,8 @@ class PerceptionManager:
     
     def add_function(self, type, function_string):
         self.logger.log_info(f"Adding function for type: {type}")
+        function_string = self.rename_function(function_string, f"function_{self.function_ids}")
+        self.function_ids += 1
         if type not in self.functions:
             self.functions[type] = []
             self.functions[type].append(PerceptionFunction(type, function_string))
@@ -84,6 +88,25 @@ class PerceptionManager:
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 return node.name
+    
+    def rename_function(self, function_string, new_name):
+        tree = ast.parse(function_string)
+        
+        function_def = tree.body[0]
+        old_name = function_def.name
+        function_def.name = new_name
+
+        class FunctionRenamer(ast.NodeTransformer):
+            def visit_Call(self, node):
+                if isinstance(node.func, ast.Name) and node.func.id == old_name:
+                    node.func.id = new_name
+                return self.generic_visit(node)
+
+        renamer = FunctionRenamer()
+        renamer.visit(tree)
+
+        new_func_str = astor.to_source(tree)
+        return new_func_str
 
     def is_function_ready(self, type):
         if type in self.functions:
@@ -107,3 +130,21 @@ class PerceptionManager:
                     out += f"{function.function_string}\n"
         out += "\n"
         return out
+
+    def get_analyzable_perception_functions(self):
+        all = ""
+        functions = {}
+        for type, pf_list in self.functions.items():
+            for function in pf_list:
+                if function is not None:
+                    all += function.function_string + "\n\n"
+                    functions[self.get_function_name(function.function_string)] = function.function_string
+        return all, functions
+
+    def get_number_perception_functions(self):
+        count = 0
+        for type, pf_list in self.functions.items():
+            for function in pf_list:
+                if function is not None:
+                    count += 1
+        return count
