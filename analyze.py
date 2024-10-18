@@ -12,7 +12,7 @@ if os.path.exists("temp.json"):
     exit()
 os.system("touch temp.json")
 
-folder = os.path.join('./experiments', args.folder)
+folder = os.path.join('/experiments', args.folder)
 
 agents_folders = []
 agents_names = []

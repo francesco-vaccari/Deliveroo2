@@ -1,3 +1,4 @@
+import os
 import time
 import signal
 import argparse
@@ -24,7 +25,7 @@ if args.desc:
     description = "Experiment Description: " + input("Please enter a description of the experiment: ")
     logger.log_info(description)
 
-conf_path = 'server_dir/conf/' + args.conf
+conf_path = os.path.join('server_dir', 'conf', args.conf)
 logger.log_info(f"Starting experiment with configuration: {args.conf}")
 
 server_args = ['--conf', conf_path, '--folder', experiment_folder, '--host', args.host , '--port', str(args.port)]

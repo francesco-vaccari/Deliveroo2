@@ -92,7 +92,7 @@ class Door:
 
 class Game:
     def __init__(self, folder):
-        self.replay_file = "experiments/" + folder + "/replay.json"
+        self.replay_file = os.path.join("experiments", folder, "replay.json")
         self.replay = json.load(open(self.replay_file, 'r'))
         self.map = None
         self.parcels = []
