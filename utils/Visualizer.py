@@ -158,48 +158,48 @@ class RealTimeVisualizer(QWidget):
                 f.close()
                 
             all, all_working, all_not_working, intentions, working_intentions, not_working_intentions = self.control.manager.get_analyzable_intentions_functions()
-            with open(f"{self.folder}/result/analyzable_IF.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_IF.py", "w") as f:
                 f.write(all)
                 f.close()
-            with open(f"{self.folder}/result/analyzable_IF_W.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_IF_W.py", "w") as f:
                 f.write(all_working)
                 f.close()
-            with open(f"{self.folder}/result/analyzable_IF_NW.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_IF_NW.py", "w") as f:
                 f.write(all_not_working)
                 f.close()
             os.makedirs(f"{self.folder}/result/analyzable_IF_S", exist_ok=True)
             for key, value in intentions.items():
-                with open(f"{self.folder}/result/analyzable_IF_S/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_IF_S/{key}.py", "w") as f:
                     f.write(value)
                     f.close()
             os.makedirs(f"{self.folder}/result/analyzable_IF_W_S", exist_ok=True)
             for key, value in working_intentions.items():
-                with open(f"{self.folder}/result/analyzable_IF_W_S/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_IF_W_S/{key}.py", "w") as f:
                     f.write(value)
                     f.close()
-            os.makedirs(f"{self.folder}/result/analyzable_IFs_NW_S", exist_ok=True)
+            os.makedirs(f"{self.folder}/result/analyzable_IF_NW_S", exist_ok=True)
             for key, value in not_working_intentions.items():
-                with open(f"{self.folder}/result/analyzable_IFs_NW_S/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_IF_NW_S/{key}.py", "w") as f:
                     f.write(value)
                     f.close()
             
             string, dictionary = self.control.manager.get_analyzable_desires_trigger_functions()
-            with open(f"{self.folder}/result/analyzable_DTF.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_DTF.py", "w") as f:
                 f.write(string)
                 f.close()
             os.makedirs(f"{self.folder}/result/analyzable_DTF_S", exist_ok=True)
             for key, value in dictionary.items():
-                with open(f"{self.folder}/result/analyzable_DTF_S/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_DTF_S/{key}.py", "w") as f:
                     f.write(value)
                     f.close()
             
             string, dictionary = self.perception.manager.get_analyzable_perception_functions()
-            with open(f"{self.folder}/result/analyzable_PF.txt", "w") as f:
+            with open(f"{self.folder}/result/analyzable_PF.py", "w") as f:
                 f.write(string)
                 f.close()
             os.makedirs(f"{self.folder}/result/analyzable_PF_S", exist_ok=True)
             for key, value in dictionary.items():
-                with open(f"{self.folder}/result/analyzable_PF_S/{key}.txt", "w") as f:
+                with open(f"{self.folder}/result/analyzable_PF_S/{key}.py", "w") as f:
                     f.write(value)
                     f.close()
             

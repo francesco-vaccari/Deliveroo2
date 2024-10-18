@@ -217,7 +217,7 @@ def game_loop(game, graphics, clock):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Deliveroo2 Replay System")
-    parser.add_argument('--folder', type=str, required=True, help="Path to the log folder")
+    parser.add_argument('--folder', type=str, required=True, help="Path to the experiment folder")
     args = parser.parse_args()
 
 
