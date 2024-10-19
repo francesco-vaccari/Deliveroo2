@@ -47,6 +47,7 @@ def handle_messages(communication, logger, agents_ports_to_ids):
                 agents_ports_to_ids[agent_port] = id
                 communication.send_to_agent("connected " + str(id), agent_port, id)
                 logger.log_info(f"Agent connected with ID {id} and address {addr}")
+                print(f"Agent connected with ID {id}")
                 send_state(communication, logger, game.get_state(), agents_ports_to_ids, id)
         
         elif msg.split()[0] == 'disconnect':
@@ -54,7 +55,7 @@ def handle_messages(communication, logger, agents_ports_to_ids):
             del agents_ports_to_ids[agent_port]
             game.remove_agent(id)
             logger.log_info(f"Agent disconnected with ID:{id} and address {addr}")
-        
+            print(f"Agent ID {id} disconnected")
         else:
             actions.append((msg, agent_port))
         

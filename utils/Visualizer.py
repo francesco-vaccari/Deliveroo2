@@ -111,7 +111,7 @@ class RealTimeVisualizer(QWidget):
         widget.setVisible(True)
 
     def update_labels(self):
-        api_calls = self.prompting.get_estimate()
+        api_calls = self.prompting.get_printable_estimate()
         perception_status = self.perception.status
         control_status = self.control.status
 
@@ -214,7 +214,7 @@ class RealTimeVisualizer(QWidget):
 
             desire_steps.append(self.control.desire_steps)
             intention_steps.append(self.control.intention_steps)
-            number_api_calls.append(self.prompting.requests_made)
+            number_api_calls.append(self.prompting.get_requests_made())
             working, not_working = self.control.manager.get_number_desires()
             number_desires_working.append(working)
             number_desires_not_working.append(not_working)

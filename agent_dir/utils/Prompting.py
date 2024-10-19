@@ -124,5 +124,11 @@ class Prompting:
 
         return extracted_elements
     
-    def get_estimate(self):
-        return f"Requests made: {self.requests_made}  Estimated cost: ${self.client.get_estimate()}"
+    def get_printable_estimate(self):
+        return f"Requests made: {self.requests_made}  Estimated cost: ${self.client.get_cost_estimate()}"
+    
+    def get_requests_made(self):
+        return self.requests_made
+
+    def get_cost_estimate(self):
+        return self.client.get_cost_estimate()

@@ -20,8 +20,13 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
+def is_experiment_concluded(desire_steps, intention_steps, requests_made, cost_estimate):
+    if desire_steps > 3 or cost_estimate > 1:
+        return True
+    return False
 
-def receive_events(communication, perception, visualizer):
+def receive_events(communication, perception, control, prompting, logger, visualizer):
+    global running
     while running:
         if len(communication.buffer) > 0:
             msg, addr = communication.buffer.pop(0)
@@ -31,6 +36,11 @@ def receive_events(communication, perception, visualizer):
                 perception.append_event(msg)
         else:
             time.sleep(0.1)
+        
+        if is_experiment_concluded(control.desire_steps, control.intention_steps, prompting.get_requests_made(), prompting.get_cost_estimate()):
+            running = False
+            logger.log_debug("Experiment limit reached. Shutting down agent...")
+    
     visualizer.self_close = True
 
 if __name__ == "__main__":
@@ -63,8 +73,8 @@ if __name__ == "__main__":
                 id = msg[1]
                 break
     
-    logger.log_debug(f"Agent started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}\n\tno evaluation of triggered desires: {args.no_evaluation_triggered_desires}")
-    print(f"Agent started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}\n\tno evaluation of triggered desires: {args.no_evaluation_triggered_desires}")
+    logger.log_debug(f"Agents started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}\n\tno evaluation of triggered desires: {args.no_evaluation_triggered_desires}")
+    print(f"Agents started with configuration:\n\tstateless intention generation: {args.stateless_intention_generation}\n\tuser generated desire: {args.user_generated_desire}\n\tno desire triggering: {args.no_desire_triggering}\n\tperception generation only on error: {args.perception_generation_only_on_error}\n\tno evaluation of triggered desires: {args.no_evaluation_triggered_desires}")
     
     prompting = Prompting(args.folder, id)
     perception = Perception(args.folder, communication, prompting, args.perception_generation_only_on_error)
@@ -75,7 +85,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     visualizer = RealTimeVisualizer(perception, control, prompting, args.folder)
     
-    listener = threading.Thread(target=receive_events, args=(communication, perception, visualizer))
+    listener = threading.Thread(target=receive_events, args=(communication, perception, control, prompting, logger, visualizer))
     listener.start()
     
     app.exec_()
@@ -92,16 +102,3 @@ if __name__ == "__main__":
     communication.send_to_server("disconnect")
     communication.close()
     logger.log_debug("Agent terminated")
-
-
-
-
-'''
-Need to track:
-perception.get_printable_belief_set()
-perception.manager.get_printable_functions()
-control.manager.get_printable_intentions()
-control.manager.get_printable_desires()
-control.manager.get_printable_intentions_graph()
-prompting.requests_made
-'''

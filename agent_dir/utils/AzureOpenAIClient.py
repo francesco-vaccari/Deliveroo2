@@ -43,7 +43,7 @@ class AzureOpenAIClient:
             self.input_prompt_lenghts.append(context_length + question_length) # use estimate of number input tokens
             return None, f"Failed request to API: {e}"
     
-    def get_estimate(self):
+    def get_cost_estimate(self):
         input_pricing = 0.06 # dollars per 1000 input tokens for a GPT-4 legacy model with 32K context window (worst pricing)
         output_pricing = 0.12 # dollars per 1000 output tokens for a GPT-4 legacy model with 32K context window (worst pricing)
         input_tokens = sum(self.input_prompt_lenghts)
