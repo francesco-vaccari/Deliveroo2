@@ -19,7 +19,7 @@ You have to modify and fix the function in order to achieve the short term goal 
 
 You can include calls to one or more of the functions from the library. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions from the library do not return any value and do not take any input arguments. The functions from the library can be called multiple times in the function that you provide.
 
-You can access the belief set using the variable belief_set in the function that you provide. DO NOT modify the belief set. The variable is updated in real-time as the agent interacts with the environment.
+You can access the belief set using the variable 'belief_set' in the function that you provide. DO NOT modify the belief set. The variable 'belief_set' is updated in real-time as the agent interacts with the environment, but only by referencing directly the variable 'belief_set' in the function that you provide, you can access the current state of the agent's belief set.
 
 The function that you provide should start with the following code snippet:
 def function():

@@ -21,8 +21,8 @@ signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
 def is_experiment_concluded(desire_steps, intention_steps, requests_made, cost_estimate):
-    if desire_steps > 3 or cost_estimate > 1:
-        return True
+    # if desire_steps > 3 or cost_estimate > 20:
+    #     return True
     return False
 
 def receive_events(communication, perception, control, prompting, logger, visualizer):

@@ -53,6 +53,10 @@ class Control:
             if generate_new_desire:
                 # everytime it generates a new desire or checks for triggers, passes here
                 self.desire_steps += 1
+                res = input("Step concluded. Type 'stop' to avoid further generation: ")
+                if res == "stop":
+                    self.stop = True
+                    break
                 self.intention_steps = 0
                 plan = None
                 if not self.no_desire_triggering:
@@ -63,7 +67,7 @@ class Control:
                     belief_set_before_execution = self.get_belief_set()
                     error, plan, events = self.manager.run_desire(desire_id, self.get_belief_set, self.execute_action)
                     belief_set_after_execution = self.get_belief_set()
-                if error is None:
+                if plan is not None:
                     self.evolution_logger.log_info(f"[{self.desire_steps}]\tDesire triggered: {desire_id}")
                     self.logger.log_info(f"[LOOP] Desire triggered : {desire_id}")
                     self.logger.log_info(f"[LOOP] Plan generated: {plan}")
