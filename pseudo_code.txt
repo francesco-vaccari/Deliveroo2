@@ -23,6 +23,8 @@ I = add_actions_as_intentions(A, I)
 wait()
 
 while True:
+    M = erase_memory()
+    
     D' = check_desires_triggers(D, DTF)
 
     if D':
