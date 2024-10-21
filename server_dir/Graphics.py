@@ -39,16 +39,16 @@ class Graphics:
                 if cell == 3:
                     pygame.draw.rect(self.screen, 'firebrick4', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
                 if cell == 4:
-                    pygame.draw.rect(self.screen, 'darkgoldenrod1', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
+                    pygame.draw.rect(self.screen, 'lightgoldenrod', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
                 if cell == 5:
                     pygame.draw.rect(self.screen, 'chartreuse4', pygame.Rect(self.get_pos(y * self.tl_cell, x * self.tl_cell), (self.CELL_SIZE, self.CELL_SIZE)))
         
         # can draw max 12 elements on the border of a cell (4 on each side)
         self.elements = [
-            (self.game.parcels, 'khaki1'),
+            (self.game.parcels, 'darkgoldenrod3'),
             (self.game.batteries, 'green'),
             (self.game.keys, 'gray42'),
-            (self.game.doors, 'chocolate4'),
+            (self.game.doors, 'saddlebrown'),
             # (self.game.parcels, 'Orange'),
             # (self.game.parcels, 'Blue'),
             # (self.game.parcels, 'Pink'),
