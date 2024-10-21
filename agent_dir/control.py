@@ -143,7 +143,7 @@ class Control:
                     self.logger.log_info(f"[LOOP] Intention generated: {intention_description}\n{function_string}")
                     self.status = f"Intention generated: {intention_description}"
                     intention_id = self.manager.add_intention(desire_id, intention_description, function_string)
-                    self.evolution_logger.log_info(f"[{self.desire_steps}]\t[{self.intention_steps}]\Intention generated: {intention_id}")
+                    self.evolution_logger.log_info(f"[{self.desire_steps}]\t[{self.intention_steps}]\tIntention generated: {intention_id}")
                     belief_set_before_execution = self.get_belief_set()
                     error, plan, events = self.manager.run_intention(intention_id, self.get_belief_set, self.execute_action)
                     belief_set_after_execution = self.get_belief_set()

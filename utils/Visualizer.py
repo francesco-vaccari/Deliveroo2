@@ -11,6 +11,15 @@ class RealTimeVisualizer(QWidget):
 
         self.folder = folder
 
+        self.desire_steps = []
+        self.intention_steps = []
+        self.number_api_calls = []
+        self.number_desires_working = []
+        self.number_desires_not_working = []
+        self.number_intentions_working = []
+        self.number_intentions_not_working = []
+        self.number_perception_functions = []
+
         self.self_close = False
 
         self.initUI()
@@ -133,6 +142,17 @@ class RealTimeVisualizer(QWidget):
         self.scroll5.widget().setText(f"{var5_value}")
         self.scroll6.widget().setText(f"{var6_value}")
 
+        self.desire_steps.append(self.control.desire_steps)
+        self.intention_steps.append(self.control.intention_steps)
+        self.number_api_calls.append(self.prompting.get_requests_made())
+        working, not_working = self.control.manager.get_number_desires()
+        self.number_desires_working.append(working)
+        self.number_desires_not_working.append(not_working)
+        working, not_working = self.control.manager.get_number_intentions()
+        self.number_intentions_working.append(working)
+        self.number_intentions_not_working.append(not_working)
+        self.number_perception_functions.append(self.perception.manager.get_number_perception_functions())
+
         if self.self_close:
             os.makedirs(f"{self.folder}/result", exist_ok=True)
             with open(f"{self.folder}/result/api_calls.txt", "w") as f:
@@ -202,36 +222,16 @@ class RealTimeVisualizer(QWidget):
                 with open(f"{self.folder}/result/analyzable_PF_S/{key}.py", "w") as f:
                     f.write(value)
                     f.close()
-            
-            desire_steps = []
-            intention_steps = []
-            number_api_calls = []
-            number_desires_working = []
-            number_desires_not_working = []
-            number_intentions_working = []
-            number_intentions_not_working = []
-            number_perception_functions = []
-
-            desire_steps.append(self.control.desire_steps)
-            intention_steps.append(self.control.intention_steps)
-            number_api_calls.append(self.prompting.get_requests_made())
-            working, not_working = self.control.manager.get_number_desires()
-            number_desires_working.append(working)
-            number_desires_not_working.append(not_working)
-            working, not_working = self.control.manager.get_number_intentions()
-            number_intentions_working.append(working)
-            number_intentions_not_working.append(not_working)
-            number_perception_functions.append(self.perception.manager.get_number_perception_functions())
 
             with open(f"{self.folder}/result/evolution_steps.txt", "w") as f:
-                f.write(str(desire_steps) + "\n")
-                f.write(str(intention_steps) + "\n")
-                f.write(str(number_api_calls) + "\n")
-                f.write(str(number_desires_working) + "\n")
-                f.write(str(number_desires_not_working) + "\n")
-                f.write(str(number_intentions_working) + "\n")
-                f.write(str(number_intentions_not_working) + "\n")
-                f.write(str(number_perception_functions) + "\n")
+                f.write(str(self.desire_steps) + "\n")
+                f.write(str(self.intention_steps) + "\n")
+                f.write(str(self.number_api_calls) + "\n")
+                f.write(str(self.number_desires_working) + "\n")
+                f.write(str(self.number_desires_not_working) + "\n")
+                f.write(str(self.number_intentions_working) + "\n")
+                f.write(str(self.number_intentions_not_working) + "\n")
+                f.write(str(self.number_perception_functions) + "\n")
                 f.close()
             
             self.timer.stop()
