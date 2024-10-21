@@ -59,6 +59,7 @@ class Control:
                     break
                 self.intention_steps = 0
                 plan = None
+                self.clear_memory()
                 if not self.no_desire_triggering:
                     self.evolution_logger.log_info(f"[{self.desire_steps}]\tChecking desire triggers...")
                     self.logger.log_info("[LOOP] Checking if any desire is triggered")
@@ -384,6 +385,9 @@ class Control:
         with open(initial_memory_path, 'r') as file:
             self.memory.append(str(file.read()))
             file.close()
+    
+    def clear_memory(self):
+        self.memory.append("")
 
     def update_memory(self, new_memory):
         if new_memory is not None:
