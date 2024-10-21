@@ -130,7 +130,8 @@ class ControlManager:
             f.close()
         
         with open(self.functions_file, 'a') as f:
-            f.write(f"import time\n\n")
+            f.write(f"import time\n")
+            f.write(f"import copy\n\n")
             f.write(f"belief_set = None\n\n")
             f.write(f"def wait():\n")
             f.write(f"    with open('{self.continue_file}', 'w') as file:\n")

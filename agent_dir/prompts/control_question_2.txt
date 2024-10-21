@@ -15,7 +15,7 @@ The function can contain calls to already implemented functions from the followi
 
 You can include calls to one or more of the functions from the library. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions from the library do not return any value and do not take any input arguments. The functions from the library can be called multiple times in the function that you provide.
 
-You can access the belief set using the variable belief_set in the function that you provide. DO NOT modify the belief set. The variable is updated in real-time as the agent interacts with the environment.
+You can access the belief set using the python dictionary variable 'belief_set' in the function that you provide. The variable is updated in real-time as the agent interacts with the environment. Accessing directly the 'belief_set' is suggested. Assigning to local variables the value of 'belief_set' by accessing it with the approriate key will cause the local variables to not be updated as the assignment is only a copy and not a reference.
 
 The function that you provide should start with the following code snippet:
 def function():
