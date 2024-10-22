@@ -58,7 +58,7 @@ class Game:
             else:
                 self.n_doors = -1
 
-        self.entities_to_track = [self.map, self.parcels, self.agents, self.keys, self.doors]
+        self.entities_to_track = [self.map, self.parcels, self.agents, self.batteries, self.keys, self.doors]
         self.entities_labels = ["map", "parcels", "agents", "batteries", "keys", "doors"]
         self.last_entities_string_values = [""] * len(self.entities_labels)
         self.environment_state = []
