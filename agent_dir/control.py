@@ -48,6 +48,7 @@ class Control:
         intention_negative_evaluations = 0
         belief_set_prior = None
         called_intentions = []
+        last_intention_error = False
 
         while not self.stop:
             if generate_new_desire:
@@ -58,6 +59,7 @@ class Control:
                     self.stop = True
                     break
                 self.intention_steps = 0
+                last_intention_error = False
                 plan = None
                 self.clear_memory()
                 if not self.no_desire_triggering:
@@ -79,7 +81,7 @@ class Control:
                         self.status = "Evaluation of triggered desires disabled"
                         desire_evaluation = "True"
                     else:
-                        desire_evaluation = self.question_5(self.manager.get_desire_description(desire_id), belief_set_before_execution, belief_set_after_execution, self.get_memory())
+                        desire_evaluation = self.question_5(self.manager.get_desire_description(desire_id), belief_set_before_execution, belief_set_after_execution)
                     if desire_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
                         self.status = "Unable to obtain evaluation for desire"
@@ -102,7 +104,7 @@ class Control:
                         desire_description = input("Enter a desire: ")
                     else:
                         implemented_desires_descriptions = self.manager.get_desires_descriptions()
-                        desire_description = self.question_1(belief_set_prior, implemented_desires_descriptions, self.get_memory())
+                        desire_description = self.question_1(belief_set_prior, implemented_desires_descriptions)
                     if desire_description is None:
                         self.logger.log_error("[LOOP] Error while generating desire")
                         intention_negative_evaluations = 0
@@ -118,6 +120,8 @@ class Control:
                         generate_new_desire = False
             else:
                 # everytime it generates a new intention, passes here
+                if not last_intention_error:
+                    self.clear_memory()
                 self.intention_steps += 1
                 self.cumulative_intention_steps += 1
                 self.evolution_logger.log_info(f"[{self.desire_steps}]\t[{self.intention_steps}]\tGenerating new intention...")
@@ -128,12 +132,15 @@ class Control:
                 belief_set_copy = self.get_belief_set()
                 for i in range(3):
                     if error is not None:
-                        intention_description, function_string, error = self.question_2(desire_description, belief_set_copy, self.manager.get_library(self.stateless_intention_generation), self.get_memory())
+                        if last_intention_error:
+                            intention_description, function_string, error = self.question_2_MEM(desire_description, belief_set_copy, self.manager.get_library(self.stateless_intention_generation), self.get_memory())
+                        else:
+                            intention_description, function_string, error = self.question_2(desire_description, belief_set_copy, self.manager.get_library(self.stateless_intention_generation))
                         for j in range(2):
                             if error is not None and intention_description is not None:
                                 self.logger.log_error(f"[LOOP] Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying...")
                                 self.status = f"Generation attempt {i+1}:{j+1} for intention failed with error {error}, retrying..."
-                                function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library(self.stateless_intention_generation), self.get_memory())
+                                function_string, error = self.question_3(function_string, belief_set_copy, intention_description, error, self.manager.get_library(self.stateless_intention_generation))
                 if error is not None or intention_description is None:
                     self.logger.log_error(f"[LOOP] Unable to generate intention for the desire")
                     self.status = "Unable to generate intention for the desire"
@@ -145,6 +152,7 @@ class Control:
                     self.status = f"Intention generated: {intention_description}"
                     intention_id = self.manager.add_intention(desire_id, intention_description, function_string)
                     self.evolution_logger.log_info(f"[{self.desire_steps}]\t[{self.intention_steps}]\tIntention generated: {intention_id}")
+                    library_before_execution = self.manager.get_library(self.stateless_intention_generation)
                     belief_set_before_execution = self.get_belief_set()
                     error, plan, events = self.manager.run_intention(intention_id, self.get_belief_set, self.execute_action)
                     belief_set_after_execution = self.get_belief_set()
@@ -152,12 +160,19 @@ class Control:
                         self.logger.log_error(f"[LOOP] Error while running intention generated: {error}")
                         self.status = f"Error while running intention generated: {error}"
                         intention_evaluation = "False"
+                        last_intention_error = True
+                        new_memory = self.question_7(function_string, intention_description, error, belief_set_before_execution, belief_set_after_execution, plan, events, library_before_execution)
+                        self.update_memory(new_memory)
+                        if new_memory is None:
+                            self.logger.log_error(f"[LOOP] Unable to obtain new memory for intention after execution error")
+                            self.status = "Unable to obtain new memory for intention after execution error"
+                            intention_evaluation = None
                     else:
                         self.logger.log_info(f"[LOOP] Plan executed: {plan}")
                         self.logger.log_info(f"[LOOP] Events received: {events}")
                         self.logger.log_info(f"[LOOP] Asking for intention evaluation and memory update...")
                         self.status = "Asking for intention evaluation and memory update..."
-                        intention_evaluation, new_memory = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution, self.get_memory())
+                        intention_evaluation, new_memory = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution)
                         self.update_memory(new_memory)
                         self.logger.log_info(f"[LOOP] Memory update: {new_memory}")
                     if intention_evaluation is None:
@@ -169,6 +184,8 @@ class Control:
                         generate_new_desire = True
                     else:
                         if intention_evaluation == "True":
+                            last_intention_error = False
+                            self.clear_memory()
                             intention_negative_evaluations = 0
                             called_intentions = []
                             self.logger.log_info(f"[LOOP] Intention evaluation positive")
@@ -179,7 +196,7 @@ class Control:
                                 while desire_evaluation is None or desire_evaluation not in ["True", "False"]:
                                     desire_evaluation = input("Enter evaluation for the desire (True/False): ")
                             else:
-                                desire_evaluation = self.question_5(desire_description, belief_set_prior, self.get_belief_set(), self.get_memory())
+                                desire_evaluation = self.question_5(desire_description, belief_set_prior, self.get_belief_set())
                             if desire_evaluation is None:
                                 self.logger.log_error(f"[LOOP] Unable to obtain evaluation for desire")
                                 self.status = "Unable to obtain evaluation for desire"
@@ -188,7 +205,7 @@ class Control:
                                     self.logger.log_info(f"[LOOP] Desire evaluation positive")
                                     self.status = "Desire evaluation positive, now asking for trigger function..."
                                     if not self.user_generated_desire:
-                                        function_string = self.question_6(desire_description, self.get_belief_set(), belief_set_prior, self.get_memory())
+                                        function_string = self.question_6(desire_description, self.get_belief_set(), belief_set_prior)
                                         if function_string is None:
                                             self.logger.log_error(f"[LOOP] Unable to obtain trigger function for desire")
                                             self.status = "Unable to obtain trigger function for desire"
@@ -205,6 +222,7 @@ class Control:
                                     self.logger.log_info(f"[LOOP] Desire not yet satisfied")
                                     self.status = f"Desire not yet satisfied: {desire_description}"
                         else:
+                            # last_intention_error = True # already True if reached this line
                             self.logger.log_info(f"[LOOP] Intention evaluated negatively or failed to run")
                             self.status = "Intention evaluated negatively or failed to run"
                             if intention_negative_evaluations == 0:
@@ -231,12 +249,12 @@ class Control:
         self.logger.log_debug("[LOOP] Stopped loop thread")
         self.alive[0] = False
     
-    def question_1(self, belief_set, descriptions, memory):
+    def question_1(self, belief_set, descriptions):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_1.txt'
 
-        elements = [belief_set, descriptions, memory]
-        elements_names = ["belief_set", "descriptions", "memory"]
+        elements = [belief_set, descriptions]
+        elements_names = ["belief_set", "descriptions"]
         elements_to_extract = ["description"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q1")
@@ -246,15 +264,15 @@ class Control:
 
         return extracted_elements[0]
     
-    def question_2(self, desire, belief_set, library, memory):
+    def question_2(self, desire, belief_set, library):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         if self.stateless_intention_generation:
             question_prompt_path = 'agent_dir/prompts/control_question_2_SIG.txt'
         else:
             question_prompt_path = 'agent_dir/prompts/control_question_2.txt'
 
-        elements = [desire, belief_set, library, memory]
-        elements_names = ["desire", "belief_set", "library", "memory"]
+        elements = [desire, belief_set, library]
+        elements_names = ["desire", "belief_set", "library"]
         elements_to_extract = ["description", "function"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q2")
@@ -273,12 +291,39 @@ class Control:
         
         return intention, function_string, None
 
-    def question_3(self, function_string, belief_set, intention, error, library, memory):
+    def question_2_MEM(self, desire, belief_set, library, memory):
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        if self.stateless_intention_generation:
+            question_prompt_path = 'agent_dir/prompts/control_question_2_SIG_MEM.txt'
+        else:
+            question_prompt_path = 'agent_dir/prompts/control_question_2_MEM.txt'
+        
+        elements = [desire, belief_set, library, memory]
+        elements_names = ["desire", "belief_set", "library", "memory"]
+        elements_to_extract = ["description", "function"]
+
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q2MEM")
+
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q2MEM] Error while making request: {error}")
+            return None, None, error
+        
+        intention = extracted_elements[0]
+        function_string = extracted_elements[1]
+
+        error = self.manager.test_intention(function_string)
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q2MEM] Error while testing intention function: {error}")
+            return intention, function_string, error
+        
+        return intention, function_string, None
+    
+    def question_3(self, function_string, belief_set, intention, error, library):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_3.txt'
 
-        elements = [function_string, belief_set, intention, error, library, memory]
-        elements_names = ["function", "belief_set", "intention", "error", "library", "memory"]
+        elements = [function_string, belief_set, intention, error, library]
+        elements_names = ["function", "belief_set", "intention", "error", "library"]
         elements_to_extract = ["function"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q3")
@@ -296,15 +341,15 @@ class Control:
         
         return function_string, None
 
-    def question_4(self, intention, plan, events, belief_set_prior, belief_set_after, memory):
+    def question_4(self, intention, plan, events, belief_set_prior, belief_set_after):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_4.txt'
 
         actions = [(action, events[i]) for i, action in enumerate(plan)]
 
-        elements = [intention, belief_set_prior, actions, belief_set_after, memory]
-        elements_names = ["intention", "belief_set_prior", "actions", "belief_set_after", "memory"]
-        elements_to_extract = ["evaluation", "information"]
+        elements = [intention, belief_set_prior, actions, belief_set_after]
+        elements_names = ["intention", "belief_set_prior", "actions", "belief_set_after"]
+        elements_to_extract = ["evaluation", "suggestions"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q4")
 
@@ -317,12 +362,12 @@ class Control:
 
         return extracted_elements[0], extracted_elements[1]
 
-    def question_5(self, desire, belief_set_prior, belief_set_current, memory):
+    def question_5(self, desire, belief_set_prior, belief_set_current):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_5.txt'
 
-        elements = [desire, belief_set_prior, belief_set_current, memory]
-        elements_names = ["desire", "belief_set_prior", "belief_set_current", "memory"]
+        elements = [desire, belief_set_prior, belief_set_current]
+        elements_names = ["desire", "belief_set_prior", "belief_set_current"]
         elements_to_extract = ["evaluation"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q5")
@@ -335,12 +380,12 @@ class Control:
         
         return extracted_elements[0]
 
-    def question_6(self, desire, belief_set, belief_set_prior, memory):
+    def question_6(self, desire, belief_set, belief_set_prior):
         context_prompt_path = 'agent_dir/prompts/context.txt'
         question_prompt_path = 'agent_dir/prompts/control_question_6.txt'
 
-        elements = [desire, belief_set, belief_set_prior, memory]
-        elements_names = ["desire", "belief_set", "belief_set_prior", "memory"]
+        elements = [desire, belief_set, belief_set_prior]
+        elements_names = ["desire", "belief_set", "belief_set_prior"]
         elements_to_extract = ["function"]
 
         extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q6")
@@ -358,6 +403,24 @@ class Control:
             return None
         
         return function_string
+
+    def question_7(self, function_string, intention_description, error, belief_set_before, belief_set_after, plan, events, library):
+        context_prompt_path = 'agent_dir/prompts/context.txt'
+        question_prompt_path = 'agent_dir/prompts/control_question_7.txt'
+
+        actions = [(action, events[i]) for i, action in enumerate(plan)] # needs to be cut down because of timeout error
+
+        elements = [function_string, library, intention_description, error, belief_set_before, actions, belief_set_after]
+        elements_names = ["function", "library", "intention", "error", "belief_set_before", "actionsQ7", "belief_set_after"]
+        elements_to_extract = ["suggestions"]
+
+        extracted_elements, error = self.prompting.make_request(context_prompt_path, question_prompt_path, elements, elements_names, elements_to_extract, tag="CONTROL Q7")
+
+        if error is not None:
+            self.logger.log_error(f"[LOOP] [Q7] Error while making request: {error}")
+            return None
+
+        return extracted_elements[0]
     
     def execute_plan(self, plan, wait_for_events=True):
         events_plan = []
@@ -387,7 +450,8 @@ class Control:
             file.close()
     
     def clear_memory(self):
-        self.memory.append("")
+        if self.memory[-1] != "":
+            self.memory.append("")
 
     def update_memory(self, new_memory):
         if new_memory is not None:

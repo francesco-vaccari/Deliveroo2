@@ -5,7 +5,7 @@ And given the belief set describing the agent's knowledge about the world
 
 ```belief_set```
 
-Propose a short term goal description in natural language and a function that achieves the short term goal. The short term goal description should be an explanation of what the agent achieves by executing the function.
+Propose a short term goal description in natural language and a function that achieves the short term goal. The short term goal description should be an explanation of what the agent achieves by executing the function. Implement a function that is simple and general, and that can be used in a variety of situations.
 
 The short term goal description should be aligned with the long term goal description, and should be simple, brief and general without referring specific objects of the belief set.
 
@@ -22,8 +22,9 @@ def function():
     global belief_set
     ...
 
-Implement a function that is simple and general, and that can be used in a variety of situations.
 
+Use the following information to provide a better response. This information recaps the short term goal description in the last iteration where an error occured either during execution of the function or because the goal was not achieved. This is the information:
+```memory```
 
 
 Provide the response in JSON format with the field 'description' containing the short term goal description and the field 'function' containing the function that achieves the short term goal description.

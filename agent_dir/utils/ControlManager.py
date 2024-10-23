@@ -29,7 +29,7 @@ class ControlManager:
         self.intention_id = 1
         self.desire_id = 1
         self.dtf_number = 1
-        self.timeout = 4
+        self.timeout = 15
         self.intentions = {} # id -> Intention
         self.intentions_graph = {} # id -> [id] the function id contains calls to the functions [id]
         self.desires = {} # id -> Desire
@@ -192,7 +192,7 @@ class ControlManager:
 
         try:
             process = subprocess.Popen(['python3', self.functions_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate(timeout=30)
+            stdout, stderr = process.communicate(timeout=self.timeout)
             if stderr != b'':
                 raise Exception(stderr)
         except Exception as e:
@@ -208,7 +208,7 @@ class ControlManager:
         self.logger.log_info(f"Belief set after intention {id} execution:\n{get_belief_set()}")
 
         if error is not None:
-            return error, None, None
+            return error, self.plan, self.events
         
         return None, self.plan, self.events
     

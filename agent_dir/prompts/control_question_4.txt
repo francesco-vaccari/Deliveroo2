@@ -22,11 +22,8 @@ The following is the belief set that the agent has after executing the plan:
 Provide a boolean evaluation on whether the agent has achieved the short term goal or not.
 
 
-
-You also need to infer information from the given data that can be used to improve plan generation in the future. This information should be general and not refer to specific instances of objects in the environment. Also, if you evaluate that the agent has not achieved the short term goal, you should write suggestions on how to improve the plan generation and execution; you can refer to the name of the actions. 
-All this information will be stored in the agent's memory, you need to integrate the informationthat you write now with the information that is already stored in the agent's memory. This is the current information stored in the agent's memory:
-```memory```
+Also, if you evaluate that the agent has not achieved the short term goal, you need to write suggestions on how to improve plan generation. Your response should describe the goal that the agent is trying to achieve and provide suggestions to improve on what you think went wrong during plan execution. You can refer to specific objects in the belief set or actions performed.
 
 
 
-Provide the response in a single line in JSON format with the field 'evaluation' containing only one of the following values: 'True' or 'False', and the field 'information' containing the information that you want to store in the agent's memory.
+Provide the response in a single line in JSON format with the field 'evaluation' containing only one of the following values: 'True' or 'False'. If the evaluation is 'False, include the field 'suggestions' containing the suggestions as requested, otherwise include the filed 'suggestions' with an empty string as value.
