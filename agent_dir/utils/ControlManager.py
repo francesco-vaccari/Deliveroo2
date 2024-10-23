@@ -97,7 +97,8 @@ class ControlManager:
         for function_called in functions_called:
             for id, intention in self.intentions.items():
                 if intention.function_name == function_called:
-                    self.intentions_graph[self.intention_id].append(id)
+                    if self.intention_id != id: # avoid recursive calls in graph
+                        self.intentions_graph[self.intention_id].append(id)
 
         self.desires[desire_id].intentions.append(intention)
 
