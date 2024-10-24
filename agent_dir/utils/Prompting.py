@@ -7,7 +7,7 @@ class Prompting:
     def __init__(self, folder, agent_id):
         self.client = AzureOpenAIClient()
         self.logger = ExperimentLogger(folder, 'prompting.log')
-        self.stop = False # change to False when ready to use
+        self.stop = True # change to False when ready to use
         self.requests_made = 0
         self.agent_id = agent_id
     
@@ -91,6 +91,46 @@ class Prompting:
                 string = "The memory is currently empty."
             else:
                 string = str(element)
+        elif element_name == "actionsQ7":
+            if len(element) == 0:
+                string = "The plan was empty: no actions executed and no events received."
+            else:
+                if len(element) > 6:
+                    first_four = element[:4]
+                    last_2 = element[-2:]
+                    actions_executed = list(set([action for action, _ in element]))
+                    counts = {action: 0 for action in actions_executed}
+                    for action, _ in element:
+                        counts[action] += 1
+                    string += f"The plan executed was too long, here is a summary:\n"
+                    string += f"\tFirst 4 actions executed:\n"
+                    for i, (name_action, events) in enumerate(first_four):
+                        string += f"\t- Action: {name_action} , Events received:\n"
+                        if len(events) == 0:
+                            string += "\tNone\n"
+                        else:
+                            for event in events:
+                                string += f"\t\t*  {event}\n"
+                    string += f"\tLast 2 actions executed:\n"
+                    for i, (name_action, events) in enumerate(last_2):
+                        string += f"\t- Action: {name_action} , Events received:\n"
+                        if len(events) == 0:
+                            string += "\tNone\n"
+                        else:
+                            for event in events:
+                                string += f"\t\t*  {event}\n"
+                    string += f"\tSummary of actions executed:\n"
+                    for action, count in counts.items():
+                        string += f"\t- Action: {action}, Executed {count} times\n"
+                else:
+                    for i, (name_action, events) in enumerate(element):
+                        string += f"- Action: {name_action} , Events received:\n"
+                        if len(events) == 0:
+                            string += "None\n"
+                        else:
+                            for event in events:
+                                string += f"\t*  {event}\n"
+
         else:
             string = str(element)
         

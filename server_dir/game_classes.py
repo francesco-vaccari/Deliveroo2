@@ -496,7 +496,7 @@ class Map:
                 elif cell == 2:
                     cell_type = 'delivery_cell'
                 elif cell == 3:
-                    cell_type = 'double_delivery_cell'
+                    cell_type = 'double_points_delivery_cell'
                 elif cell == 4:
                     cell_type = 'parcels_spawn'
                 elif cell == 5:

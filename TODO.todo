@@ -11,10 +11,7 @@ Testare:
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown
 
 
-Cambio come funziona la memoria e la uso solo come feedback nel caso la intention fallisca (sia come errore che come evaluation).
-
-
-Per poter runnare il progetto serve: pygame, astor, python-dotenv, PyQt5, openai, copy, e ovviamente il file .env con le variablili di ambiente. Aggiornare magari la descrizione della repo così da spiegare come farlo partire.
+Per poter runnare il progetto serve: pygame, astor, python-dotenv, PyQt5, openai, copy(?), tiktoken, e ovviamente il file .env con le variablili di ambiente. Aggiornare magari la descrizione della repo così da spiegare come farlo partire.
 
 
 Cose di cui parlare:
@@ -59,3 +56,17 @@ Cose di cui parlare:
 
 Note su incontro:
 - vedere se lo stesso obiettivo lo raggiunge meglio dopo averlo già raggiunto in precedenza (se c'è questo miglioramento in cose che ha già imparato e non solo in cose nuove)
+
+
+
+Cose di cui parlare:
+- esperimenti cominciati
+- qualche problema con timeout e funzioni che scriveva llm poi risolti con nuovo meccanismo memoria
+- path finding è difficoltoso, infatti mappe esperimenti devono essere rettangoli e piccole
+- alcune funzioni sono one-action
+- 3 esperimenti per ogni tipo, eventualmente posso fare di più e magari con altri elementi
+- ho lavorato a file per analisi e per fare replay per poter rivedere facilmente cosa è successo nell'esperimento
+
+Note su incontro:
+- definire quando un obiettivo è stato raggiunto (10 parcelle consegnate ad esempio)
+- lasciare andare oltre nella generazione di desire l'agente per vedere cosa genera, se sempre gli stessi obiettivi o qualcosa di nuovo
