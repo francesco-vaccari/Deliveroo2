@@ -174,7 +174,6 @@ class Control:
                         self.status = "Asking for intention evaluation and memory update..."
                         intention_evaluation, new_memory = self.question_4(intention_description, plan, events, belief_set_before_execution, belief_set_after_execution)
                         self.update_memory(new_memory)
-                        self.logger.log_info(f"[LOOP] Memory update: {new_memory}")
                     if intention_evaluation is None:
                         self.logger.log_error(f"[LOOP] Unable to obtain evaluation for intention")
                         self.status = "Unable to obtain evaluation for intention"
@@ -420,6 +419,8 @@ class Control:
             self.logger.log_error(f"[LOOP] [Q7] Error while making request: {error}")
             return None
 
+        self.logger.log_info(f"[LOOP] [Q7] Obtained memory update: {extracted_elements[0]}")
+
         return extracted_elements[0]
     
     def execute_plan(self, plan, wait_for_events=True):
@@ -456,6 +457,7 @@ class Control:
     def update_memory(self, new_memory):
         if new_memory is not None:
             self.memory.append(new_memory)
+            self.logger.log_info(f"[LOOP] Memory updated: {new_memory}")
     
     def get_memory(self):
         return self.memory[-1]
