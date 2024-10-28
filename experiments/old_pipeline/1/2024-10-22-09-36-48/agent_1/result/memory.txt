@@ -1,0 +1,6 @@
+- 
+- 
+- The agent successfully picked up the parcel but did not move towards the nearest delivery cell to deliver it. When generating a plan, ensure that the agent not only picks up the parcel, but also navigates towards the delivery cell afterward. The action to move should be included in the plan after the action to pick up the parcel.
+- 
+- The agent successfully moved towards the delivery cell, but didn't reach it or deliver the parcel. The agent needs to ensure it reaches the delivery cell before attempting to deliver the parcel. Additionally, the agent should include 'deliver parcel' actions in the plan after reaching the delivery cell.
+- The agent successfully moved towards the delivery cell, reached it and delivered the parcel. The agent's plan was effective in navigating the environment and avoiding non-walkable cells. The agent should continue to ensure it reaches the delivery cell before attempting to deliver the parcel and include 'deliver parcel' actions in the plan after reaching the delivery cell.

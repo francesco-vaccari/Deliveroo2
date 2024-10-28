@@ -1,0 +1,183 @@
+2024-10-23 17:59:53,467 - INFO - Testing function:
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'map':
+        if event['event_type'] == 'object added':
+            belief_set['map'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['map'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            del belief_set['map']
+    return belief_set
+2024-10-23 17:59:53,480 - INFO - Function is valid.
+2024-10-23 17:59:53,512 - INFO - Adding function for type: map
+2024-10-23 17:59:53,525 - INFO - Functions: 
+Type: map
+def function_1(event, belief_set):
+    if event['object_type'] == 'map':
+        if event['event_type'] == 'object added':
+            belief_set['map'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['map'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            del belief_set['map']
+    return belief_set
+
+Type: parcel
+Type: agent
+
+
+2024-10-23 17:59:53,525 - INFO - Running function for type: map
+2024-10-23 17:59:53,531 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}}
+2024-10-23 18:00:00,116 - INFO - Testing function:
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'parcel':
+        if event['event_type'] == 'object added':
+            if 'parcels' not in belief_set:
+                belief_set['parcels'] = {}
+            belief_set['parcels'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object changed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set['parcels']:
+                belief_set['parcels'][event['object']['id']].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set['parcels']:
+                del belief_set['parcels'][event['object']['id']]
+    return belief_set
+2024-10-23 18:00:00,117 - INFO - Function is valid.
+2024-10-23 18:00:00,123 - INFO - Adding function for type: parcel
+2024-10-23 18:00:00,136 - INFO - Functions: 
+Type: map
+def function_1(event, belief_set):
+    if event['object_type'] == 'map':
+        if event['event_type'] == 'object added':
+            belief_set['map'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['map'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            del belief_set['map']
+    return belief_set
+
+Type: parcel
+def function_2(event, belief_set):
+    if event['object_type'] == 'parcel':
+        if event['event_type'] == 'object added':
+            if 'parcels' not in belief_set:
+                belief_set['parcels'] = {}
+            belief_set['parcels'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object changed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set[
+                'parcels']:
+                belief_set['parcels'][event['object']['id']].update(event[
+                    'object'])
+        elif event['event_type'] == 'object removed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set[
+                'parcels']:
+                del belief_set['parcels'][event['object']['id']]
+    return belief_set
+
+Type: agent
+
+
+2024-10-23 18:00:00,161 - INFO - Running function for type: parcel
+2024-10-23 18:00:00,161 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}}
+2024-10-23 18:00:03,688 - INFO - Testing function:
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'agent':
+        if event['event_type'] == 'object added':
+            belief_set['agent'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['agent'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            belief_set.pop('agent', None)
+    return belief_set
+2024-10-23 18:00:03,688 - INFO - Function is valid.
+2024-10-23 18:00:03,694 - INFO - Adding function for type: agent
+2024-10-23 18:00:03,695 - INFO - Functions: 
+Type: map
+def function_1(event, belief_set):
+    if event['object_type'] == 'map':
+        if event['event_type'] == 'object added':
+            belief_set['map'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['map'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            del belief_set['map']
+    return belief_set
+
+Type: parcel
+def function_2(event, belief_set):
+    if event['object_type'] == 'parcel':
+        if event['event_type'] == 'object added':
+            if 'parcels' not in belief_set:
+                belief_set['parcels'] = {}
+            belief_set['parcels'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object changed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set[
+                'parcels']:
+                belief_set['parcels'][event['object']['id']].update(event[
+                    'object'])
+        elif event['event_type'] == 'object removed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set[
+                'parcels']:
+                del belief_set['parcels'][event['object']['id']]
+    return belief_set
+
+Type: agent
+def function_3(event, belief_set):
+    if event['object_type'] == 'agent':
+        if event['event_type'] == 'object added':
+            belief_set['agent'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['agent'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            belief_set.pop('agent', None)
+    return belief_set
+
+
+
+2024-10-23 18:00:03,701 - INFO - Running function for type: agent
+2024-10-23 18:00:03,701 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'score': 0}}
+2024-10-23 18:00:34,740 - INFO - Running function for type: agent
+2024-10-23 18:00:34,747 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 0}}
+2024-10-23 18:00:35,267 - INFO - Running function for type: agent
+2024-10-23 18:00:35,268 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'score': 0}}
+2024-10-23 18:00:35,946 - INFO - Running function for type: parcel
+2024-10-23 18:00:35,946 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'score': 0}}
+2024-10-23 18:00:35,947 - INFO - Running function for type: agent
+2024-10-23 18:00:35,947 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:46,442 - INFO - Running function for type: parcel
+2024-10-23 18:00:46,442 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:46,592 - INFO - Running function for type: agent
+2024-10-23 18:00:46,593 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:47,189 - INFO - Running function for type: parcel
+2024-10-23 18:00:47,189 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:47,196 - INFO - Running function for type: agent
+2024-10-23 18:00:47,196 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:47,594 - INFO - Running function for type: parcel
+2024-10-23 18:00:47,594 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:47,737 - INFO - Running function for type: agent
+2024-10-23 18:00:47,737 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:48,103 - INFO - Running function for type: parcel
+2024-10-23 18:00:48,109 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:48,109 - INFO - Running function for type: agent
+2024-10-23 18:00:48,109 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [1], 'score': 0}}
+2024-10-23 18:00:48,674 - INFO - Running function for type: agent
+2024-10-23 18:00:48,674 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'score': 20, 'has_key': False}}
+2024-10-23 18:00:48,787 - INFO - Running function for type: parcel
+2024-10-23 18:00:48,787 - INFO - Function ran successfully. Result:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {}, 'agent': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'score': 20, 'has_key': False}}

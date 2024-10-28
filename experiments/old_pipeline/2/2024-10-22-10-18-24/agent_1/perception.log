@@ -1,0 +1,92 @@
+2024-10-22 10:18:25,971 - DEBUG - [STORE_EVENTS] Started storing events thread
+2024-10-22 10:18:25,971 - DEBUG - [PROCESS_EVENTS] Started processing events thread
+2024-10-22 10:18:25,984 - DEBUG - [LOOP] Started loop thread
+2024-10-22 10:18:26,686 - INFO - [STORE_EVENTS] New object type detected: map
+2024-10-22 10:18:26,686 - INFO - [STORE_EVENTS] New object type detected: parcel
+2024-10-22 10:18:26,686 - INFO - [STORE_EVENTS] New object type detected: agent
+2024-10-22 10:18:26,686 - INFO - [STORE_EVENTS] New object type detected: key
+2024-10-22 10:18:26,686 - INFO - [LOOP] Generating perception function for object type: map
+2024-10-22 10:18:26,686 - INFO - [STORE_EVENTS] New object type detected: door
+2024-10-22 10:18:31,665 - INFO - [LOOP] Adding perception function for object type: map
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'map':
+        if event['event_type'] == 'object added':
+            belief_set['map'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['map'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            belief_set.pop('map')
+    return belief_set
+2024-10-22 10:18:31,665 - INFO - [LOOP] Generating perception function for object type: parcel
+2024-10-22 10:18:31,671 - INFO - [PROCESS_EVENTS] Processing events for object type: map
+2024-10-22 10:18:37,587 - INFO - [LOOP] Adding perception function for object type: parcel
+def update_belief_set(event, belief_set):
+    if 'parcel' not in belief_set:
+        belief_set['parcel'] = {}
+    if event['event_type'] == 'object added':
+        belief_set['parcel'][event['object']['id']] = event['object']
+    elif event['event_type'] == 'object changed':
+        if event['object']['id'] in belief_set['parcel']:
+            belief_set['parcel'][event['object']['id']].update(event['object'])
+    elif event['event_type'] == 'object removed':
+        if event['object']['id'] in belief_set['parcel']:
+            del belief_set['parcel'][event['object']['id']]
+    return belief_set
+2024-10-22 10:18:37,619 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 10:18:37,631 - INFO - [LOOP] Generating perception function for object type: agent
+2024-10-22 10:18:41,442 - INFO - [LOOP] Adding perception function for object type: agent
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'agent':
+        if event['event_type'] == 'object added':
+            belief_set['agent'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['agent'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            del belief_set['agent']
+    return belief_set
+2024-10-22 10:18:41,442 - INFO - [LOOP] Generating perception function for object type: key
+2024-10-22 10:18:41,442 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:18:46,561 - INFO - [LOOP] Adding perception function for object type: key
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'key':
+        if event['event_type'] == 'object added':
+            belief_set['key'] = {event['object']['id']: event['object']}
+        elif event['event_type'] == 'object changed':
+            belief_set['key'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object removed':
+            del belief_set['key'][event['object']['id']]
+    return belief_set
+2024-10-22 10:18:46,568 - INFO - [PROCESS_EVENTS] Processing events for object type: key
+2024-10-22 10:18:46,637 - INFO - [LOOP] Generating perception function for object type: door
+2024-10-22 10:18:53,328 - INFO - [LOOP] Adding perception function for object type: door
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'door':
+        if event['event_type'] == 'object added':
+            belief_set['door'] = {event['object']['id']: event['object']}
+        elif event['event_type'] == 'object changed':
+            if 'door' in belief_set:
+                belief_set['door'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object removed':
+            if 'door' in belief_set:
+                belief_set['door'].pop(event['object']['id'], None)
+    return belief_set
+2024-10-22 10:18:53,328 - INFO - [PROCESS_EVENTS] Processing events for object type: door
+2024-10-22 10:19:22,951 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:19:23,623 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:19:24,200 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 10:19:24,231 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:19:24,641 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 10:19:24,690 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:19:25,245 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 10:19:25,252 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:20:00,496 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 10:20:00,534 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:20:16,600 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 10:20:16,681 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:22:31,005 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 10:22:31,025 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:23:08,438 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 10:23:08,458 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 10:25:28,848 - DEBUG - [PROCESS_EVENTS] Stopped processing events thread
+2024-10-22 10:25:28,865 - DEBUG - [LOOP] Stopped loop thread
+2024-10-22 10:25:28,873 - DEBUG - [STORE_EVENTS] Stopped storing events thread

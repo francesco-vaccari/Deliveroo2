@@ -1,0 +1,241 @@
+2024-10-23 20:30:07,436 - DEBUG - [LOOP] Started loop thread
+2024-10-23 20:30:07,448 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-23 20:30:08,463 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-23 20:30:09,473 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-23 20:30:10,497 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-23 20:30:11,527 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-23 20:30:12,544 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-23 20:30:13,579 - INFO - [LOOP] Belief set is ready, waiting 30 seconds...
+2024-10-23 20:30:14,599 - INFO - [LOOP] Belief set is ready, waiting 29 seconds...
+2024-10-23 20:30:15,614 - INFO - [LOOP] Belief set is ready, waiting 28 seconds...
+2024-10-23 20:30:16,634 - INFO - [LOOP] Belief set is ready, waiting 27 seconds...
+2024-10-23 20:30:17,664 - INFO - [LOOP] Belief set is ready, waiting 26 seconds...
+2024-10-23 20:30:18,686 - INFO - [LOOP] Belief set is ready, waiting 25 seconds...
+2024-10-23 20:30:19,712 - INFO - [LOOP] Belief set is ready, waiting 24 seconds...
+2024-10-23 20:30:20,734 - INFO - [LOOP] Belief set is ready, waiting 23 seconds...
+2024-10-23 20:30:21,755 - INFO - [LOOP] Belief set is ready, waiting 22 seconds...
+2024-10-23 20:30:22,778 - INFO - [LOOP] Belief set is ready, waiting 21 seconds...
+2024-10-23 20:30:23,797 - INFO - [LOOP] Belief set is ready, waiting 20 seconds...
+2024-10-23 20:30:24,820 - INFO - [LOOP] Belief set is ready, waiting 19 seconds...
+2024-10-23 20:30:25,843 - INFO - [LOOP] Belief set is ready, waiting 18 seconds...
+2024-10-23 20:30:26,866 - INFO - [LOOP] Belief set is ready, waiting 17 seconds...
+2024-10-23 20:30:27,883 - INFO - [LOOP] Belief set is ready, waiting 16 seconds...
+2024-10-23 20:30:28,911 - INFO - [LOOP] Belief set is ready, waiting 15 seconds...
+2024-10-23 20:30:29,947 - INFO - [LOOP] Belief set is ready, waiting 14 seconds...
+2024-10-23 20:30:30,965 - INFO - [LOOP] Belief set is ready, waiting 13 seconds...
+2024-10-23 20:30:31,987 - INFO - [LOOP] Belief set is ready, waiting 12 seconds...
+2024-10-23 20:30:33,011 - INFO - [LOOP] Belief set is ready, waiting 11 seconds...
+2024-10-23 20:30:34,032 - INFO - [LOOP] Belief set is ready, waiting 10 seconds...
+2024-10-23 20:30:35,051 - INFO - [LOOP] Belief set is ready, waiting 9 seconds...
+2024-10-23 20:30:36,071 - INFO - [LOOP] Belief set is ready, waiting 8 seconds...
+2024-10-23 20:30:37,088 - INFO - [LOOP] Belief set is ready, waiting 7 seconds...
+2024-10-23 20:30:38,091 - INFO - [LOOP] Belief set is ready, waiting 6 seconds...
+2024-10-23 20:30:39,094 - INFO - [LOOP] Belief set is ready, waiting 5 seconds...
+2024-10-23 20:30:40,161 - INFO - [LOOP] Belief set is ready, waiting 4 seconds...
+2024-10-23 20:30:41,190 - INFO - [LOOP] Belief set is ready, waiting 3 seconds...
+2024-10-23 20:30:42,200 - INFO - [LOOP] Belief set is ready, waiting 2 seconds...
+2024-10-23 20:30:43,220 - INFO - [LOOP] Belief set is ready, waiting 1 seconds...
+2024-10-23 20:30:45,693 - INFO - [LOOP] Generating new desire
+2024-10-23 20:30:47,966 - INFO - [LOOP] Desire generated: The agent's long term goal is to collect all keys available in the environment, open all the doors and deliver all the parcels to their respective delivery cells, while maximizing the score by prioritizing parcels delivered at the double points delivery cells.
+2024-10-23 20:30:48,035 - INFO - [LOOP] Generating new intention ...
+2024-10-23 20:30:57,182 - INFO - [LOOP] Intention generated: The agent's short term goal is to move towards the coordinate of the nearest parcel and pick it up.
+def function():
+    global belief_set
+    parcel = list(belief_set['parcels'].values())[0]
+    agent = belief_set['agents'][1]
+    while parcel['coordinates'] != agent['coordinates']:
+        if parcel['coordinates'][0] < agent['coordinates'][0]:
+            function_1()
+            agent['coordinates'][0] -= 1
+        elif parcel['coordinates'][0] > agent['coordinates'][0]:
+            function_2()
+            agent['coordinates'][0] += 1
+        elif parcel['coordinates'][1] < agent['coordinates'][1]:
+            function_3()
+            agent['coordinates'][1] -= 1
+        elif parcel['coordinates'][1] > agent['coordinates'][1]:
+            function_4()
+            agent['coordinates'][1] += 1
+    function_5()
+    parcel['carried_by_id'] = 1
+    agent['parcels_carried_ids'].append(parcel['id'])
+2024-10-23 20:30:59,759 - INFO - [LOOP] Plan executed: ['action_1', 'action_3', 'action_5']
+2024-10-23 20:30:59,771 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'has_key': False, 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'has_key': False, 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'has_key': False, 'score': 0}}]]
+2024-10-23 20:30:59,771 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-23 20:31:01,166 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-23 20:31:01,166 - INFO - [LOOP] Obtained memory update: 
+2024-10-23 20:31:01,178 - INFO - [LOOP] Memory update: 
+2024-10-23 20:31:01,178 - INFO - [LOOP] Intention evaluation positive
+2024-10-23 20:31:01,178 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-23 20:31:01,979 - INFO - [LOOP] Obtained evaluation for desire: False
+2024-10-23 20:31:01,979 - INFO - [LOOP] Desire not yet satisfied
+2024-10-23 20:31:01,998 - INFO - [LOOP] Generating new intention ...
+2024-10-23 20:31:12,558 - INFO - [LOOP] Intention generated: The agent's short term goal is to deliver the parcel it is currently carrying to the nearest delivery cell.
+def function():
+    global belief_set
+    agent = belief_set['agents'][1]
+    parcel = belief_set['parcels'][agent['parcels_carried_ids'][0]]
+    delivery_cells = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] in ['delivery_cell', 'double_points_delivery_cell']]
+    nearest_delivery_cell = min(delivery_cells, key=lambda cell: abs(cell['cell_coordinates'][0] - agent['coordinates'][0]) + abs(cell['cell_coordinates'][1] - agent['coordinates'][1]))
+    while agent['coordinates'] != nearest_delivery_cell['cell_coordinates']:
+        if agent['coordinates'][0] < nearest_delivery_cell['cell_coordinates'][0]:
+            function_2()
+        elif agent['coordinates'][0] > nearest_delivery_cell['cell_coordinates'][0]:
+            function_1()
+        elif agent['coordinates'][1] < nearest_delivery_cell['cell_coordinates'][1]:
+            function_4()
+        elif agent['coordinates'][1] > nearest_delivery_cell['cell_coordinates'][1]:
+            function_3()
+    function_6()
+2024-10-23 20:31:28,320 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 15 seconds
+2024-10-23 20:31:33,998 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-23 20:31:34,005 - INFO - [LOOP] Generating new intention ...
+2024-10-23 20:31:43,683 - INFO - [LOOP] Intention generated: The short term goal of the agent is to move towards the nearest delivery cell by comparing the agent's current position with the delivery cell's coordinates and deliver the parcel it's carrying. If the agent reaches a delivery cell, it should drop the parcel.
+def function():
+    global belief_set
+    max_iterations = 100
+    i = 0
+    agent = belief_set['agents'][1]
+    delivery_cell = [3, 0]  
+    while i < max_iterations and agent['coordinates'] != delivery_cell:
+        if agent['coordinates'][0] < delivery_cell[0]:
+            function_2()
+            agent['coordinates'][0] += 1
+        elif agent['coordinates'][0] > delivery_cell[0]:
+            function_1()
+            agent['coordinates'][0] -= 1
+        elif agent['coordinates'][1] < delivery_cell[1]:
+            function_4()
+            agent['coordinates'][1] += 1
+        elif agent['coordinates'][1] > delivery_cell[1]:
+            function_3()
+            agent['coordinates'][1] -= 1
+        i += 1
+    if agent['coordinates'] == delivery_cell:
+        function_6()
+    return
+2024-10-23 20:31:47,070 - INFO - [LOOP] Plan executed: ['action_2', 'action_2', 'action_2', 'action_3', 'action_6']
+2024-10-23 20:31:47,070 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1], 'has_key': False, 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [2, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [2, 1], 'parcels_carried_ids': [1], 'has_key': False, 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [3, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [3, 1], 'parcels_carried_ids': [1], 'has_key': False, 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [3, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [3, 0], 'parcels_carried_ids': [1], 'has_key': False, 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [3, 0], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [3, 0], 'score': 20, 'carried_by_id': 1}}]]
+2024-10-23 20:31:47,070 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-23 20:31:48,264 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-23 20:31:48,264 - INFO - [LOOP] Obtained memory update: 
+2024-10-23 20:31:48,264 - INFO - [LOOP] Memory update: 
+2024-10-23 20:31:48,264 - INFO - [LOOP] Intention evaluation positive
+2024-10-23 20:31:48,276 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-23 20:31:48,879 - INFO - [LOOP] Obtained evaluation for desire: False
+2024-10-23 20:31:48,879 - INFO - [LOOP] Desire not yet satisfied
+2024-10-23 20:31:48,935 - INFO - [LOOP] Generating new intention ...
+2024-10-23 20:32:01,102 - INFO - [LOOP] Intention generated: The short term goal is to navigate to the nearest key, pick it up and move towards the nearest locked door.
+def function():
+    global belief_set
+    key_coordinates = None
+    for key_id, key_info in belief_set['keys'].items():
+        if key_info['carried_by_id'] is None:
+            key_coordinates = key_info['coordinates']
+            break
+    if key_coordinates is None:
+        return
+    agent_coordinates = belief_set['agents'][1]['coordinates']
+    while agent_coordinates[0] != key_coordinates[0]:
+        if agent_coordinates[0] > key_coordinates[0]:
+            function_1()
+        else:
+            function_2()
+    while agent_coordinates[1] != key_coordinates[1]:
+        if agent_coordinates[1] > key_coordinates[1]:
+            function_3()
+        else:
+            function_4()
+    function_5()
+    door_coordinates = None
+    for door_id, door_info in belief_set['doors'].items():
+        door_coordinates = door_info['coordinates']
+        break
+    while agent_coordinates[0] != door_coordinates[0]:
+        if agent_coordinates[0] > door_coordinates[0]:
+            function_1()
+        else:
+            function_2()
+    while agent_coordinates[1] != door_coordinates[1]:
+        if agent_coordinates[1] > door_coordinates[1]:
+            function_3()
+        else:
+            function_4()
+2024-10-23 20:32:16,991 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 15 seconds
+2024-10-23 20:32:23,574 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-23 20:32:23,587 - INFO - [LOOP] Generating new intention ...
+2024-10-23 20:32:40,850 - ERROR - [LOOP] [Q2MEM] Error while making request: Unable to parse JSON, error: Expecting property name enclosed in double quotes: line 1 column 334 (char 333)
+2024-10-23 20:33:00,242 - INFO - [LOOP] Intention generated: The agent's short term goal is to navigate to the nearest key, pick it up, and then move towards the nearest locked door to open it. The agent should ensure to not enter an infinite loop by constantly updating its coordinates and breaking the loop if it runs for an excessively long duration.
+def function():
+    global belief_set
+    agent_id = 1
+    agent = belief_set['agents'][agent_id]
+    key = [k for k in belief_set['keys'].values() if k['carried_by_id'] is None][0]
+    key_coords = key['coordinates']
+    iteration_count = 0
+    while agent['coordinates'] != key_coords and iteration_count < 100:
+        if agent['coordinates'][0] > key_coords[0]:
+            function_1()
+        elif agent['coordinates'][0] < key_coords[0]:
+            function_2()
+        elif agent['coordinates'][1] > key_coords[1]:
+            function_3()
+        elif agent['coordinates'][1] < key_coords[1]:
+            function_4()
+        agent['coordinates'] = [agent['coordinates'][0] - 1 if agent['coordinates'][0] > key_coords[0] else agent['coordinates'][0] + 1 if agent['coordinates'][0] < key_coords[0] else agent['coordinates'][0], agent['coordinates'][1] - 1 if agent['coordinates'][1] > key_coords[1] else agent['coordinates'][1] + 1 if agent['coordinates'][1] < key_coords[1] else agent['coordinates'][1]]
+        iteration_count += 1
+    function_5()
+    if 'has_key' in agent and agent['has_key']:
+        door_coords = [d['coordinates'] for d in belief_set['doors'].values()][0]
+        iteration_count = 0
+        while agent['coordinates'] != door_coords and iteration_count < 100:
+            if agent['coordinates'][0] > door_coords[0]:
+                function_1()
+            elif agent['coordinates'][0] < door_coords[0]:
+                function_2()
+            elif agent['coordinates'][1] > door_coords[1]:
+                function_3()
+            elif agent['coordinates'][1] < door_coords[1]:
+                function_4()
+            agent['coordinates'] = [agent['coordinates'][0] - 1 if agent['coordinates'][0] > door_coords[0] else agent['coordinates'][0] + 1 if agent['coordinates'][0] < door_coords[0] else agent['coordinates'][0], agent['coordinates'][1] - 1 if agent['coordinates'][1] > door_coords[1] else agent['coordinates'][1] + 1 if agent['coordinates'][1] < door_coords[1] else agent['coordinates'][1]]
+            iteration_count += 1
+2024-10-23 20:33:01,431 - INFO - [LOOP] Plan executed: ['action_5']
+2024-10-23 20:33:01,431 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [3, 3], 'parcels_carried_ids': [], 'has_key': True, 'score': 20}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [3, 3], 'carried_by_id': 1}}]]
+2024-10-23 20:33:01,437 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-23 20:33:05,771 - INFO - [LOOP] Obtained evaluation for intention: False
+2024-10-23 20:33:05,771 - INFO - [LOOP] Obtained memory update: The agent has not achieved the short term goal. Even though the agent has picked up the key, it has not moved towards the nearest locked door to open it. The agent's coordinates remain the same before and after executing the plan, meaning it hasn't moved. The plan needs to include actions that make the agent move to the location of the nearest locked door. It also needs to ensure that the agent's path doesn't contain any obstacles that it can't overcome. The agent should also keep updating its belief set with the latest changes in the environment to make informed decisions.
+2024-10-23 20:33:05,771 - INFO - [LOOP] Memory update: The agent has not achieved the short term goal. Even though the agent has picked up the key, it has not moved towards the nearest locked door to open it. The agent's coordinates remain the same before and after executing the plan, meaning it hasn't moved. The plan needs to include actions that make the agent move to the location of the nearest locked door. It also needs to ensure that the agent's path doesn't contain any obstacles that it can't overcome. The agent should also keep updating its belief set with the latest changes in the environment to make informed decisions.
+2024-10-23 20:33:05,783 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-23 20:33:05,784 - INFO - [LOOP] Generating new intention ...
+2024-10-23 20:33:14,994 - ERROR - [LOOP] [Q2MEM] Error while making request: Unable to parse JSON, error: Expecting property name enclosed in double quotes: line 1 column 213 (char 212)
+2024-10-23 20:33:23,404 - INFO - [LOOP] Intention generated: The short term goal is to move towards the nearest locked door, ensuring the agent's path doesn't contain any obstacles that it can't overcome, and open it using the key the agent is carrying.
+def function():
+    global belief_set
+    doors = belief_set['doors']
+    agent = belief_set['agents'][1]
+    min_distance = float('inf')
+    nearest_door = None
+    for door in doors.values():
+        distance = abs(door['coordinates'][0] - agent['coordinates'][0]) + abs(door['coordinates'][1] - agent['coordinates'][1])
+        if distance < min_distance:
+            min_distance = distance
+            nearest_door = door
+    if nearest_door is not None:
+        if nearest_door['coordinates'][0] < agent['coordinates'][0]:
+            function_1()
+        elif nearest_door['coordinates'][0] > agent['coordinates'][0]:
+            function_2()
+        if nearest_door['coordinates'][1] < agent['coordinates'][1]:
+            function_3()
+        elif nearest_door['coordinates'][1] > agent['coordinates'][1]:
+            function_4()
+
+2024-10-23 20:33:24,662 - INFO - [LOOP] Plan executed: ['action_1']
+2024-10-23 20:33:24,662 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [2, 3], 'parcels_carried_ids': [], 'has_key': True, 'score': 20}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [2, 3], 'carried_by_id': 1}}]]
+2024-10-23 20:33:24,674 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-23 20:33:30,435 - INFO - [LOOP] Obtained evaluation for intention: False
+2024-10-23 20:33:30,447 - INFO - [LOOP] Obtained memory update: The agent's short term goal was to move towards the nearest locked door and open it using the key it is carrying. After executing the plan, the agent's position is [2, 3], while the nearest door is at either [0, 2] or [1, 2] or [1, 3]. The plan only contained one action, which moved the agent one step, but it did not reach the door nor did it open it. Plan generation can be improved by ensuring that the agent moves towards the door until it reaches it, and then performs an action to open the door. The generated plan should contain actions that would result in the agent's position being the same as the door's coordinates, and the door should be removed from the belief set to indicate that it was opened.
+2024-10-23 20:33:30,447 - INFO - [LOOP] Memory update: The agent's short term goal was to move towards the nearest locked door and open it using the key it is carrying. After executing the plan, the agent's position is [2, 3], while the nearest door is at either [0, 2] or [1, 2] or [1, 3]. The plan only contained one action, which moved the agent one step, but it did not reach the door nor did it open it. Plan generation can be improved by ensuring that the agent moves towards the door until it reaches it, and then performs an action to open the door. The generated plan should contain actions that would result in the agent's position being the same as the door's coordinates, and the door should be removed from the belief set to indicate that it was opened.
+2024-10-23 20:33:30,448 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-23 20:33:30,466 - INFO - [LOOP] Intention evaluation or intention run failed 3 times, generating new desire and invalidating called intentions: [1, 2, 3, 4]
+2024-10-23 20:33:49,240 - DEBUG - [LOOP] Stopped loop thread

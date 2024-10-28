@@ -1,0 +1,43 @@
+
+Desire 1: The agent's long term goal is to strategically plan and optimize its path in order to deliver as many parcels as possible while maximizing the total score.
+    Intention ID: [7]
+    Executable: True
+    Description: The short term goal is for the agent to move towards the parcel spawn location, pick up a parcel, and then move towards the delivery cell to deliver the parcel.
+                def function_7():
+                    global belief_set
+                    spawn_location = [cell for cell in belief_set['map']['grid'] if cell[
+                        'cell_type'] == 'parcels_spawn'][0]['cell_coordinates']
+                    delivery_location = [cell for cell in belief_set['map']['grid'] if cell
+                        ['cell_type'] == 'delivery_cell'][0]['cell_coordinates']
+                    while belief_set['agent']['coordinates'] != spawn_location:
+                        if belief_set['agent']['coordinates'][0] < spawn_location[0]:
+                            function_2()
+                        elif belief_set['agent']['coordinates'][0] > spawn_location[0]:
+                            function_1()
+                        elif belief_set['agent']['coordinates'][1] < spawn_location[1]:
+                            function_4()
+                        elif belief_set['agent']['coordinates'][1] > spawn_location[1]:
+                            function_3()
+                    function_5()
+                    while belief_set['agent']['coordinates'] != delivery_location:
+                        if belief_set['agent']['coordinates'][0] < delivery_location[0]:
+                            function_2()
+                        elif belief_set['agent']['coordinates'][0] > delivery_location[0]:
+                            function_1()
+                        elif belief_set['agent']['coordinates'][1] < delivery_location[1]:
+                            function_4()
+                        elif belief_set['agent']['coordinates'][1] > delivery_location[1]:
+                            function_3()
+                    function_6()
+                
+Executable: True
+Trigger function:
+def function_dtf_1(belief_set):
+    if 'parcels' in belief_set and belief_set['parcels'
+        ] and 'agent' in belief_set and belief_set['agent']['score'] < sum(
+        parcel['score'] for parcel in belief_set['parcels'].values()):
+        return True
+    return False
+
+
+

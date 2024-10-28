@@ -1,0 +1,277 @@
+2024-10-23 18:06:24,456 - DEBUG - Server started
+2024-10-23 18:06:25,118 - INFO - Agent connected with ID 1 and address ('127.0.0.1', 8081)
+2024-10-23 18:06:25,118 - INFO - Sent event to agent (ID:1): {"event_type": "object added", "object_type": "map", "object": {"width": 4, "height": 4, "grid": [{"cell_coordinates": [0, 0], "cell_type": "parcels_spawn"}, {"cell_coordinates": [0, 1], "cell_type": "walkable"}, {"cell_coordinates": [0, 2], "cell_type": "walkable"}, {"cell_coordinates": [0, 3], "cell_type": "walkable"}, {"cell_coordinates": [1, 0], "cell_type": "walkable"}, {"cell_coordinates": [1, 1], "cell_type": "walkable"}, {"cell_coordinates": [1, 2], "cell_type": "walkable"}, {"cell_coordinates": [1, 3], "cell_type": "delivery_cell"}, {"cell_coordinates": [2, 0], "cell_type": "non_walkable"}, {"cell_coordinates": [2, 1], "cell_type": "non_walkable"}, {"cell_coordinates": [2, 2], "cell_type": "non_walkable"}, {"cell_coordinates": [2, 3], "cell_type": "non_walkable"}, {"cell_coordinates": [3, 0], "cell_type": "non_walkable"}, {"cell_coordinates": [3, 1], "cell_type": "non_walkable"}, {"cell_coordinates": [3, 2], "cell_type": "non_walkable"}, {"cell_coordinates": [3, 3], "cell_type": "non_walkable"}]}}
+2024-10-23 18:06:25,122 - INFO - Sent event to agent (ID:1): {"event_type": "object added", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-10-23 18:06:25,122 - INFO - Sent event to agent (ID:1): {"event_type": "object added", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-23 18:06:25,122 - INFO - Sent event to agent (ID:1): {"event_type": "object added", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": null}}
+2024-10-23 18:06:25,122 - INFO - Sent event to agent (ID:1): {"event_type": "object added", "object_type": "door", "object": {"id": 1, "coordinates": [1, 2]}}
+2024-10-23 18:06:25,122 - INFO - Sent event to agent (ID:1): {"event_type": "object added", "object_type": "door", "object": {"id": 2, "coordinates": [0, 2]}}
+2024-10-23 18:07:12,179 - INFO - Agent 1 moved up: True
+2024-10-23 18:07:12,180 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-23 18:07:30,250 - INFO - Agent 1 moved left: True
+2024-10-23 18:07:30,251 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-23 18:07:30,828 - INFO - Agent 1 picked up: True
+2024-10-23 18:07:30,829 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:07:30,829 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-23 18:07:31,391 - INFO - Agent 1 moved down: True
+2024-10-23 18:07:31,391 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:07:31,391 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-23 18:07:31,951 - INFO - Agent 1 moved right: True
+2024-10-23 18:07:31,951 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:07:31,951 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-23 18:07:32,546 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:33,155 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:33,799 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:34,373 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:35,019 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:35,648 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:36,308 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:36,868 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:37,480 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:38,058 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:38,565 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:39,174 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:39,648 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:40,189 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:40,731 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:41,325 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:41,883 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:42,476 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:42,985 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:43,594 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:44,104 - INFO - Agent 1 moved right: False
+2024-10-23 18:07:44,648 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:03,225 - INFO - Agent 1 picked up: False
+2024-10-23 18:08:03,816 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:04,375 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:04,987 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:05,547 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:06,177 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:06,700 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:07,240 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:07,800 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:08,344 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:08,904 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:09,465 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:10,025 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:10,534 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:11,077 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:11,670 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:12,245 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:12,857 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:13,401 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:14,010 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:14,537 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:15,046 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:15,607 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:16,219 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:16,814 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:17,475 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:40,990 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:41,599 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:42,209 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:42,737 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:43,312 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:43,856 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:44,416 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:44,960 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:45,501 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:46,113 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:46,693 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:47,221 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:47,763 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:48,322 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:48,932 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:49,440 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:50,066 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:50,644 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:51,156 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:51,698 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:52,239 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:52,865 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:53,512 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:54,069 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:54,596 - INFO - Agent 1 moved right: False
+2024-10-23 18:08:55,276 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:14,681 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:15,207 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:15,852 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:16,431 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:16,973 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:17,533 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:18,075 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:18,652 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:19,262 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:19,838 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:20,431 - INFO - Agent 1 put down: True
+2024-10-23 18:09:20,432 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 1], "score": 20, "carried_by_id": null}}
+2024-10-23 18:09:20,432 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-23 18:09:36,199 - INFO - Agent 1 picked up: True
+2024-10-23 18:09:36,200 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:09:36,200 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-23 18:09:36,793 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:37,404 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:37,982 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:38,493 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:38,999 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:39,577 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:40,137 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:40,678 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:41,221 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:41,782 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:42,377 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:42,903 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:43,499 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:44,091 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:44,634 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:45,227 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:45,905 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:46,415 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:46,973 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:47,533 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:48,041 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:48,587 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:49,145 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:49,756 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:50,299 - INFO - Agent 1 moved right: False
+2024-10-23 18:09:50,894 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:09,505 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:09,980 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:10,525 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:11,103 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:11,712 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:12,288 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:12,829 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:13,322 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:13,901 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:14,408 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:14,970 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:15,582 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:16,108 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:16,686 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:17,265 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:17,823 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:18,348 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:18,891 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:19,485 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:20,027 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:20,620 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:21,199 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:21,738 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:22,399 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:22,927 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:23,505 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:24,033 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:40,209 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:40,768 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:41,325 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:41,884 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:42,494 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:42,984 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:43,530 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:44,106 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:44,729 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:45,303 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:45,865 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:46,408 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:47,017 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:47,609 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:48,169 - INFO - Agent 1 moved right: False
+2024-10-23 18:10:48,695 - INFO - Agent 1 moved right: False
+2024-10-23 18:11:17,825 - INFO - Agent 1 moved right: False
+2024-10-23 18:11:43,873 - INFO - Agent 1 moved left: True
+2024-10-23 18:11:43,873 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:11:43,873 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-23 18:11:44,416 - INFO - Agent 1 picked up: True
+2024-10-23 18:11:44,417 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [1], "has_key": true, "score": 0}}
+2024-10-23 18:11:44,417 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-10-23 18:11:44,943 - INFO - Agent 1 moved right: True
+2024-10-23 18:11:44,943 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:11:44,943 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [1], "has_key": true, "score": 0}}
+2024-10-23 18:11:44,943 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-10-23 18:11:45,469 - INFO - Agent 1 moved right: True
+2024-10-23 18:11:45,469 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:11:45,469 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [1], "has_key": true, "score": 0}}
+2024-10-23 18:11:45,469 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-10-23 18:12:01,784 - INFO - Agent 1 moved right: True
+2024-10-23 18:12:01,785 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:12:01,785 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [1], "has_key": true, "score": 0}}
+2024-10-23 18:12:01,785 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-10-23 18:12:02,395 - INFO - Agent 1 put down: True
+2024-10-23 18:12:02,395 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": false, "score": 20}}
+2024-10-23 18:12:02,395 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": null}}
+2024-10-23 18:12:02,395 - INFO - Sent event to agent (ID:1): {"event_type": "object removed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-10-23 18:12:18,671 - INFO - Agent 1 picked up: True
+2024-10-23 18:12:18,671 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:12:18,671 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-10-23 18:12:19,263 - INFO - Agent 1 moved left: True
+2024-10-23 18:12:19,263 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:12:19,263 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-10-23 18:12:19,807 - INFO - Agent 1 moved left: True
+2024-10-23 18:12:19,807 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:12:19,807 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-10-23 18:12:20,298 - INFO - Agent 1 moved left: True
+2024-10-23 18:12:20,299 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:12:20,299 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-10-23 18:12:20,858 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:21,487 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:22,080 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:22,588 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:23,281 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:23,856 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:24,552 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:25,026 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:25,569 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:26,127 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:26,687 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:27,264 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:27,856 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:28,500 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:29,090 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:29,731 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:30,242 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:30,749 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:31,274 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:31,832 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:32,338 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:32,864 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:33,440 - INFO - Agent 1 moved left: False
+2024-10-23 18:12:48,159 - INFO - Agent 1 moved right: True
+2024-10-23 18:12:48,160 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:12:48,160 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-10-23 18:12:48,666 - INFO - Agent 1 moved right: True
+2024-10-23 18:12:48,666 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:12:48,666 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-10-23 18:12:49,259 - INFO - Agent 1 moved right: True
+2024-10-23 18:12:49,259 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:12:49,259 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-10-23 18:13:14,756 - INFO - Agent 1 moved up: True
+2024-10-23 18:13:14,756 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 3], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:13:14,757 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 3], "carried_by_id": 1}}
+2024-10-23 18:13:15,350 - INFO - Agent 1 moved left: True
+2024-10-23 18:13:15,350 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 2], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:13:15,350 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 2], "carried_by_id": 1}}
+2024-10-23 18:13:15,858 - INFO - Agent 1 moved left: True
+2024-10-23 18:13:15,859 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:13:15,859 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": 1}}
+2024-10-23 18:13:16,399 - INFO - Agent 1 moved left: True
+2024-10-23 18:13:16,400 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:13:16,400 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 0], "carried_by_id": 1}}
+2024-10-23 18:13:17,007 - INFO - Agent 1 picked up: False
+2024-10-23 18:13:17,620 - INFO - Agent 1 moved down: True
+2024-10-23 18:13:17,620 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:13:17,620 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-10-23 18:13:18,161 - INFO - Agent 1 moved right: True
+2024-10-23 18:13:18,161 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:13:18,162 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-10-23 18:13:18,719 - INFO - Agent 1 moved right: True
+2024-10-23 18:13:18,720 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:13:18,720 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-10-23 18:13:19,263 - INFO - Agent 1 moved right: True
+2024-10-23 18:13:19,263 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 20}}
+2024-10-23 18:13:19,263 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-10-23 18:13:19,939 - INFO - Agent 1 put down: True
+2024-10-23 18:13:19,939 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": false, "score": 20}}
+2024-10-23 18:13:19,939 - INFO - Sent event to agent (ID:1): {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": null}}
+2024-10-23 18:13:38,084 - DEBUG - Replay file written
+2024-10-23 18:13:38,084 - DEBUG - Server terminated

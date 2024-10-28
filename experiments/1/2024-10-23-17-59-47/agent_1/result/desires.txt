@@ -1,0 +1,56 @@
+
+Desire 1: The long term goal of the agent is to map the most efficient route from the parcel spawn location to the delivery cell, avoiding all non-walkable areas, and maximizing the score by delivering as many parcels as possible.
+    Intention ID: [7]
+    Executable: True
+    Description: The short term goal is to navigate the agent towards the parcel spawn location and pick up a parcel.
+                def function_7():
+                    global belief_set
+                    parcel_spawn = [cell for cell in belief_set['map']['grid'] if cell[
+                        'cell_type'] == 'parcels_spawn'][0]['cell_coordinates']
+                    agent_pos = belief_set['agent']['coordinates']
+                    while agent_pos[0] > parcel_spawn[0]:
+                        function_1()
+                        agent_pos[0] -= 1
+                    while agent_pos[0] < parcel_spawn[0]:
+                        function_2()
+                        agent_pos[0] += 1
+                    while agent_pos[1] > parcel_spawn[1]:
+                        function_3()
+                        agent_pos[1] -= 1
+                    while agent_pos[1] < parcel_spawn[1]:
+                        function_4()
+                        agent_pos[1] += 1
+                    function_5()
+                
+    Intention ID: [8]
+    Executable: True
+    Description: The short term goal is to navigate the agent towards the delivery cell and deliver the parcels it's carrying.
+                def function_8():
+                    global belief_set
+                    delivery_cell_coordinates = [cell['cell_coordinates'] for cell in
+                        belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]
+                    while belief_set['agent']['coordinates'] != delivery_cell_coordinates:
+                        if belief_set['agent']['coordinates'][0] < delivery_cell_coordinates[0
+                            ]:
+                            function_2()
+                        elif belief_set['agent']['coordinates'][0] > delivery_cell_coordinates[
+                            0]:
+                            function_1()
+                        elif belief_set['agent']['coordinates'][1] < delivery_cell_coordinates[
+                            1]:
+                            function_4()
+                        elif belief_set['agent']['coordinates'][1] > delivery_cell_coordinates[
+                            1]:
+                            function_3()
+                    function_6()
+                
+Executable: True
+Trigger function:
+def function_dtf_1(belief_set):
+    if 'parcels' in belief_set and belief_set['parcels'] != {}:
+        return True
+    else:
+        return False
+
+
+

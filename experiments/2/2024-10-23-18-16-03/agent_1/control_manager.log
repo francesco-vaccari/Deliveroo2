@@ -1,0 +1,447 @@
+2024-10-23 18:16:04,903 - INFO - Loading actions from agent_dir/actions.json ...
+2024-10-23 18:16:04,953 - INFO - Actions loaded: 
+[1]
+Executable: True
+Description: This is a wrapper function for action_1. The agent moves by 1 cell, decreasing its first coordinate by 1.
+        def function_1():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_1\n')
+                f.close()
+            wait()
+        
+        
+[2]
+Executable: True
+Description: This is a wrapper function for action_2. The agent moves by 1 cell, increasing its first coordinate by 1.
+        def function_2():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_2\n')
+                f.close()
+            wait()
+        
+        
+[3]
+Executable: True
+Description: This is a wrapper function for action_3. The agent moves by 1 cell, decreasing its second coordinate by 1.
+        def function_3():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_3\n')
+                f.close()
+            wait()
+        
+        
+[4]
+Executable: True
+Description: This is a wrapper function for action_4. The agent moves by 1 cell, increasing its second coordinate by 1.
+        def function_4():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_4\n')
+                f.close()
+            wait()
+        
+        
+[5]
+Executable: True
+Description: This is a wrapper function for action_5. The agent picks up the objects on the ground. The agent has to be in the same cell of the objects to pick them up.
+        def function_5():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_5\n')
+                f.close()
+            wait()
+        
+        
+[6]
+Executable: True
+Description: This is a wrapper function for action_6. The agent puts down all the objects it is carrying on the ground. The agent will put down the objects in the cell it is currently in.
+        def function_6():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_6\n')
+                f.close()
+            wait()
+        
+        
+
+2024-10-23 18:16:45,091 - INFO - Desire added: 1. Desires:
+Desire 1: The agent's long term goal is to collect all keys in the environment, use them to open any doors encountered and deliver all parcels to the designated delivery cells, while avoiding non-walkable cells.
+Executable: False
+Trigger function:
+None
+
+
+
+2024-10-23 18:16:57,236 - INFO - Testing intention 
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    keys = belief_set['keys']
+    doors = belief_set['doors']
+    if not agent['has_key']:
+        nearest_key = min(keys.values(), key=lambda k: abs(k['coordinates'][0] - agent['coordinates'][0]) + abs(k['coordinates'][1] - agent['coordinates'][1]))
+        if agent['coordinates'][0] > nearest_key['coordinates'][0]:
+            function_1()
+        elif agent['coordinates'][0] < nearest_key['coordinates'][0]:
+            function_2()
+        elif agent['coordinates'][1] > nearest_key['coordinates'][1]:
+            function_3()
+        elif agent['coordinates'][1] < nearest_key['coordinates'][1]:
+            function_4()
+        function_5()
+    nearest_door = min(doors.values(), key=lambda d: abs(d['coordinates'][0] - agent['coordinates'][0]) + abs(d['coordinates'][1] - agent['coordinates'][1]))
+    if agent['coordinates'][0] > nearest_door['coordinates'][0]:
+        function_1()
+    elif agent['coordinates'][0] < nearest_door['coordinates'][0]:
+        function_2()
+    elif agent['coordinates'][1] > nearest_door['coordinates'][1]:
+        function_3()
+    elif agent['coordinates'][1] < nearest_door['coordinates'][1]:
+        function_4()
+2024-10-23 18:16:57,236 - INFO - The intention is valid.
+2024-10-23 18:16:57,269 - INFO - Intention added to desire 1
+2024-10-23 18:16:57,287 - INFO - Running intention 7 ...
+2024-10-23 18:16:57,486 - INFO - Belief set thread started ...
+2024-10-23 18:16:57,505 - INFO - Plan thread started ...
+2024-10-23 18:16:57,511 - INFO - Started subprocess...
+2024-10-23 18:16:57,517 - INFO - Belief set before intention 7 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'has_key': False, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [1, 0], 'carried_by_id': None}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:16:57,872 - INFO - Executing action action_3 ...
+2024-10-23 18:16:58,110 - INFO - Action action_3 executed. Events received: [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [], 'has_key': False, 'score': 0}}]
+2024-10-23 18:16:58,463 - INFO - Executing action action_5 ...
+2024-10-23 18:16:58,737 - INFO - Action action_5 executed. Events received: [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 0], 'carried_by_id': 1}}]
+2024-10-23 18:16:59,061 - INFO - Executing action action_4 ...
+2024-10-23 18:16:59,272 - INFO - Action action_4 executed. Events received: [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 1], 'carried_by_id': 1}}]
+2024-10-23 18:16:59,584 - INFO - Belief set thread terminated.
+2024-10-23 18:16:59,640 - INFO - Plan thread terminated.
+2024-10-23 18:16:59,640 - INFO - Intention 7 execution has finished. Threads and subprocess terminated. Plan: ['action_3', 'action_5', 'action_4']. Events: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [], 'has_key': False, 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 0], 'carried_by_id': 1}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 1], 'carried_by_id': 1}}]]
+2024-10-23 18:16:59,640 - INFO - Belief set after intention 7 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [1, 1], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:17:04,457 - INFO - Invalidating intention 7 ...
+2024-10-23 18:17:10,127 - INFO - Testing intention 
+def function():
+	global belief_set
+	parcel_coordinates = belief_set['parcels'][1]['coordinates']
+	agent_coordinates = belief_set['agent']['coordinates']
+	while parcel_coordinates != agent_coordinates:
+		if parcel_coordinates[0] < agent_coordinates[0]:
+			function_1()
+		elif parcel_coordinates[0] > agent_coordinates[0]:
+			function_2()
+		if parcel_coordinates[1] < agent_coordinates[1]:
+			function_3()
+		elif parcel_coordinates[1] > agent_coordinates[1]:
+			function_4()
+	function_5()
+2024-10-23 18:17:10,127 - INFO - The intention is valid.
+2024-10-23 18:17:10,134 - INFO - Intention added to desire 1
+2024-10-23 18:17:10,146 - INFO - Running intention 8 ...
+2024-10-23 18:17:10,233 - INFO - Belief set thread started ...
+2024-10-23 18:17:10,245 - INFO - Plan thread started ...
+2024-10-23 18:17:10,258 - INFO - Started subprocess...
+2024-10-23 18:17:10,283 - INFO - Belief set before intention 8 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [1, 1], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:17:10,545 - INFO - Executing action action_1 ...
+2024-10-23 18:17:10,789 - INFO - Action action_1 executed. Events received: [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [0, 1], 'carried_by_id': 1}}]
+2024-10-23 18:17:11,154 - INFO - Executing action action_3 ...
+2024-10-23 18:17:11,379 - INFO - Action action_3 executed. Events received: [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [0, 0], 'carried_by_id': 1}}]
+2024-10-23 18:17:11,777 - INFO - Executing action action_1 ...
+2024-10-23 18:17:12,039 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:12,438 - INFO - Executing action action_3 ...
+2024-10-23 18:17:12,689 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:13,052 - INFO - Executing action action_1 ...
+2024-10-23 18:17:13,269 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:13,657 - INFO - Executing action action_3 ...
+2024-10-23 18:17:13,930 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:14,264 - INFO - Executing action action_1 ...
+2024-10-23 18:17:14,482 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:14,759 - INFO - Executing action action_3 ...
+2024-10-23 18:17:14,975 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:15,368 - INFO - Executing action action_1 ...
+2024-10-23 18:17:15,603 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:15,915 - INFO - Executing action action_3 ...
+2024-10-23 18:17:16,126 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:16,455 - INFO - Executing action action_1 ...
+2024-10-23 18:17:16,697 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:17,062 - INFO - Executing action action_3 ...
+2024-10-23 18:17:17,279 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:17,704 - INFO - Executing action action_1 ...
+2024-10-23 18:17:17,930 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:18,309 - INFO - Executing action action_3 ...
+2024-10-23 18:17:18,535 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:18,841 - INFO - Executing action action_1 ...
+2024-10-23 18:17:19,083 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:19,383 - INFO - Executing action action_3 ...
+2024-10-23 18:17:19,594 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:19,980 - INFO - Executing action action_1 ...
+2024-10-23 18:17:20,216 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:20,509 - INFO - Executing action action_3 ...
+2024-10-23 18:17:20,794 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:21,124 - INFO - Executing action action_1 ...
+2024-10-23 18:17:21,361 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:21,698 - INFO - Executing action action_3 ...
+2024-10-23 18:17:21,936 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:22,238 - INFO - Executing action action_1 ...
+2024-10-23 18:17:22,499 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:22,821 - INFO - Executing action action_3 ...
+2024-10-23 18:17:23,084 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:23,369 - INFO - Executing action action_1 ...
+2024-10-23 18:17:23,632 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:23,949 - INFO - Executing action action_3 ...
+2024-10-23 18:17:24,182 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:24,509 - INFO - Executing action action_1 ...
+2024-10-23 18:17:24,732 - INFO - Action action_1 executed. Events received: []
+2024-10-23 18:17:25,131 - INFO - Executing action action_3 ...
+2024-10-23 18:17:25,342 - ERROR - Error during intention 8 execution. Intention 8 will be invalidated. Error: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 15 seconds
+2024-10-23 18:17:25,354 - INFO - Action action_3 executed. Events received: []
+2024-10-23 18:17:25,379 - INFO - Belief set thread terminated.
+2024-10-23 18:17:25,667 - INFO - Plan thread terminated.
+2024-10-23 18:17:25,692 - INFO - Intention 8 execution has finished. Threads and subprocess terminated. Plan: ['action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3', 'action_1', 'action_3']. Events: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [0, 1], 'carried_by_id': 1}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [0, 0], 'carried_by_id': 1}}], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
+2024-10-23 18:17:25,705 - INFO - Belief set after intention 8 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [0, 0], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:17:34,317 - INFO - Invalidating intention 8 ...
+2024-10-23 18:17:45,151 - INFO - Testing intention 
+def function():
+	global belief_set
+	agent_coordinates = belief_set['agent']['coordinates']
+	parcels = belief_set['parcels']
+	closest_parcel_id = min(parcels, key=lambda x: abs(parcels[x]['coordinates'][0] - agent_coordinates[0]) + abs(parcels[x]['coordinates'][1] - agent_coordinates[1]))
+	closest_parcel = parcels[closest_parcel_id]
+	while agent_coordinates != closest_parcel['coordinates']:
+		if agent_coordinates[0] < closest_parcel['coordinates'][0]:
+			function_2()
+			agent_coordinates[0] += 1
+		elif agent_coordinates[0] > closest_parcel['coordinates'][0]:
+			function_1()
+			agent_coordinates[0] -= 1
+		if agent_coordinates[1] < closest_parcel['coordinates'][1]:
+			function_4()
+			agent_coordinates[1] += 1
+		elif agent_coordinates[1] > closest_parcel['coordinates'][1]:
+			function_3()
+			agent_coordinates[1] -= 1
+	function_5()
+2024-10-23 18:17:45,151 - INFO - The intention is valid.
+2024-10-23 18:17:45,164 - INFO - Intention added to desire 1
+2024-10-23 18:17:45,165 - INFO - Running intention 9 ...
+2024-10-23 18:17:45,362 - INFO - Belief set thread started ...
+2024-10-23 18:17:45,388 - INFO - Plan thread started ...
+2024-10-23 18:17:45,413 - INFO - Started subprocess...
+2024-10-23 18:17:45,413 - INFO - Belief set before intention 9 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [0, 0], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:17:45,692 - INFO - Executing action action_5 ...
+2024-10-23 18:17:45,900 - INFO - Action action_5 executed. Events received: [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}]
+2024-10-23 18:17:46,286 - INFO - Belief set thread terminated.
+2024-10-23 18:17:46,311 - INFO - Plan thread terminated.
+2024-10-23 18:17:46,324 - INFO - Intention 9 execution has finished. Threads and subprocess terminated. Plan: ['action_5']. Events: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}]]
+2024-10-23 18:17:46,324 - INFO - Belief set after intention 9 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [0, 0], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:17:50,626 - INFO - Invalidating intention 9 ...
+2024-10-23 18:17:50,626 - INFO - Invalidating intention 1 ...
+2024-10-23 18:17:50,626 - INFO - Intention 1 is a base action. It cannot be invalidated.
+2024-10-23 18:17:50,626 - INFO - Invalidating intention 2 ...
+2024-10-23 18:17:50,626 - INFO - Intention 2 is a base action. It cannot be invalidated.
+2024-10-23 18:17:50,626 - INFO - Invalidating intention 3 ...
+2024-10-23 18:17:50,626 - INFO - Intention 3 is a base action. It cannot be invalidated.
+2024-10-23 18:17:50,632 - INFO - Invalidating intention 4 ...
+2024-10-23 18:17:50,632 - INFO - Intention 4 is a base action. It cannot be invalidated.
+2024-10-23 18:17:50,638 - INFO - Invalidating intention 5 ...
+2024-10-23 18:17:50,675 - INFO - Intention 5 is a base action. It cannot be invalidated.
+2024-10-23 18:18:09,950 - INFO - Desire added: 2. Desires:
+Desire 1: The agent's long term goal is to collect all keys in the environment, use them to open any doors encountered and deliver all parcels to the designated delivery cells, while avoiding non-walkable cells.
+    Intention ID: [7]
+    Executable: False
+    Description: The short term goal is to move the agent to the nearest key if it doesn't have a key, pick up the key, and then move towards the nearest door to open it.
+                def function_7():
+                    global belief_set
+                    agent = belief_set['agent']
+                    keys = belief_set['keys']
+                    doors = belief_set['doors']
+                    if not agent['has_key']:
+                        nearest_key = min(keys.values(), key=lambda k: abs(k['coordinates']
+                            [0] - agent['coordinates'][0]) + abs(k['coordinates'][1] -
+                            agent['coordinates'][1]))
+                        if agent['coordinates'][0] > nearest_key['coordinates'][0]:
+                            function_1()
+                        elif agent['coordinates'][0] < nearest_key['coordinates'][0]:
+                            function_2()
+                        elif agent['coordinates'][1] > nearest_key['coordinates'][1]:
+                            function_3()
+                        elif agent['coordinates'][1] < nearest_key['coordinates'][1]:
+                            function_4()
+                        function_5()
+                    nearest_door = min(doors.values(), key=lambda d: abs(d['coordinates'][0
+                        ] - agent['coordinates'][0]) + abs(d['coordinates'][1] - agent[
+                        'coordinates'][1]))
+                    if agent['coordinates'][0] > nearest_door['coordinates'][0]:
+                        function_1()
+                    elif agent['coordinates'][0] < nearest_door['coordinates'][0]:
+                        function_2()
+                    elif agent['coordinates'][1] > nearest_door['coordinates'][1]:
+                        function_3()
+                    elif agent['coordinates'][1] < nearest_door['coordinates'][1]:
+                        function_4()
+                
+    Intention ID: [8]
+    Executable: False
+    Description: The agent's short term goal is to move towards and pick up the parcel in its vicinity.
+                def function_8():
+                    global belief_set
+                    parcel_coordinates = belief_set['parcels'][1]['coordinates']
+                    agent_coordinates = belief_set['agent']['coordinates']
+                    while parcel_coordinates != agent_coordinates:
+                        if parcel_coordinates[0] < agent_coordinates[0]:
+                            function_1()
+                        elif parcel_coordinates[0] > agent_coordinates[0]:
+                            function_2()
+                        if parcel_coordinates[1] < agent_coordinates[1]:
+                            function_3()
+                        elif parcel_coordinates[1] > agent_coordinates[1]:
+                            function_4()
+                    function_5()
+                
+    Intention ID: [9]
+    Executable: False
+    Description: The agent's short term goal is to move towards and pick up the nearest parcel, whilst avoiding non-walkable cells.
+                def function_9():
+                    global belief_set
+                    agent_coordinates = belief_set['agent']['coordinates']
+                    parcels = belief_set['parcels']
+                    closest_parcel_id = min(parcels, key=lambda x: abs(parcels[x][
+                        'coordinates'][0] - agent_coordinates[0]) + abs(parcels[x][
+                        'coordinates'][1] - agent_coordinates[1]))
+                    closest_parcel = parcels[closest_parcel_id]
+                    while agent_coordinates != closest_parcel['coordinates']:
+                        if agent_coordinates[0] < closest_parcel['coordinates'][0]:
+                            function_2()
+                            agent_coordinates[0] += 1
+                        elif agent_coordinates[0] > closest_parcel['coordinates'][0]:
+                            function_1()
+                            agent_coordinates[0] -= 1
+                        if agent_coordinates[1] < closest_parcel['coordinates'][1]:
+                            function_4()
+                            agent_coordinates[1] += 1
+                        elif agent_coordinates[1] > closest_parcel['coordinates'][1]:
+                            function_3()
+                            agent_coordinates[1] -= 1
+                    function_5()
+                
+Executable: False
+Trigger function:
+None
+
+
+Desire 2: The agent's long term goal is to carry and deliver as many parcels as possible to the delivery cell while managing and using keys to open doors when necessary.
+Executable: False
+Trigger function:
+None
+
+
+
+2024-10-23 18:18:16,403 - INFO - Testing intention 
+def function():
+    global belief_set
+    delivery_cell = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]['cell_coordinates']
+    agent_coordinates = belief_set['agent']['coordinates']
+    if agent_coordinates[0] > delivery_cell[0]:
+        function_1()
+    elif agent_coordinates[0] < delivery_cell[0]:
+        function_2()
+    elif agent_coordinates[1] > delivery_cell[1]:
+        function_3()
+    elif agent_coordinates[1] < delivery_cell[1]:
+        function_4()
+    else:
+        function_6()
+2024-10-23 18:18:16,403 - INFO - The intention is valid.
+2024-10-23 18:18:16,441 - INFO - Intention added to desire 2
+2024-10-23 18:18:16,441 - INFO - Running intention 10 ...
+2024-10-23 18:18:16,566 - INFO - Belief set thread started ...
+2024-10-23 18:18:16,578 - INFO - Plan thread started ...
+2024-10-23 18:18:16,590 - INFO - Started subprocess...
+2024-10-23 18:18:16,658 - INFO - Belief set before intention 10 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [0, 0], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:18:16,935 - INFO - Executing action action_2 ...
+2024-10-23 18:18:17,164 - INFO - Action action_2 executed. Events received: [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 0], 'carried_by_id': 1}}]
+2024-10-23 18:18:17,470 - INFO - Plan thread terminated.
+2024-10-23 18:18:17,489 - INFO - Belief set thread terminated.
+2024-10-23 18:18:17,508 - INFO - Intention 10 execution has finished. Threads and subprocess terminated. Plan: ['action_2']. Events: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 0], 'carried_by_id': 1}}]]
+2024-10-23 18:18:17,533 - INFO - Belief set after intention 10 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [1, 0], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:18:21,922 - INFO - Invalidating intention 10 ...
+2024-10-23 18:18:27,357 - INFO - Testing intention 
+def function():
+    global belief_set
+    delivery_cell = next(cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell')
+    agent = belief_set['agent']
+    if agent['coordinates'][0] < delivery_cell['cell_coordinates'][0]:
+        function_2()
+    elif agent['coordinates'][0] > delivery_cell['cell_coordinates'][0]:
+        function_1()
+    elif agent['coordinates'][1] < delivery_cell['cell_coordinates'][1]:
+        function_4()
+    else:
+        function_3()
+
+2024-10-23 18:18:27,357 - INFO - The intention is valid.
+2024-10-23 18:18:27,364 - INFO - Intention added to desire 2
+2024-10-23 18:18:27,364 - INFO - Running intention 11 ...
+2024-10-23 18:18:27,520 - INFO - Belief set thread started ...
+2024-10-23 18:18:27,539 - INFO - Plan thread started ...
+2024-10-23 18:18:27,551 - INFO - Started subprocess...
+2024-10-23 18:18:27,612 - INFO - Belief set before intention 11 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [1, 0], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:18:27,857 - INFO - Executing action action_4 ...
+2024-10-23 18:18:28,093 - INFO - Action action_4 executed. Events received: [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}]
+2024-10-23 18:18:28,416 - INFO - Belief set thread terminated.
+2024-10-23 18:18:28,416 - INFO - Plan thread terminated.
+2024-10-23 18:18:28,448 - INFO - Intention 11 execution has finished. Threads and subprocess terminated. Plan: ['action_4']. Events: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}]]
+2024-10-23 18:18:28,448 - INFO - Belief set after intention 11 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [1, 0], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:18:31,602 - INFO - Invalidating intention 11 ...
+2024-10-23 18:18:35,641 - INFO - Testing intention 
+def function():
+    global belief_set
+    delivery_cell = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]['cell_coordinates']
+    while belief_set['agent']['coordinates'] != delivery_cell:
+        if belief_set['agent']['coordinates'][1] < delivery_cell[1]:
+            function_4()
+        else:
+            function_3()
+    function_6()
+2024-10-23 18:18:35,641 - INFO - The intention is valid.
+2024-10-23 18:18:35,660 - INFO - Intention added to desire 2
+2024-10-23 18:18:35,660 - INFO - Running intention 12 ...
+2024-10-23 18:18:35,784 - INFO - Belief set thread started ...
+2024-10-23 18:18:35,796 - INFO - Plan thread started ...
+2024-10-23 18:18:35,803 - INFO - Started subprocess...
+2024-10-23 18:18:35,803 - INFO - Belief set before intention 12 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {1: {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, 'agent': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}, 'keys': {1: {'id': 1, 'coordinates': [1, 1], 'carried_by_id': 1}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:18:36,074 - INFO - Executing action action_4 ...
+2024-10-23 18:18:36,295 - INFO - Action action_4 executed. Events received: [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 2], 'carried_by_id': 1}}]
+2024-10-23 18:18:36,674 - INFO - Executing action action_4 ...
+2024-10-23 18:18:36,899 - INFO - Action action_4 executed. Events received: [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 3], 'carried_by_id': 1}}]
+2024-10-23 18:18:37,254 - INFO - Executing action action_6 ...
+2024-10-23 18:18:37,500 - INFO - Action action_6 executed. Events received: [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 3], 'carried_by_id': None}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}]
+2024-10-23 18:18:37,890 - INFO - Belief set thread terminated.
+2024-10-23 18:18:37,921 - INFO - Plan thread terminated.
+2024-10-23 18:18:37,940 - INFO - Intention 12 execution has finished. Threads and subprocess terminated. Plan: ['action_4', 'action_4', 'action_6']. Events: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 2], 'carried_by_id': 1}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 3], 'carried_by_id': 1}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 3], 'carried_by_id': None}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}]]
+2024-10-23 18:18:37,940 - INFO - Belief set after intention 12 execution:
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcels': {}, 'agent': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}, 'keys': {1: {'id': 1, 'coordinates': [1, 3], 'carried_by_id': None}}, 'doors': {1: {'id': 1, 'coordinates': [1, 2]}, 2: {'id': 2, 'coordinates': [0, 2]}}}
+2024-10-23 18:18:50,191 - INFO - Testing trigger function 
+def should_pursue_goal(belief_set):
+    # If there are parcels and the agent is not carrying one, pursue the goal
+    if belief_set['parcels'] and not belief_set['agent']['parcels_carried_ids']:
+        return True
+    # If the agent is carrying a parcel and is not at the delivery cell, pursue the goal
+    if belief_set['agent']['parcels_carried_ids']:
+        delivery_cell = next((cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'), None)
+        if delivery_cell and belief_set['agent']['coordinates'] != delivery_cell['cell_coordinates']:
+            return True
+    # If there are keys and the agent does not have a key, pursue the goal
+    if belief_set['keys'] and not belief_set['agent']['has_key']:
+        return True
+    # If there are doors and the agent has a key, pursue the goal
+    if belief_set['doors'] and belief_set['agent']['has_key']:
+        return True
+    # In all other cases, do not pursue the goal
+    return False
+2024-10-23 18:18:50,192 - INFO - The trigger function is valid.
+2024-10-23 18:18:50,192 - INFO - Trigger function added to desire 2.

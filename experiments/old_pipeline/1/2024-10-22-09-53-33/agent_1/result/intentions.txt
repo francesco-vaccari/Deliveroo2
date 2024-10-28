@@ -1,0 +1,219 @@
+
+[1]
+Executable: True
+Description: This is a wrapper function for action_1. The agent moves by 1 cell, decreasing its first coordinate by 1.
+        def function_1():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_1\n')
+                f.close()
+            wait()
+        
+        
+[2]
+Executable: True
+Description: This is a wrapper function for action_2. The agent moves by 1 cell, increasing its first coordinate by 1.
+        def function_2():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_2\n')
+                f.close()
+            wait()
+        
+        
+[3]
+Executable: True
+Description: This is a wrapper function for action_3. The agent moves by 1 cell, decreasing its second coordinate by 1.
+        def function_3():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_3\n')
+                f.close()
+            wait()
+        
+        
+[4]
+Executable: True
+Description: This is a wrapper function for action_4. The agent moves by 1 cell, increasing its second coordinate by 1.
+        def function_4():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_4\n')
+                f.close()
+            wait()
+        
+        
+[5]
+Executable: True
+Description: This is a wrapper function for action_5. The agent picks up the objects on the ground. The agent has to be in the same cell of the objects to pick them up.
+        def function_5():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_5\n')
+                f.close()
+            wait()
+        
+        
+[6]
+Executable: True
+Description: This is a wrapper function for action_6. The agent puts down all the objects it is carrying on the ground. The agent will put down the objects in the cell it is currently in.
+        def function_6():
+            with open('agent_dir/functions/agent_1/plan.txt', 'a') as f:
+                f.write('action_6\n')
+                f.close()
+            wait()
+        
+        
+[7]
+Executable: False
+Description: The short term goal is to move the agent towards the nearest parcel and pick it up.
+        def function_7():
+            global belief_set
+            agent = belief_set['agent'][1]
+            parcel = belief_set['parcel'][1]
+            while agent['coordinates'] != parcel['coordinates']:
+                if agent['coordinates'][0] > parcel['coordinates'][0]:
+                    function_1()
+                elif agent['coordinates'][0] < parcel['coordinates'][0]:
+                    function_2()
+                if agent['coordinates'][1] > parcel['coordinates'][1]:
+                    function_3()
+                elif agent['coordinates'][1] < parcel['coordinates'][1]:
+                    function_4()
+            function_5()
+        
+[8]
+Executable: False
+Description: The agent's short term goal is to pick up a parcel if it is in the same cell as the parcel, and to move towards the delivery cell if it is carrying a parcel. If the agent is not carrying a parcel, it should move towards the nearest parcel.
+        def function_8():
+            global belief_set
+            agent = belief_set['agent'][1]
+            parcels = belief_set['parcel']
+            map_grid = belief_set['map']['map']['grid']
+            delivery_cell = [cell for cell in map_grid if cell['cell_type'] ==
+                'delivery_cell'][0]['cell_coordinates']
+            if agent['parcels_carried_ids']:
+                if agent['coordinates'] == delivery_cell:
+                    function_6()
+                elif agent['coordinates'][0] > delivery_cell[0]:
+                    function_1()
+                elif agent['coordinates'][0] < delivery_cell[0]:
+                    function_2()
+                elif agent['coordinates'][1] > delivery_cell[1]:
+                    function_3()
+                elif agent['coordinates'][1] < delivery_cell[1]:
+                    function_4()
+            else:
+                for parcel in parcels.values():
+                    if agent['coordinates'] == parcel['coordinates']:
+                        function_5()
+                        break
+                    elif agent['coordinates'][0] > parcel['coordinates'][0]:
+                        function_1()
+                        break
+                    elif agent['coordinates'][0] < parcel['coordinates'][0]:
+                        function_2()
+                        break
+                    elif agent['coordinates'][1] > parcel['coordinates'][1]:
+                        function_3()
+                        break
+                    elif agent['coordinates'][1] < parcel['coordinates'][1]:
+                        function_4()
+                        break
+        
+[9]
+Executable: False
+Description: The agent's short term goal is to move towards the delivery cell in the most efficient path possible.
+        def function_9():
+            global belief_set
+            agent = belief_set['agent'][1]
+            delivery_cell = [cell for cell in belief_set['map']['map']['grid'] if 
+                cell['cell_type'] == 'delivery_cell'][0]['cell_coordinates']
+            if agent['coordinates'][0] < delivery_cell[0]:
+                function_2()
+            elif agent['coordinates'][0] > delivery_cell[0]:
+                function_1()
+            elif agent['coordinates'][1] < delivery_cell[1]:
+                function_4()
+            elif agent['coordinates'][1] > delivery_cell[1]:
+                function_3()
+            else:
+                function_6()
+        
+[10]
+Executable: False
+Description: The short term goal is to move the agent to the delivery cell and drop the parcel that it is carrying
+        def function_10():
+            global belief_set
+            agent = belief_set['agent'][1]
+            parcels = belief_set['parcel']
+            map_grid = belief_set['map']['map']['grid']
+            delivery_cell = next(cell for cell in map_grid if cell['cell_type'] ==
+                'delivery_cell')['cell_coordinates']
+            while agent['coordinates'] != delivery_cell:
+                if agent['coordinates'][0] < delivery_cell[0]:
+                    function_2()
+                elif agent['coordinates'][0] > delivery_cell[0]:
+                    function_1()
+                if agent['coordinates'][1] < delivery_cell[1]:
+                    function_4()
+                elif agent['coordinates'][1] > delivery_cell[1]:
+                    function_3()
+            function_6()
+        
+[11]
+Executable: False
+Description: The agent's short term goal is to navigate towards the nearest parcel, pick it up, and then navigate to the nearest delivery cell to deliver it.
+        def function_11():
+            global belief_set
+            parcel_location = [p['coordinates'] for p in belief_set['parcel'].
+                values() if p['carried_by_id'] is None][0]
+            agent_location = belief_set['agent'][1]['coordinates']
+            while agent_location != parcel_location:
+                if agent_location[0] < parcel_location[0]:
+                    function_2()
+                elif agent_location[0] > parcel_location[0]:
+                    function_1()
+                elif agent_location[1] < parcel_location[1]:
+                    function_4()
+                elif agent_location[1] > parcel_location[1]:
+                    function_3()
+                agent_location = belief_set['agent'][1]['coordinates']
+            function_5()
+            delivery_location = [c['cell_coordinates'] for c in belief_set['map'][
+                'map']['grid'] if c['cell_type'] == 'delivery_cell'][0]
+            while agent_location != delivery_location:
+                if agent_location[0] < delivery_location[0]:
+                    function_2()
+                elif agent_location[0] > delivery_location[0]:
+                    function_1()
+                elif agent_location[1] < delivery_location[1]:
+                    function_4()
+                elif agent_location[1] > delivery_location[1]:
+                    function_3()
+                agent_location = belief_set['agent'][1]['coordinates']
+            function_6()
+        
+[12]
+Executable: True
+Description: The short term goal is to detect if the agent is carrying a parcel and if so, deliver it to the nearest delivery cell.
+        def function_12():
+            global belief_set
+            if len(belief_set['agent'][1]['parcels_carried_ids']) > 0:
+                for cell in belief_set['map']['map']['grid']:
+                    if cell['cell_type'] == 'delivery_cell' and cell['cell_coordinates'
+                        ] == belief_set['agent'][1]['coordinates']:
+                        function_6()
+                        break
+                else:
+                    for cell in belief_set['map']['map']['grid']:
+                        if cell['cell_type'] == 'delivery_cell':
+                            if cell['cell_coordinates'][0] < belief_set['agent'][1][
+                                'coordinates'][0]:
+                                function_1()
+                            elif cell['cell_coordinates'][0] > belief_set['agent'][1][
+                                'coordinates'][0]:
+                                function_2()
+                            elif cell['cell_coordinates'][1] < belief_set['agent'][1][
+                                'coordinates'][1]:
+                                function_3()
+                            elif cell['cell_coordinates'][1] > belief_set['agent'][1][
+                                'coordinates'][1]:
+                                function_4()
+                            break
+        

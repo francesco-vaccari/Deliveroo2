@@ -1,0 +1,302 @@
+2024-10-21 21:20:21,713 - DEBUG - [LOOP] Started loop thread
+2024-10-21 21:20:21,738 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-21 21:20:22,747 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-21 21:20:23,766 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-21 21:20:24,788 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-21 21:20:25,796 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-21 21:20:26,817 - INFO - [LOOP] Belief set is ready, waiting 30 seconds...
+2024-10-21 21:20:27,825 - INFO - [LOOP] Belief set is ready, waiting 29 seconds...
+2024-10-21 21:20:28,848 - INFO - [LOOP] Belief set is ready, waiting 28 seconds...
+2024-10-21 21:20:29,862 - INFO - [LOOP] Belief set is ready, waiting 27 seconds...
+2024-10-21 21:20:30,884 - INFO - [LOOP] Belief set is ready, waiting 26 seconds...
+2024-10-21 21:20:31,900 - INFO - [LOOP] Belief set is ready, waiting 25 seconds...
+2024-10-21 21:20:32,912 - INFO - [LOOP] Belief set is ready, waiting 24 seconds...
+2024-10-21 21:20:33,934 - INFO - [LOOP] Belief set is ready, waiting 23 seconds...
+2024-10-21 21:20:34,952 - INFO - [LOOP] Belief set is ready, waiting 22 seconds...
+2024-10-21 21:20:35,974 - INFO - [LOOP] Belief set is ready, waiting 21 seconds...
+2024-10-21 21:20:36,996 - INFO - [LOOP] Belief set is ready, waiting 20 seconds...
+2024-10-21 21:20:38,019 - INFO - [LOOP] Belief set is ready, waiting 19 seconds...
+2024-10-21 21:20:39,038 - INFO - [LOOP] Belief set is ready, waiting 18 seconds...
+2024-10-21 21:20:40,060 - INFO - [LOOP] Belief set is ready, waiting 17 seconds...
+2024-10-21 21:20:41,082 - INFO - [LOOP] Belief set is ready, waiting 16 seconds...
+2024-10-21 21:20:42,124 - INFO - [LOOP] Belief set is ready, waiting 15 seconds...
+2024-10-21 21:20:43,142 - INFO - [LOOP] Belief set is ready, waiting 14 seconds...
+2024-10-21 21:20:44,164 - INFO - [LOOP] Belief set is ready, waiting 13 seconds...
+2024-10-21 21:20:45,182 - INFO - [LOOP] Belief set is ready, waiting 12 seconds...
+2024-10-21 21:20:46,221 - INFO - [LOOP] Belief set is ready, waiting 11 seconds...
+2024-10-21 21:20:47,235 - INFO - [LOOP] Belief set is ready, waiting 10 seconds...
+2024-10-21 21:20:48,259 - INFO - [LOOP] Belief set is ready, waiting 9 seconds...
+2024-10-21 21:20:49,286 - INFO - [LOOP] Belief set is ready, waiting 8 seconds...
+2024-10-21 21:20:50,301 - INFO - [LOOP] Belief set is ready, waiting 7 seconds...
+2024-10-21 21:20:51,324 - INFO - [LOOP] Belief set is ready, waiting 6 seconds...
+2024-10-21 21:20:52,349 - INFO - [LOOP] Belief set is ready, waiting 5 seconds...
+2024-10-21 21:20:53,365 - INFO - [LOOP] Belief set is ready, waiting 4 seconds...
+2024-10-21 21:20:54,375 - INFO - [LOOP] Belief set is ready, waiting 3 seconds...
+2024-10-21 21:20:55,382 - INFO - [LOOP] Belief set is ready, waiting 2 seconds...
+2024-10-21 21:20:56,407 - INFO - [LOOP] Belief set is ready, waiting 1 seconds...
+2024-10-21 21:20:57,455 - INFO - [LOOP] Generating new desire
+2024-10-21 21:20:59,332 - INFO - [LOOP] Desire generated: The agent's long term goal is to maximize its score by strategically picking up and delivering as many parcels as possible while managing the acquisition and usage of keys to open doors that block the path to delivery cells.
+2024-10-21 21:20:59,333 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:21:07,668 - INFO - [LOOP] Intention generated: The short term goal is to move the agent towards the key, pick it up, and then move towards the door to unlock it.
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    key = belief_set['key'][1]
+    door = belief_set['door'][1]
+    while agent['coordinates'] != key['coordinates']:
+        if agent['coordinates'][0] < key['coordinates'][0]:
+            function_2()
+        elif agent['coordinates'][0] > key['coordinates'][0]:
+            function_1()
+        elif agent['coordinates'][1] < key['coordinates'][1]:
+            function_4()
+        else:
+            function_3()
+    function_5()
+    while agent['coordinates'] != door['coordinates']:
+        if agent['coordinates'][0] < door['coordinates'][0]:
+            function_2()
+        elif agent['coordinates'][0] > door['coordinates'][0]:
+            function_1()
+        elif agent['coordinates'][1] < door['coordinates'][1]:
+            function_4()
+        else:
+            function_3()
+    function_5()
+
+2024-10-21 21:21:38,176 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 30 seconds
+2024-10-21 21:21:38,189 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-21 21:21:38,208 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:21:44,609 - INFO - [LOOP] Intention generated: The short term goal is for the agent to pick up a nearby key and a parcel if they are present in the same cell.
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    parcel = belief_set['parcel']
+    key = belief_set['key']
+    for parcel_id, parcel_info in parcel.items():
+        if parcel_info['coordinates'] == agent['coordinates']:
+            function_5()
+    for key_id, key_info in key.items():
+        if key_info['coordinates'] == agent['coordinates']:
+            function_5()
+2024-10-21 21:21:45,712 - INFO - [LOOP] Plan executed: ['action_5']
+2024-10-21 21:21:45,712 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 0], 'carried_by_id': 1}}]]
+2024-10-21 21:21:45,712 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-21 21:21:49,625 - INFO - [LOOP] Obtained evaluation for intention: False
+2024-10-21 21:21:49,625 - INFO - [LOOP] Obtained memory update: The agent successfully picked up a key but failed to pick up a parcel. To improve plan generation, ensure that the agent's plan includes actions for retrieving both the key and the parcel if they are present in the same cell. Also, remember that actions can fail if their preconditions are not met, so the agent should have a clear understanding of the environment and the state of the objects before performing an action.
+2024-10-21 21:21:49,625 - INFO - [LOOP] Memory update: The agent successfully picked up a key but failed to pick up a parcel. To improve plan generation, ensure that the agent's plan includes actions for retrieving both the key and the parcel if they are present in the same cell. Also, remember that actions can fail if their preconditions are not met, so the agent should have a clear understanding of the environment and the state of the objects before performing an action.
+2024-10-21 21:21:49,644 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-21 21:21:49,663 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:22:06,674 - INFO - [LOOP] Intention generated: The agent's short term goal is to navigate towards the nearest parcel, pick it up, and deliver it to the nearest delivery cell.
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    parcels = belief_set['parcel']
+    delivery_cells = [cell for cell in belief_set['map']['grid'] if 'delivery' in cell['cell_type']]
+    for parcel in parcels.values():
+        if parcel['carried_by_id'] is None and parcel['coordinates'] != agent['coordinates']:
+            if parcel['coordinates'][0] < agent['coordinates'][0]:
+                function_1()
+            elif parcel['coordinates'][0] > agent['coordinates'][0]:
+                function_2()
+            elif parcel['coordinates'][1] < agent['coordinates'][1]:
+                function_3()
+            elif parcel['coordinates'][1] > agent['coordinates'][1]:
+                function_4()
+        elif parcel['carried_by_id'] == agent['id']:
+            nearest_delivery_cell = min(delivery_cells, key=lambda cell: abs(cell['cell_coordinates'][0] - agent['coordinates'][0]) + abs(cell['cell_coordinates'][1] - agent['coordinates'][1]))
+            if nearest_delivery_cell['cell_coordinates'][0] < agent['coordinates'][0]:
+                function_1()
+            elif nearest_delivery_cell['cell_coordinates'][0] > agent['coordinates'][0]:
+                function_2()
+            elif nearest_delivery_cell['cell_coordinates'][1] < agent['coordinates'][1]:
+                function_3()
+            elif nearest_delivery_cell['cell_coordinates'][1] > agent['coordinates'][1]:
+                function_4()
+        function_5() if parcel['coordinates'] == agent['coordinates'] and parcel['carried_by_id'] is None else function_6() if nearest_delivery_cell['cell_coordinates'] == agent['coordinates'] else None
+2024-10-21 21:22:37,000 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 30 seconds
+2024-10-21 21:22:37,012 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-21 21:22:37,025 - INFO - [LOOP] Intention evaluation or intention run failed 3 times, generating new desire and invalidating called intentions: [5]
+2024-10-21 21:22:37,044 - INFO - [LOOP] Generating new desire
+2024-10-21 21:22:39,179 - INFO - [LOOP] Desire generated: The agent's long-term goal is to collect all parcels and deliver them to the correct cells while navigating through the environment, avoiding non-walkable cells and utilizing keys to open doors when necessary.
+2024-10-21 21:22:39,179 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:22:45,921 - INFO - [LOOP] Intention generated: The agent's short-term goal is to pick up a parcel if it is at the same coordinates as the parcel. If not, the agent moves to reach the parcel.
+def function():
+    global belief_set
+    agent_coords = belief_set['agent']['coordinates']
+    parcel_coords = belief_set['parcel'][1]['coordinates']
+    if agent_coords == parcel_coords:
+        function_5()
+    else:
+        if agent_coords[0] < parcel_coords[0]:
+            function_2()
+        elif agent_coords[0] > parcel_coords[0]:
+            function_1()
+        if agent_coords[1] < parcel_coords[1]:
+            function_4()
+        elif agent_coords[1] > parcel_coords[1]:
+            function_3()
+2024-10-21 21:22:47,423 - INFO - [LOOP] Plan executed: ['action_5']
+2024-10-21 21:22:47,423 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}]]
+2024-10-21 21:22:47,423 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-21 21:22:50,571 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-21 21:22:50,584 - INFO - [LOOP] Obtained memory update: The plan generation was effective in achieving the short-term goal of picking up a parcel at the agent's coordinates. It is important to ensure the agent is at the same coordinates as the parcel before attempting to pick it up. This can be guaranteed by including a check in the plan generation process to confirm the agent's coordinates match the parcel's before the pick up action is performed.
+2024-10-21 21:22:50,591 - INFO - [LOOP] Memory update: The plan generation was effective in achieving the short-term goal of picking up a parcel at the agent's coordinates. It is important to ensure the agent is at the same coordinates as the parcel before attempting to pick it up. This can be guaranteed by including a check in the plan generation process to confirm the agent's coordinates match the parcel's before the pick up action is performed.
+2024-10-21 21:22:50,603 - INFO - [LOOP] Intention evaluation positive
+2024-10-21 21:22:50,616 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-21 21:22:51,391 - INFO - [LOOP] Obtained evaluation for desire: False
+2024-10-21 21:22:51,391 - INFO - [LOOP] Desire not yet satisfied
+2024-10-21 21:22:51,391 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:22:58,322 - INFO - [LOOP] Intention generated: The agent's short-term goal is to move towards the delivery cell while carrying the parcel and avoiding non-walkable cells. If a door is on the path, the agent should use the key to open it.
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    grid = belief_set['map']['grid']
+    delivery_cells = [cell for cell in grid if cell['cell_type'] in ['delivery_cell', 'double_delivery_cell']]
+    for cell in delivery_cells:
+        if cell['cell_coordinates'][0] > agent['coordinates'][0]:
+            function_2()
+        elif cell['cell_coordinates'][0] < agent['coordinates'][0]:
+            function_1()
+        elif cell['cell_coordinates'][1] > agent['coordinates'][1]:
+            function_4()
+        elif cell['cell_coordinates'][1] < agent['coordinates'][1]:
+            function_3()
+        else:
+            function_6()
+2024-10-21 21:23:00,012 - INFO - [LOOP] Plan executed: ['action_4', 'action_2']
+2024-10-21 21:23:00,018 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [0, 1], 'carried_by_id': 1}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1], 'has_key': True, 'score': 0}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [1, 1], 'carried_by_id': 1}}]]
+2024-10-21 21:23:00,018 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-21 21:23:05,848 - INFO - [LOOP] Obtained evaluation for intention: False
+2024-10-21 21:23:05,861 - INFO - [LOOP] Obtained memory update: The plan generation was effective in achieving the short-term goal of picking up a parcel at the agent's coordinates. It is important to ensure the agent is at the same coordinates as the parcel before attempting to pick it up. This can be guaranteed by including a check in the plan generation process to confirm the agent's coordinates match the parcel's before the pick up action is performed. However, the agent was not successful in reaching the delivery cell while carrying the parcel. The agent should also avoid non-walkable cells in its movement towards the delivery cell. If there is a door in the path, the agent should use the key to open it. The plan generation process should therefore include actions to navigate around non-walkable cells and to use the key when a door is encountered.
+2024-10-21 21:23:05,861 - INFO - [LOOP] Memory update: The plan generation was effective in achieving the short-term goal of picking up a parcel at the agent's coordinates. It is important to ensure the agent is at the same coordinates as the parcel before attempting to pick it up. This can be guaranteed by including a check in the plan generation process to confirm the agent's coordinates match the parcel's before the pick up action is performed. However, the agent was not successful in reaching the delivery cell while carrying the parcel. The agent should also avoid non-walkable cells in its movement towards the delivery cell. If there is a door in the path, the agent should use the key to open it. The plan generation process should therefore include actions to navigate around non-walkable cells and to use the key when a door is encountered.
+2024-10-21 21:23:05,861 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-21 21:23:05,867 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:23:15,845 - INFO - [LOOP] Intention generated: The agent's short-term goal is to deliver a parcel to the nearest delivery cell, navigating around non-walkable cells and using a key to open doors if necessary.
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    parcels = belief_set['parcel']
+    map_grid = belief_set['map']['grid']
+    delivery_cells = [cell['cell_coordinates'] for cell in map_grid if cell['cell_type'] in ['delivery_cell', 'double_delivery_cell']]
+    min_distance = float('inf')
+    nearest_delivery_cell = None
+    for cell in delivery_cells:
+        distance = abs(agent['coordinates'][0] - cell[0]) + abs(agent['coordinates'][1] - cell[1])
+        if distance < min_distance:
+            min_distance = distance
+            nearest_delivery_cell = cell
+    while agent['coordinates'] != nearest_delivery_cell:
+        if agent['coordinates'][0] < nearest_delivery_cell[0]:
+            function_2()
+        elif agent['coordinates'][0] > nearest_delivery_cell[0]:
+            function_1()
+        if agent['coordinates'][1] < nearest_delivery_cell[1]:
+            function_4()
+        elif agent['coordinates'][1] > nearest_delivery_cell[1]:
+            function_3()
+    function_6()
+2024-10-21 21:23:46,282 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 30 seconds
+2024-10-21 21:23:46,295 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-21 21:23:46,345 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:23:56,377 - INFO - [LOOP] Intention generated: The short-term goal for the agent is to deliver the parcel it is carrying to the right delivery cell, while avoiding non-walkable cells and using keys to open doors when necessary.
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    parcel = belief_set['parcel'][1]
+    if agent['coordinates'] == parcel['coordinates']:
+        function_5()
+    delivery_cells = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] in ['delivery_cell', 'double_delivery_cell']]
+    for cell in delivery_cells:
+        if agent['coordinates'][0] < cell['cell_coordinates'][0]:
+            while agent['coordinates'][0] != cell['cell_coordinates'][0]:
+                function_2()
+        elif agent['coordinates'][0] > cell['cell_coordinates'][0]:
+            while agent['coordinates'][0] != cell['cell_coordinates'][0]:
+                function_1()
+        if agent['coordinates'][1] < cell['cell_coordinates'][1]:
+            while agent['coordinates'][1] != cell['cell_coordinates'][1]:
+                function_4()
+        elif agent['coordinates'][1] > cell['cell_coordinates'][1]:
+            while agent['coordinates'][1] != cell['cell_coordinates'][1]:
+                function_3()
+    function_6()
+
+2024-10-21 21:24:27,065 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 30 seconds
+2024-10-21 21:24:27,084 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-21 21:24:27,084 - INFO - [LOOP] Intention evaluation or intention run failed 3 times, generating new desire and invalidating called intentions: [1, 2, 3, 4, 6]
+2024-10-21 21:24:27,102 - INFO - [LOOP] Generating new desire
+2024-10-21 21:24:29,050 - INFO - [LOOP] Desire generated: The agent's long term goal should be to maximize its score by efficiently picking up parcels from the spawn point and delivering them to the designated delivery cells, while avoiding non-walkable cells and using keys to unlock doors if necessary.
+2024-10-21 21:24:29,051 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:24:44,783 - ERROR - [LOOP] [Q2] Error while making request: Unable to parse JSON, error: Expecting property name enclosed in double quotes: line 1 column 163 (char 162)
+2024-10-21 21:24:54,206 - INFO - [LOOP] Intention generated: The agent's short term goal should be to deliver the parcel in its possession to the nearest delivery cell by navigating through the walkable cells.
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    map_grid = belief_set['map']['grid']
+    delivery_cells = [cell for cell in map_grid if cell['cell_type'] in ['delivery_cell', 'double_delivery_cell']]
+    nearest_delivery_cell = min(delivery_cells, key=lambda cell: abs(cell['cell_coordinates'][0] - agent['coordinates'][0]) + abs(cell['cell_coordinates'][1] - agent['coordinates'][1]))
+    while agent['coordinates'] != nearest_delivery_cell['cell_coordinates']:
+        if agent['coordinates'][0] < nearest_delivery_cell['cell_coordinates'][0]:
+            function_2()
+        elif agent['coordinates'][0] > nearest_delivery_cell['cell_coordinates'][0]:
+            function_1()
+        elif agent['coordinates'][1] < nearest_delivery_cell['cell_coordinates'][1]:
+            function_4()
+        elif agent['coordinates'][1] > nearest_delivery_cell['cell_coordinates'][1]:
+            function_3()
+    function_6()
+2024-10-21 21:24:55,387 - INFO - [LOOP] Plan executed: ['action_6']
+2024-10-21 21:24:55,387 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 40}}, {'event_type': 'object changed', 'object_type': 'key', 'object': {'id': 1, 'coordinates': [0, 3], 'carried_by_id': None}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 3], 'score': 20, 'carried_by_id': 1}}]]
+2024-10-21 21:24:55,387 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-21 21:25:02,498 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-21 21:25:02,505 - INFO - [LOOP] Obtained memory update: Delivering a parcel to a delivery cell leads to an increase in score, and the parcel is removed from the environment. The key carried by the agent is also lost during this action. In order to improve plan generation, ensure the agent has a key before attempting to deliver a parcel. Furthermore, consider the position of the delivery cells and the walkable paths when planning the delivery route.
+2024-10-21 21:25:02,517 - INFO - [LOOP] Memory update: Delivering a parcel to a delivery cell leads to an increase in score, and the parcel is removed from the environment. The key carried by the agent is also lost during this action. In order to improve plan generation, ensure the agent has a key before attempting to deliver a parcel. Furthermore, consider the position of the delivery cells and the walkable paths when planning the delivery route.
+2024-10-21 21:25:02,523 - INFO - [LOOP] Intention evaluation positive
+2024-10-21 21:25:02,523 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-21 21:25:03,552 - INFO - [LOOP] Obtained evaluation for desire: True
+2024-10-21 21:25:03,552 - INFO - [LOOP] Desire evaluation positive
+2024-10-21 21:25:09,699 - INFO - [LOOP] Obtained trigger function for desire: The agent's long term goal should be to maximize its score by efficiently picking up parcels from the spawn point and delivering them to the designated delivery cells, while avoiding non-walkable cells and using keys to unlock doors if necessary.
+def should_pursue_goal(belief_set):
+    # Check if there are still parcels in the environment
+    if 'parcel' in belief_set and belief_set['parcel']:
+        return True
+    # Check if the agent is carrying a parcel
+    if belief_set['agent']['parcels_carried_ids']:
+        return True
+    # Check if the agent has a key
+    if belief_set['agent']['has_key']:
+        return True
+    return False
+2024-10-21 21:25:09,705 - INFO - [LOOP] Desire satisfied
+2024-10-21 21:25:09,731 - INFO - [LOOP] Generating new desire
+2024-10-21 21:25:12,499 - INFO - [LOOP] Desire generated: The agent's long term goal should be to explore the map thoroughly, identify and remember the locations of keys and doors, and use this knowledge to plan the most direct routes for future parcel deliveries.
+2024-10-21 21:25:12,530 - INFO - [LOOP] Generating new intention ...
+2024-10-21 21:25:25,287 - INFO - [LOOP] Intention generated: The agent's short term goal should be to move to the nearest parcel spawn cell, pick up the parcel if present, and then move to the nearest delivery cell to deliver the parcel.
+def function():
+    global belief_set
+    spawn_cell_coordinates = next((cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'parcels_spawn'), None)
+    delivery_cell_coordinates = next((cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'), None)
+    while belief_set['agent']['coordinates'] != spawn_cell_coordinates:
+        if belief_set['agent']['coordinates'][0] < spawn_cell_coordinates[0]:
+            function_2()
+        elif belief_set['agent']['coordinates'][0] > spawn_cell_coordinates[0]:
+            function_1()
+        elif belief_set['agent']['coordinates'][1] < spawn_cell_coordinates[1]:
+            function_4()
+        else:
+            function_3()
+    function_5()
+    while belief_set['agent']['coordinates'] != delivery_cell_coordinates:
+        if belief_set['agent']['coordinates'][0] < delivery_cell_coordinates[0]:
+            function_2()
+        elif belief_set['agent']['coordinates'][0] > delivery_cell_coordinates[0]:
+            function_1()
+        elif belief_set['agent']['coordinates'][1] < delivery_cell_coordinates[1]:
+            function_4()
+        else:
+            function_3()
+    function_6()
+2024-10-21 21:25:55,698 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 30 seconds
+2024-10-21 21:25:55,699 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-21 21:25:55,699 - DEBUG - [LOOP] Stopped loop thread

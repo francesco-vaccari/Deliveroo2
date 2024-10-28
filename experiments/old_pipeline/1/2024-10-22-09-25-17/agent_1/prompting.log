@@ -1,0 +1,468 @@
+2024-10-22 09:25:24,686 - INFO - 
+[PERCEPTION Q1]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: Write a function that takes as input an event and the current belief set, and returns the updated belief set that incorporates the information from the event.
+
+The input event is structured like the following examples:
+
+Example 1:
+{'event_type': 'object added', 'object_type': 'map', 'object': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}}
+
+
+
+
+The input event describes a change in the state of an object in the environment. The field 'object_type' specifies the type of the object. The function you provide will only be used to process events for the object 'map'. Other functions will be used to process events for other object types. Each function updates the belief set indipedently from the others.
+
+The input event has the field 'event_type' that specifies the type of event. The field 'event_type' can be one of the following:
+- 'object added' meaning that the object didn't exist before and now it does;
+- 'object changed' meaning that the object already existed before and now at least one of its properties or attributes has changed;
+- 'object removed' meaning that the object existed before and now it doesn't.
+
+
+The belief set is a python dictionary. Update it with the information from the event. The current belief set is structured like this:
+
+{}
+
+
+The belief set should be structured in a way that makes it easy to use later. Multiple objects in the environment might belong to the same object type, using the object type is recommended to divide the belief set into different sections. If you think that the way the information about the object type 'map' is not structured in the best way, you can change it by removing or changing parts of the belief set, but only regarding the object type 'map'.
+
+
+Provide the response in JSON format with the field 'function' containing the function.
+Temperature: 0.7
+Response: {"function": "def update_belief_set(event, belief_set):\n    if event['object_type'] == 'map':\n        if event['event_type'] == 'object added':\n            belief_set['map'] = event['object']\n        elif event['event_type'] == 'object changed':\n            belief_set['map'].update(event['object'])\n        elif event['event_type'] == 'object removed':\n            del belief_set['map']\n    return belief_set"}
+2024-10-22 09:25:31,301 - INFO - 
+[PERCEPTION Q1]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: Write a function that takes as input an event and the current belief set, and returns the updated belief set that incorporates the information from the event.
+
+The input event is structured like the following examples:
+
+Example 1:
+{'event_type': 'object added', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}
+
+
+
+
+The input event describes a change in the state of an object in the environment. The field 'object_type' specifies the type of the object. The function you provide will only be used to process events for the object 'parcel'. Other functions will be used to process events for other object types. Each function updates the belief set indipedently from the others.
+
+The input event has the field 'event_type' that specifies the type of event. The field 'event_type' can be one of the following:
+- 'object added' meaning that the object didn't exist before and now it does;
+- 'object changed' meaning that the object already existed before and now at least one of its properties or attributes has changed;
+- 'object removed' meaning that the object existed before and now it doesn't.
+
+
+The belief set is a python dictionary. Update it with the information from the event. The current belief set is structured like this:
+
+{}
+
+
+The belief set should be structured in a way that makes it easy to use later. Multiple objects in the environment might belong to the same object type, using the object type is recommended to divide the belief set into different sections. If you think that the way the information about the object type 'parcel' is not structured in the best way, you can change it by removing or changing parts of the belief set, but only regarding the object type 'parcel'.
+
+
+Provide the response in JSON format with the field 'function' containing the function.
+Temperature: 0.7
+Response: {"function": "def update_belief_set(event, belief_set):\n    if event['object_type'] != 'parcel':\n        return belief_set\n    if event['event_type'] == 'object added':\n        if 'parcel' not in belief_set:\n            belief_set['parcel'] = {}\n        belief_set['parcel'][event['object']['id']] = event['object']\n    elif event['event_type'] == 'object changed':\n        if 'parcel' in belief_set and event['object']['id'] in belief_set['parcel']:\n            belief_set['parcel'][event['object']['id']].update(event['object'])\n    elif event['event_type'] == 'object removed':\n        if 'parcel' in belief_set and event['object']['id'] in belief_set['parcel']:\n            del belief_set['parcel'][event['object']['id']]\n    return belief_set"}
+2024-10-22 09:25:35,890 - INFO - 
+[PERCEPTION Q1]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: Write a function that takes as input an event and the current belief set, and returns the updated belief set that incorporates the information from the event.
+
+The input event is structured like the following examples:
+
+Example 1:
+{'event_type': 'object added', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'score': 0}}
+
+
+
+
+The input event describes a change in the state of an object in the environment. The field 'object_type' specifies the type of the object. The function you provide will only be used to process events for the object 'agent'. Other functions will be used to process events for other object types. Each function updates the belief set indipedently from the others.
+
+The input event has the field 'event_type' that specifies the type of event. The field 'event_type' can be one of the following:
+- 'object added' meaning that the object didn't exist before and now it does;
+- 'object changed' meaning that the object already existed before and now at least one of its properties or attributes has changed;
+- 'object removed' meaning that the object existed before and now it doesn't.
+
+
+The belief set is a python dictionary. Update it with the information from the event. The current belief set is structured like this:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}}
+
+
+The belief set should be structured in a way that makes it easy to use later. Multiple objects in the environment might belong to the same object type, using the object type is recommended to divide the belief set into different sections. If you think that the way the information about the object type 'agent' is not structured in the best way, you can change it by removing or changing parts of the belief set, but only regarding the object type 'agent'.
+
+
+Provide the response in JSON format with the field 'function' containing the function.
+Temperature: 0.7
+Response: {"function": "def update_belief_set(event, belief_set):\n    if event['object_type'] == 'agent':\n        if event['event_type'] == 'object added':\n            belief_set['agent'] = {event['object']['id']: event['object']}\n        elif event['event_type'] == 'object changed':\n            belief_set['agent'][event['object']['id']] = event['object']\n        elif event['event_type'] == 'object removed':\n            del belief_set['agent'][event['object']['id']]\n    return belief_set"}
+2024-10-22 09:26:02,550 - INFO - 
+[CONTROL Q1]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: Consider the following belief set in json format:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {1: {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'score': 0}}}
+
+Provide a long term goal description in natural language:
+- do not reference specific instances of the belief set
+- keep it general, abstract and high level
+- keep it brief (1-2 sentences)
+
+The long term goal you have to provide should be different from the ones already implemented. These are the descriptions of the already implemented long term goals:
+No long term goal has been implemented yet.
+
+
+The agent has learned the following information, you can use this information to provide a better response:
+The memory is currently empty.
+
+
+Provide the response in JSON format with the field 'description' containing the description.
+Temperature: 0.7
+Response: {"description": "The agent's long term goal is to maximize its score by collecting as many parcels as possible from the parcels spawn points and delivering them to the delivery cells, while navigating through walkable cells and avoiding non-walkable cells."}
+2024-10-22 09:26:12,175 - INFO - 
+[CONTROL Q2]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: Given the long term goal description
+The agent's long term goal is to maximize its score by collecting as many parcels as possible from the parcels spawn points and delivering them to the delivery cells, while navigating through walkable cells and avoiding non-walkable cells.
+
+And given the belief set describing the agent's knowledge about the world
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {1: {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'score': 0}}}
+
+Propose a short term goal description in natural language and a function that achieves the short term goal. The short term goal description should be an explanation of what the agent achieves by executing the function. Implement a function that is simple and general, and that can be used in a variety of situations.
+
+The short term goal description should be aligned with the long term goal description, and should be simple, brief and general without referring specific objects of the belief set.
+
+The function can contain calls to already implemented functions from the following library:
+
+- function_1()	Description: This is a wrapper function for action_1. The agent moves by 1 cell, decreasing its first coordinate by 1.
+- function_2()	Description: This is a wrapper function for action_2. The agent moves by 1 cell, increasing its first coordinate by 1.
+- function_3()	Description: This is a wrapper function for action_3. The agent moves by 1 cell, decreasing its second coordinate by 1.
+- function_4()	Description: This is a wrapper function for action_4. The agent moves by 1 cell, increasing its second coordinate by 1.
+- function_5()	Description: This is a wrapper function for action_5. The agent picks up the objects on the ground. The agent has to be in the same cell of the objects to pick them up.
+- function_6()	Description: This is a wrapper function for action_6. The agent puts down all the objects it is carrying on the ground. The agent will put down the objects in the cell it is currently in.
+
+
+You can include calls to one or more of the functions from the library. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions from the library do not return any value and do not take any input arguments. The functions from the library can be called multiple times in the function that you provide.
+
+You can access the belief set using the python dictionary variable 'belief_set' in the function that you provide. The variable is updated in real-time as the agent interacts with the environment. Accessing directly the 'belief_set' is strongly suggested. Copying objects from the belief set to local variables will not work as the local variable is not a reference and won't be updated as the belief set is updated.
+
+The function that you provide should start with the following code snippet:
+def function():
+    global belief_set
+    ...
+
+
+The agent has learned the following information, you can use this information to provide a better response:
+The memory is currently empty.
+
+
+Provide the response in JSON format with the field 'description' containing the short term goal description and the field 'function' containing the function that achieves the short term goal description.
+Temperature: 0.7
+Response: {"description": "The agent's short term goal is to move towards a parcel spawn point, pick up a parcel if present and then move towards a delivery cell to drop the parcel.", "function": "def function():\n    global belief_set\n    agent = belief_set['agent'][1]\n    parcel = belief_set['parcel'][1]\n    map_grid = belief_set['map']['grid']\n    spawn_points = [cell['cell_coordinates'] for cell in map_grid if cell['cell_type'] == 'parcels_spawn']\n    delivery_points = [cell['cell_coordinates'] for cell in map_grid if cell['cell_type'] == 'delivery_cell']\n    if parcel['carried_by_id'] is None and parcel['coordinates'] == agent['coordinates']:\n        function_5()\n    elif parcel['carried_by_id'] == agent['id'] and agent['coordinates'] in delivery_points:\n        function_6()\n    else:\n        target = spawn_points[0] if parcel['carried_by_id'] is None else delivery_points[0]\n        if agent['coordinates'][0] > target[0]:\n            function_1()\n        elif agent['coordinates'][0] < target[0]:\n            function_2()\n        elif agent['coordinates'][1] > target[1]:\n            function_3()\n        elif agent['coordinates'][1] < target[1]:\n            function_4()"}
+2024-10-22 09:26:17,432 - INFO - 
+[CONTROL Q4]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: The agent has just finished executing a plan. The plan had the objective of achieving the following short term goal:
+The agent's short term goal is to move towards a parcel spawn point, pick up a parcel if present and then move towards a delivery cell to drop the parcel.
+
+During execution, the agent performed sequencially the actions in the plan. After performing an action, the agent receives some events that inform the agent about how the world has changed. Not all events are a direct result of the action. Keep in mind that an action can fail if its preconditions are not met in the environment.
+
+
+The following is the belief set that the agent had before executing the plan:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {1: {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'score': 0}}}
+
+
+The following list contains all the actions performed as part of the plan, in the order they were performed. Each action is associated with the events that were received shortly after the action was performed.
+
+- Action: action_1 , Events received:
+	*  {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 0}}
+
+
+
+The following is the belief set that the agent has after executing the plan:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {1: {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 0}}}
+
+
+Provide a boolean evaluation on whether the agent has achieved the short term goal or not.
+
+
+
+You also need to infer information from the given data that can be used to improve plan generation in the future. This information should be general and not refer to specific instances of objects in the environment. Also, if you evaluate that the agent has not achieved the short term goal, you should write suggestions on how to improve the plan generation and execution; you can refer to the name of the actions. 
+All this information will be stored in the agent's memory, you need to integrate the informationthat you write now with the information that is already stored in the agent's memory. This is the current information stored in the agent's memory:
+The memory is currently empty.
+
+
+
+Provide the response in a single line in JSON format with the field 'evaluation' containing only one of the following values: 'True' or 'False', and the field 'information' containing the information that you want to store in the agent's memory.
+Temperature: 0.7
+Response: {"evaluation": "False", "information": "The agent failed to achieve the short term goal as it did not pick up the parcel, nor did it reach the delivery cell. For improved plan generation, the agent should include actions to move towards the parcel spawn point and pick up the parcel before moving towards the delivery cell. The agent should also ensure the preconditions for each action are met before execution, to increase the likelihood of successful action execution."}
+2024-10-22 09:26:30,555 - INFO - 
+[CONTROL Q2]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: Given the long term goal description
+The agent's long term goal is to maximize its score by collecting as many parcels as possible from the parcels spawn points and delivering them to the delivery cells, while navigating through walkable cells and avoiding non-walkable cells.
+
+And given the belief set describing the agent's knowledge about the world
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {1: {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 0}}}
+
+Propose a short term goal description in natural language and a function that achieves the short term goal. The short term goal description should be an explanation of what the agent achieves by executing the function. Implement a function that is simple and general, and that can be used in a variety of situations.
+
+The short term goal description should be aligned with the long term goal description, and should be simple, brief and general without referring specific objects of the belief set.
+
+The function can contain calls to already implemented functions from the following library:
+
+- function_1()	Description: This is a wrapper function for action_1. The agent moves by 1 cell, decreasing its first coordinate by 1.
+- function_2()	Description: This is a wrapper function for action_2. The agent moves by 1 cell, increasing its first coordinate by 1.
+- function_3()	Description: This is a wrapper function for action_3. The agent moves by 1 cell, decreasing its second coordinate by 1.
+- function_4()	Description: This is a wrapper function for action_4. The agent moves by 1 cell, increasing its second coordinate by 1.
+- function_5()	Description: This is a wrapper function for action_5. The agent picks up the objects on the ground. The agent has to be in the same cell of the objects to pick them up.
+- function_6()	Description: This is a wrapper function for action_6. The agent puts down all the objects it is carrying on the ground. The agent will put down the objects in the cell it is currently in.
+
+
+You can include calls to one or more of the functions from the library. Each function from the library has a description associated, this description describes the goal that the agent achieves by executing that function from the library. The functions from the library do not return any value and do not take any input arguments. The functions from the library can be called multiple times in the function that you provide.
+
+You can access the belief set using the python dictionary variable 'belief_set' in the function that you provide. The variable is updated in real-time as the agent interacts with the environment. Accessing directly the 'belief_set' is strongly suggested. Copying objects from the belief set to local variables will not work as the local variable is not a reference and won't be updated as the belief set is updated.
+
+The function that you provide should start with the following code snippet:
+def function():
+    global belief_set
+    ...
+
+
+The agent has learned the following information, you can use this information to provide a better response:
+The agent failed to achieve the short term goal as it did not pick up the parcel, nor did it reach the delivery cell. For improved plan generation, the agent should include actions to move towards the parcel spawn point and pick up the parcel before moving towards the delivery cell. The agent should also ensure the preconditions for each action are met before execution, to increase the likelihood of successful action execution.
+
+
+Provide the response in JSON format with the field 'description' containing the short term goal description and the field 'function' containing the function that achieves the short term goal description.
+Temperature: 0.7
+Response: {"description": "The agent's short term goal is to move towards the parcel spawn point, pick up the parcel and then move towards the delivery cell to deliver the parcel.", "function": "def function():\n    global belief_set\n    spawn_point = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'parcels_spawn'][0]['cell_coordinates']\n    delivery_point = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]['cell_coordinates']\n    agent_position = belief_set['agent'][1]['coordinates']\n    while agent_position != spawn_point:\n        if spawn_point[0] < agent_position[0]:\n            function_1()\n        elif spawn_point[0] > agent_position[0]:\n            function_2()\n        elif spawn_point[1] < agent_position[1]:\n            function_3()\n        elif spawn_point[1] > agent_position[1]:\n            function_4()\n        agent_position = belief_set['agent'][1]['coordinates']\n    function_5()\n    while agent_position != delivery_point:\n        if delivery_point[0] < agent_position[0]:\n            function_1()\n        elif delivery_point[0] > agent_position[0]:\n            function_2()\n        elif delivery_point[1] < agent_position[1]:\n            function_3()\n        elif delivery_point[1] > agent_position[1]:\n            function_4()\n        agent_position = belief_set['agent'][1]['coordinates']\n    function_6()"}
+2024-10-22 09:26:39,229 - INFO - 
+[CONTROL Q4]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: The agent has just finished executing a plan. The plan had the objective of achieving the following short term goal:
+The agent's short term goal is to move towards the parcel spawn point, pick up the parcel and then move towards the delivery cell to deliver the parcel.
+
+During execution, the agent performed sequencially the actions in the plan. After performing an action, the agent receives some events that inform the agent about how the world has changed. Not all events are a direct result of the action. Keep in mind that an action can fail if its preconditions are not met in the environment.
+
+
+The following is the belief set that the agent had before executing the plan:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {1: {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 0}}}
+
+
+The following list contains all the actions performed as part of the plan, in the order they were performed. Each action is associated with the events that were received shortly after the action was performed.
+
+- Action: action_3 , Events received:
+	*  {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'score': 0}}
+- Action: action_5 , Events received:
+	*  {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}
+	*  {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'score': 0}}
+- Action: action_2 , Events received:
+	*  {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}
+	*  {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1], 'score': 0}}
+- Action: action_4 , Events received:
+	*  {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}
+	*  {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1], 'score': 0}}
+- Action: action_4 , Events received:
+	*  {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}
+	*  {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1], 'score': 0}}
+- Action: action_4 , Events received:
+	*  {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}
+	*  {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [1], 'score': 0}}
+- Action: action_6 , Events received:
+	*  {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}}
+	*  {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}
+
+
+
+The following is the belief set that the agent has after executing the plan:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {}, 'agent': {1: {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}}}
+
+
+Provide a boolean evaluation on whether the agent has achieved the short term goal or not.
+
+
+
+You also need to infer information from the given data that can be used to improve plan generation in the future. This information should be general and not refer to specific instances of objects in the environment. Also, if you evaluate that the agent has not achieved the short term goal, you should write suggestions on how to improve the plan generation and execution; you can refer to the name of the actions. 
+All this information will be stored in the agent's memory, you need to integrate the informationthat you write now with the information that is already stored in the agent's memory. This is the current information stored in the agent's memory:
+The agent failed to achieve the short term goal as it did not pick up the parcel, nor did it reach the delivery cell. For improved plan generation, the agent should include actions to move towards the parcel spawn point and pick up the parcel before moving towards the delivery cell. The agent should also ensure the preconditions for each action are met before execution, to increase the likelihood of successful action execution.
+
+
+
+Provide the response in a single line in JSON format with the field 'evaluation' containing only one of the following values: 'True' or 'False', and the field 'information' containing the information that you want to store in the agent's memory.
+Temperature: 0.7
+Response: {"evaluation": "True", "information": "The agent successfully achieved the short term goal by moving to the parcel spawn point, picking up the parcel and delivering it at the delivery cell. The agent should continue to ensure the preconditions for each action are met before execution, to increase the likelihood of successful action execution. It is also beneficial for the agent to include actions to move towards the parcel spawn point and pick up the parcel before moving towards the delivery cell in its plan generation."}
+2024-10-22 09:26:40,052 - INFO - 
+[CONTROL Q5]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: You have to evaluate whether the agent has achieved the following long term goal:
+The agent's long term goal is to maximize its score by collecting as many parcels as possible from the parcels spawn points and delivering them to the delivery cells, while navigating through walkable cells and avoiding non-walkable cells.
+
+To perform this evaluation, consider the belief set prior to the agent pursuing the goal, and the current belief set.
+
+This is the belief set of the agent prior to pursuing the goal:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {1: {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'score': 0}}}
+
+
+This is the belief set of the agent after having pursued the goal:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {}, 'agent': {1: {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}}}
+
+
+The agent has learned the following information, you can use this information to provide a better response:
+The agent successfully achieved the short term goal by moving to the parcel spawn point, picking up the parcel and delivering it at the delivery cell. The agent should continue to ensure the preconditions for each action are met before execution, to increase the likelihood of successful action execution. It is also beneficial for the agent to include actions to move towards the parcel spawn point and pick up the parcel before moving towards the delivery cell in its plan generation.
+
+
+Provide the response in JSON format with the field 'evaluation' containing only one of the following values: 'True' or 'False'.
+Temperature: 0.7
+Response: {"evaluation": "True"}
+2024-10-22 09:26:46,692 - INFO - 
+[CONTROL Q6]
+Context: An agent is placed into an environment. The agent receives events that describe what is happening in the environment, and acts on the environment by performing actions. You will be asked, through multiple propmts, to provide goal descriptions, functions in python, evaluation and knowledge extraction given actions and events received. The question you will receive will be related to one of these requests.
+
+If you have to provide a function, stick to the following guidelines:
+- do not use any external libraries except the standard python libraries
+- do not use print statements
+- do not split the code into multiple blocks
+- fully implement the function
+
+If you have to provide a textual description, make it concise, direct and imperative.
+
+Make sure to format the response as a JSON object following the instructions in the question. If a function is requested, it must be provided in a single line using \n as the newline character. Provide in your response only what is requested. Your answer must contain ONLY the JSON object and nothing else.
+
+The agent is identified with ID 1.
+Question: Given the following goal description:
+The agent's long term goal is to maximize its score by collecting as many parcels as possible from the parcels spawn points and delivering them to the delivery cells, while navigating through walkable cells and avoiding non-walkable cells.
+
+Provide a function that evaluates whether the goal should be pursued or not, given the current belief set. The function takes as input the argument 'belief_set', and returns either 'True' or 'False'. The belief set is structured like the following example:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {}, 'agent': {1: {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}}}
+
+
+For context, the goal was originally pursued with the following instance of the belief set:
+
+{'map': {'width': 4, 'height': 4, 'grid': [{'cell_coordinates': [0, 0], 'cell_type': 'parcels_spawn'}, {'cell_coordinates': [0, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [0, 3], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 0], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 1], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 2], 'cell_type': 'walkable'}, {'cell_coordinates': [1, 3], 'cell_type': 'delivery_cell'}, {'cell_coordinates': [2, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [2, 3], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 0], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 1], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 2], 'cell_type': 'non_walkable'}, {'cell_coordinates': [3, 3], 'cell_type': 'non_walkable'}]}, 'parcel': {1: {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': None}}, 'agent': {1: {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [], 'score': 0}}}
+
+
+The function should be able to handle as input both the current belief set and the previous belief set.
+
+
+The agent has learned the following information, you can use this information to provide a better response:
+The agent successfully achieved the short term goal by moving to the parcel spawn point, picking up the parcel and delivering it at the delivery cell. The agent should continue to ensure the preconditions for each action are met before execution, to increase the likelihood of successful action execution. It is also beneficial for the agent to include actions to move towards the parcel spawn point and pick up the parcel before moving towards the delivery cell in its plan generation.
+
+
+Provide the response in JSON format with the field 'function' containing the function.
+Temperature: 0.7
+Response: {"function": "def should_pursue_goal(belief_set):\n    # Check if there are any parcels left on the map\n    if 'parcel' in belief_set and belief_set['parcel']:\n        # Check if there is a path from the agent to the parcel and from the parcel to the delivery cell\n        agent_coordinates = belief_set['agent'][1]['coordinates']\n        parcel_coordinates = list(belief_set['parcel'].values())[0]['coordinates']\n        delivery_cell_coordinates = [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]\n        walkable_cells = [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'walkable']\n        if (agent_coordinates in walkable_cells and parcel_coordinates in walkable_cells and delivery_cell_coordinates in walkable_cells):\n            return True\n    return False"}

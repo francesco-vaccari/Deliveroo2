@@ -1,0 +1,215 @@
+2024-10-28 09:31:56,274 - DEBUG - [8081] Started listening on 127.0.0.1:8081
+2024-10-28 09:31:56,274 - INFO - [8081] Sent message to 127.0.0.1:8080: connect
+2024-10-28 09:31:56,374 - INFO - [8081] Sent message to 127.0.0.1:8080: connect
+2024-10-28 09:31:56,480 - INFO - [8081] Sent message to 127.0.0.1:8080: connect
+2024-10-28 09:31:56,585 - INFO - [8081] Sent message to 127.0.0.1:8080: connect
+2024-10-28 09:31:56,624 - INFO - [8081] Received message from ('127.0.0.1', 8080): connected 1
+2024-10-28 09:31:56,624 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object added", "object_type": "map", "object": {"width": 4, "height": 4, "grid": [{"cell_coordinates": [0, 0], "cell_type": "parcels_spawn"}, {"cell_coordinates": [0, 1], "cell_type": "walkable"}, {"cell_coordinates": [0, 2], "cell_type": "walkable"}, {"cell_coordinates": [0, 3], "cell_type": "double_points_delivery_cell"}, {"cell_coordinates": [1, 0], "cell_type": "walkable"}, {"cell_coordinates": [1, 1], "cell_type": "walkable"}, {"cell_coordinates": [1, 2], "cell_type": "walkable"}, {"cell_coordinates": [1, 3], "cell_type": "walkable"}, {"cell_coordinates": [2, 0], "cell_type": "walkable"}, {"cell_coordinates": [2, 1], "cell_type": "walkable"}, {"cell_coordinates": [2, 2], "cell_type": "walkable"}, {"cell_coordinates": [2, 3], "cell_type": "walkable"}, {"cell_coordinates": [3, 0], "cell_type": "delivery_cell"}, {"cell_coordinates": [3, 1], "cell_type": "walkable"}, {"cell_coordinates": [3, 2], "cell_type": "walkable"}, {"cell_coordinates": [3, 3], "cell_type": "walkable"}]}}
+2024-10-28 09:31:56,627 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object added", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-10-28 09:31:56,627 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object added", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-28 09:31:56,628 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object added", "object_type": "key", "object": {"id": 1, "coordinates": [2, 2], "carried_by_id": null}}
+2024-10-28 09:31:56,628 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object added", "object_type": "door", "object": {"id": 1, "coordinates": [0, 2]}}
+2024-10-28 09:31:56,628 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object added", "object_type": "door", "object": {"id": 2, "coordinates": [1, 3]}}
+2024-10-28 09:31:56,628 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object added", "object_type": "door", "object": {"id": 3, "coordinates": [2, 0]}}
+2024-10-28 09:31:56,628 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object added", "object_type": "door", "object": {"id": 4, "coordinates": [3, 1]}}
+2024-10-28 09:32:48,338 - INFO - [8081] Sent message to 127.0.0.1:8080: action_1
+2024-10-28 09:32:48,344 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-28 09:33:13,906 - INFO - [8081] Sent message to 127.0.0.1:8080: action_3
+2024-10-28 09:33:13,931 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-28 09:33:20,399 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:33:20,425 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-10-28 09:33:20,425 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-28 09:33:20,917 - INFO - [8081] Sent message to 127.0.0.1:8080: action_6
+2024-10-28 09:33:20,942 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-10-28 09:33:20,942 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-28 09:33:29,032 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:33:29,056 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-10-28 09:33:29,075 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-28 09:33:35,936 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:33:36,475 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-10-28 09:33:36,487 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:36,499 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-28 09:33:37,078 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:37,663 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:38,210 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:38,765 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:39,430 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:40,012 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:40,523 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:41,049 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:41,603 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:42,185 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:42,768 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:43,322 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:44,009 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:44,580 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:45,146 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:45,683 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:46,186 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:46,764 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:47,285 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:47,901 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:48,412 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:49,000 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:49,503 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:50,076 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:33:50,649 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:11,017 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:11,524 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:12,092 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:12,670 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:13,186 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:13,764 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:14,338 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:14,866 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:15,409 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:15,901 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:16,471 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:17,064 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:17,570 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:18,150 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:18,728 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:19,308 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:19,868 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:20,485 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:21,013 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:21,596 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:22,124 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:22,672 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:23,315 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:23,912 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:24,529 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:25,097 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:25,724 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:34:43,167 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:43,748 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:44,346 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:44,887 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:45,488 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:46,037 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:46,631 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:47,168 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:47,717 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:48,301 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:48,860 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:49,409 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:50,032 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:50,605 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:51,158 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:51,708 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:52,269 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:52,792 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:53,351 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:53,944 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:54,559 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:55,173 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:55,839 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:56,394 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:57,015 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:34:57,513 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:35:23,078 - INFO - [8081] Sent message to 127.0.0.1:8080: action_2
+2024-10-28 09:35:39,104 - INFO - [8081] Sent message to 127.0.0.1:8080: action_6
+2024-10-28 09:35:39,129 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 0], "score": 20, "carried_by_id": null}}
+2024-10-28 09:35:39,148 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-28 09:35:50,717 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-10-28 09:35:50,717 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:35:50,730 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-28 09:36:14,508 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-10-28 09:36:14,508 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-28 09:36:14,514 - INFO - [8081] Sent message to 127.0.0.1:8080: action_1
+2024-10-28 09:36:26,725 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:26,725 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 1], "score": 20, "carried_by_id": 1}}
+2024-10-28 09:36:26,757 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-28 09:36:27,225 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:27,746 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:28,267 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:28,853 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:29,452 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:29,993 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:30,584 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:31,123 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:31,648 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:32,174 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:32,766 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:33,316 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:33,846 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:34,420 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:35,018 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:35,557 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:36,159 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:36,743 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:37,346 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:37,846 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:38,380 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:38,942 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:39,520 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:40,076 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:40,685 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:41,310 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:58,131 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:36:58,678 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 1], "score": 20, "carried_by_id": null}}
+2024-10-28 09:36:58,690 - INFO - [8081] Sent message to 127.0.0.1:8080: action_6
+2024-10-28 09:36:58,690 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": false, "score": 0}}
+2024-10-28 09:37:18,912 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 1], "score": 20, "carried_by_id": 1}}
+2024-10-28 09:37:18,919 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:37:18,919 - INFO - [8081] Received message from ('127.0.0.1', 8080): {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [1], "has_key": false, "score": 0}}
+2024-10-28 09:37:29,852 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:30,369 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:30,939 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:31,483 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:32,045 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:32,569 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:33,162 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:33,754 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:34,366 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:34,963 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:35,511 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:36,133 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:36,748 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:37,255 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:37,773 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:38,435 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:38,935 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:39,491 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:40,045 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:40,604 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:41,186 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:41,720 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:42,368 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:42,885 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:43,431 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:44,079 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:44,652 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:37:59,773 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:38:00,351 - INFO - [8081] Sent message to 127.0.0.1:8080: action_5
+2024-10-28 09:38:18,491 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:18,985 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:19,551 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:20,166 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:20,774 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:21,279 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:21,864 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:22,399 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:22,928 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:23,494 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:24,061 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:24,606 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:25,184 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:25,701 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:26,367 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:26,926 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:27,536 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:28,103 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:28,739 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:29,311 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:29,885 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:30,479 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:31,003 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:31,527 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:32,119 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:32,674 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:33,243 - INFO - [8081] Sent message to 127.0.0.1:8080: action_4
+2024-10-28 09:38:49,031 - INFO - [8081] Sent message to 127.0.0.1:8080: disconnect
+2024-10-28 09:38:49,031 - DEBUG - [8081] Closing connection on 127.0.0.1:8081
+2024-10-28 09:38:49,031 - INFO - [8081] Received message from ('127.0.0.1', 8081): exit
+2024-10-28 09:38:49,031 - DEBUG - [8081] Connection closed

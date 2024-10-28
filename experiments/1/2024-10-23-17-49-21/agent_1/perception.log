@@ -1,0 +1,59 @@
+2024-10-23 17:49:22,193 - DEBUG - [STORE_EVENTS] Started storing events thread
+2024-10-23 17:49:22,193 - DEBUG - [PROCESS_EVENTS] Started processing events thread
+2024-10-23 17:49:22,200 - DEBUG - [LOOP] Started loop thread
+2024-10-23 17:49:22,907 - INFO - [STORE_EVENTS] New object type detected: map
+2024-10-23 17:49:22,907 - INFO - [STORE_EVENTS] New object type detected: parcel
+2024-10-23 17:49:22,907 - INFO - [STORE_EVENTS] New object type detected: agent
+2024-10-23 17:49:22,972 - INFO - [LOOP] Generating perception function for object type: map
+2024-10-23 17:49:27,077 - INFO - [LOOP] Adding perception function for object type: map
+def update_belief_set(event, belief_set):
+    if event['event_type'] == 'object added':
+        belief_set[event['object_type']] = event['object']
+    elif event['event_type'] == 'object changed':
+        belief_set[event['object_type']].update(event['object'])
+    elif event['event_type'] == 'object removed':
+        del belief_set[event['object_type']]
+    return belief_set
+2024-10-23 17:49:27,078 - INFO - [LOOP] Generating perception function for object type: parcel
+2024-10-23 17:49:27,078 - INFO - [PROCESS_EVENTS] Processing events for object type: map
+2024-10-23 17:49:32,302 - INFO - [LOOP] Adding perception function for object type: parcel
+def update_belief_set(event, belief_set):
+    if 'parcel' not in belief_set:
+        belief_set['parcel'] = {}
+    if event['event_type'] == 'object added':
+        belief_set['parcel'][event['object']['id']] = event['object']
+    elif event['event_type'] == 'object changed':
+        belief_set['parcel'][event['object']['id']].update(event['object'])
+    elif event['event_type'] == 'object removed':
+        del belief_set['parcel'][event['object']['id']]
+    return belief_set
+2024-10-23 17:49:32,321 - INFO - [LOOP] Generating perception function for object type: agent
+2024-10-23 17:49:32,321 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-23 17:49:36,497 - INFO - [LOOP] Adding perception function for object type: agent
+def update_belief_set(event, belief_set): 
+    if event['object_type'] == 'agent': 
+        if event['event_type'] == 'object added': 
+            belief_set['agent'] = event['object'] 
+        elif event['event_type'] == 'object changed': 
+            belief_set['agent'].update(event['object']) 
+        elif event['event_type'] == 'object removed': 
+            belief_set.pop('agent', None) 
+    return belief_set
+2024-10-23 17:49:36,510 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:50:07,303 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:50:07,802 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:50:28,804 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-23 17:50:28,817 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:50:29,172 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-23 17:50:29,266 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:51:02,159 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-23 17:51:02,179 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:51:02,721 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-23 17:51:02,722 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:51:03,283 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-23 17:51:03,284 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:51:03,870 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-23 17:51:03,870 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-23 17:51:16,870 - DEBUG - [STORE_EVENTS] Stopped storing events thread
+2024-10-23 17:51:16,870 - DEBUG - [LOOP] Stopped loop thread
+2024-10-23 17:51:16,870 - DEBUG - [PROCESS_EVENTS] Stopped processing events thread

@@ -1,0 +1,157 @@
+2024-10-22 09:43:57,238 - DEBUG - [LOOP] Started loop thread
+2024-10-22 09:43:57,258 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-22 09:43:58,278 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-22 09:43:59,287 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-22 09:44:00,304 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-22 09:44:01,331 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-22 09:44:02,364 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-22 09:44:03,382 - INFO - [LOOP] Belief set is ready, waiting 30 seconds...
+2024-10-22 09:44:04,402 - INFO - [LOOP] Belief set is ready, waiting 29 seconds...
+2024-10-22 09:44:05,416 - INFO - [LOOP] Belief set is ready, waiting 28 seconds...
+2024-10-22 09:44:06,439 - INFO - [LOOP] Belief set is ready, waiting 27 seconds...
+2024-10-22 09:44:07,461 - INFO - [LOOP] Belief set is ready, waiting 26 seconds...
+2024-10-22 09:44:08,479 - INFO - [LOOP] Belief set is ready, waiting 25 seconds...
+2024-10-22 09:44:09,486 - INFO - [LOOP] Belief set is ready, waiting 24 seconds...
+2024-10-22 09:44:10,504 - INFO - [LOOP] Belief set is ready, waiting 23 seconds...
+2024-10-22 09:44:11,539 - INFO - [LOOP] Belief set is ready, waiting 22 seconds...
+2024-10-22 09:44:12,563 - INFO - [LOOP] Belief set is ready, waiting 21 seconds...
+2024-10-22 09:44:13,587 - INFO - [LOOP] Belief set is ready, waiting 20 seconds...
+2024-10-22 09:44:14,607 - INFO - [LOOP] Belief set is ready, waiting 19 seconds...
+2024-10-22 09:44:15,638 - INFO - [LOOP] Belief set is ready, waiting 18 seconds...
+2024-10-22 09:44:16,656 - INFO - [LOOP] Belief set is ready, waiting 17 seconds...
+2024-10-22 09:44:17,674 - INFO - [LOOP] Belief set is ready, waiting 16 seconds...
+2024-10-22 09:44:18,692 - INFO - [LOOP] Belief set is ready, waiting 15 seconds...
+2024-10-22 09:44:19,709 - INFO - [LOOP] Belief set is ready, waiting 14 seconds...
+2024-10-22 09:44:20,731 - INFO - [LOOP] Belief set is ready, waiting 13 seconds...
+2024-10-22 09:44:21,741 - INFO - [LOOP] Belief set is ready, waiting 12 seconds...
+2024-10-22 09:44:22,766 - INFO - [LOOP] Belief set is ready, waiting 11 seconds...
+2024-10-22 09:44:23,784 - INFO - [LOOP] Belief set is ready, waiting 10 seconds...
+2024-10-22 09:44:24,807 - INFO - [LOOP] Belief set is ready, waiting 9 seconds...
+2024-10-22 09:44:25,837 - INFO - [LOOP] Belief set is ready, waiting 8 seconds...
+2024-10-22 09:44:26,867 - INFO - [LOOP] Belief set is ready, waiting 7 seconds...
+2024-10-22 09:44:27,900 - INFO - [LOOP] Belief set is ready, waiting 6 seconds...
+2024-10-22 09:44:28,923 - INFO - [LOOP] Belief set is ready, waiting 5 seconds...
+2024-10-22 09:44:29,944 - INFO - [LOOP] Belief set is ready, waiting 4 seconds...
+2024-10-22 09:44:30,962 - INFO - [LOOP] Belief set is ready, waiting 3 seconds...
+2024-10-22 09:44:31,982 - INFO - [LOOP] Belief set is ready, waiting 2 seconds...
+2024-10-22 09:44:32,987 - INFO - [LOOP] Belief set is ready, waiting 1 seconds...
+2024-10-22 09:44:41,041 - INFO - [LOOP] Generating new desire
+2024-10-22 09:44:42,603 - INFO - [LOOP] Desire generated: The agent's long term goal is to efficiently pick up and deliver as many parcels as possible, maximizing its overall score while minimizing the distance traveled.
+2024-10-22 09:44:42,670 - INFO - [LOOP] Generating new intention ...
+2024-10-22 09:44:50,184 - INFO - [LOOP] Intention generated: The short term goal is for the agent to move towards the parcel spawn point and pick up a parcel.
+def function():
+    global belief_set
+    spawn_point = [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'parcels_spawn'][0]
+    agent_position = belief_set['agent']['coordinates']
+    while agent_position != spawn_point:
+        if agent_position[0] > spawn_point[0]:
+            function_1()
+        elif agent_position[0] < spawn_point[0]:
+            function_2()
+        elif agent_position[1] > spawn_point[1]:
+            function_3()
+        else:
+            function_4()
+        agent_position = belief_set['agent']['coordinates']
+    function_5()
+2024-10-22 09:44:52,635 - INFO - [LOOP] Plan executed: ['action_1', 'action_3', 'action_5']
+2024-10-22 09:44:52,635 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1], 'score': 0}}]]
+2024-10-22 09:44:52,647 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-22 09:44:56,365 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-22 09:44:56,378 - INFO - [LOOP] Obtained memory update: The agent is capable of efficiently navigating towards the parcel spawn point, and successfully picking up a parcel when it reaches the spawn point. For future plan generation, it should continue using similar actions to navigate towards the parcel spawn point and pick up parcels. It is also important to ensure that the agent is aware of the current location of parcels and its own location to make efficient movements. Monitoring the 'object changed' events can help the agent keep track of these changes.
+2024-10-22 09:44:56,378 - INFO - [LOOP] Memory update: The agent is capable of efficiently navigating towards the parcel spawn point, and successfully picking up a parcel when it reaches the spawn point. For future plan generation, it should continue using similar actions to navigate towards the parcel spawn point and pick up parcels. It is also important to ensure that the agent is aware of the current location of parcels and its own location to make efficient movements. Monitoring the 'object changed' events can help the agent keep track of these changes.
+2024-10-22 09:44:56,378 - INFO - [LOOP] Intention evaluation positive
+2024-10-22 09:44:56,378 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-22 09:44:57,141 - INFO - [LOOP] Obtained evaluation for desire: False
+2024-10-22 09:44:57,141 - INFO - [LOOP] Desire not yet satisfied
+2024-10-22 09:44:57,141 - INFO - [LOOP] Generating new intention ...
+2024-10-22 09:45:03,676 - INFO - [LOOP] Intention generated: The short term goal is for the agent to move towards the delivery cell and deliver the parcel it is carrying
+def function():
+	global belief_set
+	agent_position = belief_set['agent']['coordinates']
+	delivery_position = [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]
+	if agent_position[0] < delivery_position[0]:
+		function_2()
+	elif agent_position[0] > delivery_position[0]:
+		function_1()
+	elif agent_position[1] < delivery_position[1]:
+		function_4()
+	elif agent_position[1] > delivery_position[1]:
+		function_3()
+	else:
+		function_6()
+2024-10-22 09:45:04,726 - INFO - [LOOP] Plan executed: ['action_2']
+2024-10-22 09:45:04,727 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1], 'score': 0}}]]
+2024-10-22 09:45:04,739 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-22 09:45:19,548 - INFO - [LOOP] Obtained evaluation for intention: False
+2024-10-22 09:45:19,548 - INFO - [LOOP] Obtained memory update: The agent is capable of efficiently navigating towards the parcel spawn point, and successfully picking up a parcel when it reaches the spawn point. For future plan generation, it should continue using similar actions to navigate towards the parcel spawn point and pick up parcels. It is also important to ensure that the agent is aware of the current location of parcels and its own location to make efficient movements. Monitoring the 'object changed' events can help the agent keep track of these changes. The agent has not reached the delivery cell yet, so it has not achieved the short term goal. For future plans, the agent should generate a plan that includes actions to move towards the delivery cell after picking up a parcel.
+2024-10-22 09:45:19,548 - INFO - [LOOP] Memory update: The agent is capable of efficiently navigating towards the parcel spawn point, and successfully picking up a parcel when it reaches the spawn point. For future plan generation, it should continue using similar actions to navigate towards the parcel spawn point and pick up parcels. It is also important to ensure that the agent is aware of the current location of parcels and its own location to make efficient movements. Monitoring the 'object changed' events can help the agent keep track of these changes. The agent has not reached the delivery cell yet, so it has not achieved the short term goal. For future plans, the agent should generate a plan that includes actions to move towards the delivery cell after picking up a parcel.
+2024-10-22 09:45:19,548 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-22 09:45:19,586 - INFO - [LOOP] Generating new intention ...
+2024-10-22 09:45:29,235 - INFO - [LOOP] Intention generated: The agent's short term goal is to navigate to the delivery cell while it is carrying a parcel, and then drop off the parcel in the delivery cell to increase its score.
+def function():
+    global belief_set
+    delivery_cell = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]['cell_coordinates']
+    agent_position = belief_set['agent']['coordinates']
+    if delivery_cell[0] < agent_position[0]:
+        function_1()
+    elif delivery_cell[0] > agent_position[0]:
+        function_2()
+    elif delivery_cell[1] < agent_position[1]:
+        function_3()
+    elif delivery_cell[1] > agent_position[1]:
+        function_4()
+    else:
+        function_6()
+2024-10-22 09:45:30,607 - INFO - [LOOP] Plan executed: ['action_4']
+2024-10-22 09:45:30,607 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1], 'score': 0}}]]
+2024-10-22 09:45:30,620 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-22 09:45:40,059 - INFO - [LOOP] Obtained evaluation for intention: False
+2024-10-22 09:45:40,084 - INFO - [LOOP] Obtained memory update: The agent is capable of efficiently navigating towards the parcel spawn point, and successfully picking up a parcel when it reaches the spawn point. For future plan generation, it should continue using similar actions to navigate towards the parcel spawn point and pick up parcels. It is also important to ensure that the agent is aware of the current location of parcels and its own location to make efficient movements. Monitoring the 'object changed' events can help the agent keep track of these changes. The agent has not reached the delivery cell yet, so it has not achieved the short term goal. For future plans, the agent should generate a plan that includes actions to move towards the delivery cell after picking up a parcel. The agent also needs to include actions to drop off parcels at the delivery cell in its plan. This will help it achieve its short term goal of increasing its score by delivering parcels.
+2024-10-22 09:45:40,084 - INFO - [LOOP] Memory update: The agent is capable of efficiently navigating towards the parcel spawn point, and successfully picking up a parcel when it reaches the spawn point. For future plan generation, it should continue using similar actions to navigate towards the parcel spawn point and pick up parcels. It is also important to ensure that the agent is aware of the current location of parcels and its own location to make efficient movements. Monitoring the 'object changed' events can help the agent keep track of these changes. The agent has not reached the delivery cell yet, so it has not achieved the short term goal. For future plans, the agent should generate a plan that includes actions to move towards the delivery cell after picking up a parcel. The agent also needs to include actions to drop off parcels at the delivery cell in its plan. This will help it achieve its short term goal of increasing its score by delivering parcels.
+2024-10-22 09:45:40,084 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-22 09:45:40,134 - INFO - [LOOP] Generating new intention ...
+2024-10-22 09:45:48,304 - INFO - [LOOP] Intention generated: The short term goal is to navigate the agent to the delivery cell while carrying a parcel, and then drop off the parcel at the delivery cell, which increases the agent's overall score.
+def function():
+    global belief_set
+    agent = belief_set['agent']
+    delivery_cell = next(cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell')
+    while agent['coordinates'] != delivery_cell['cell_coordinates']:
+        if agent['coordinates'][0] < delivery_cell['cell_coordinates'][0]:
+            function_2()
+        elif agent['coordinates'][0] > delivery_cell['cell_coordinates'][0]:
+            function_1()
+        elif agent['coordinates'][1] < delivery_cell['cell_coordinates'][1]:
+            function_4()
+        elif agent['coordinates'][1] > delivery_cell['cell_coordinates'][1]:
+            function_3()
+    function_6()
+2024-10-22 09:46:19,222 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 30 seconds
+2024-10-22 09:46:19,229 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-22 09:46:19,241 - INFO - [LOOP] Intention evaluation or intention run failed 3 times, generating new desire and invalidating called intentions: [1, 2, 3, 4, 6]
+2024-10-22 09:46:25,485 - INFO - [LOOP] Generating new desire
+2024-10-22 09:46:27,692 - INFO - [LOOP] Desire generated: The agent's long term goal is to optimize its path in the environment to collect and deliver as many parcels as possible within a given time frame.
+2024-10-22 09:46:27,717 - INFO - [LOOP] Generating new intention ...
+2024-10-22 09:46:32,054 - INFO - [LOOP] Intention generated: The short term goal is for the agent to deliver the parcel it is carrying to the delivery cell.
+def function():
+    global belief_set
+    while belief_set['agent']['coordinates'] != [1, 3]:
+        if belief_set['agent']['coordinates'][1] < 3:
+            function_4()
+        elif belief_set['agent']['coordinates'][0] > 1:
+            function_1()
+    function_6()
+2024-10-22 09:46:33,108 - INFO - [LOOP] Plan executed: ['action_6']
+2024-10-22 09:46:33,108 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'has_key': False, 'score': 20}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}]]
+2024-10-22 09:46:33,108 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-22 09:46:36,748 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-22 09:46:36,748 - INFO - [LOOP] Obtained memory update: The agent has successfully delivered a parcel, indicating that it can navigate to the delivery cell and perform the delivery action. This suggests that the agent's planning and execution capabilities are effective in navigating the map and completing delivery tasks. The agent should continue to refine its ability to navigate and deliver parcels effectively, especially considering potential obstacles or changes in the environment.
+2024-10-22 09:46:36,748 - INFO - [LOOP] Memory update: The agent has successfully delivered a parcel, indicating that it can navigate to the delivery cell and perform the delivery action. This suggests that the agent's planning and execution capabilities are effective in navigating the map and completing delivery tasks. The agent should continue to refine its ability to navigate and deliver parcels effectively, especially considering potential obstacles or changes in the environment.
+2024-10-22 09:46:36,754 - INFO - [LOOP] Intention evaluation positive
+2024-10-22 09:46:36,767 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-22 09:46:37,778 - INFO - [LOOP] Obtained evaluation for desire: True
+2024-10-22 09:46:37,778 - INFO - [LOOP] Desire evaluation positive
+2024-10-22 09:46:42,977 - ERROR - [LOOP] [Q6] Error while testing trigger function: The function does not return the boolean True for the prior belief set.
+2024-10-22 09:46:42,996 - ERROR - [LOOP] Unable to obtain trigger function for desire
+2024-10-22 09:46:42,996 - INFO - [LOOP] Desire satisfied
+2024-10-22 09:46:50,969 - DEBUG - [LOOP] Stopped loop thread

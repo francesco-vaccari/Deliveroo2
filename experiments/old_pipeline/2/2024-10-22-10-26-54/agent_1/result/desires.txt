@@ -1,0 +1,178 @@
+
+Desire 1: The agent's long term goal should be to efficiently collect all parcels and keys, navigate through the environment avoiding non-walkable cells and deliver the parcels to the designated delivery cells.
+    Intention ID: [7]
+    Executable: False
+    Description: The short term goal should be for the agent to move towards the parcel at [0,0], pick it up and then move to the delivery cell at [1,3] to drop off the parcel.
+                def function_7():
+                    global belief_set
+                    agent_coordinates = belief_set['agent']['coordinates']
+                    while belief_set['parcels'][1]['coordinates'] != agent_coordinates:
+                        if belief_set['parcels'][1]['coordinates'][0] < agent_coordinates[0]:
+                            function_1()
+                        elif belief_set['parcels'][1]['coordinates'][0] > agent_coordinates[0]:
+                            function_2()
+                        elif belief_set['parcels'][1]['coordinates'][1] < agent_coordinates[1]:
+                            function_3()
+                        elif belief_set['parcels'][1]['coordinates'][1] > agent_coordinates[1]:
+                            function_4()
+                        agent_coordinates = belief_set['agent']['coordinates']
+                    function_5()
+                    while belief_set['map']['grid'][7]['cell_coordinates'
+                        ] != agent_coordinates:
+                        if belief_set['map']['grid'][7]['cell_coordinates'][0
+                            ] < agent_coordinates[0]:
+                            function_1()
+                        elif belief_set['map']['grid'][7]['cell_coordinates'][0
+                            ] > agent_coordinates[0]:
+                            function_2()
+                        elif belief_set['map']['grid'][7]['cell_coordinates'][1
+                            ] < agent_coordinates[1]:
+                            function_3()
+                        elif belief_set['map']['grid'][7]['cell_coordinates'][1
+                            ] > agent_coordinates[1]:
+                            function_4()
+                        agent_coordinates = belief_set['agent']['coordinates']
+                    function_6()
+                
+    Intention ID: [8]
+    Executable: True
+    Description: The short term goal is to move the agent to the parcel's location and pick it up.
+                def function_8():
+                    global belief_set
+                    agent_position = belief_set['agent']['coordinates']
+                    parcel_position = belief_set['parcels'][1]['coordinates']
+                    while agent_position != parcel_position:
+                        if agent_position[0] < parcel_position[0]:
+                            function_2()
+                            agent_position[0] += 1
+                        elif agent_position[0] > parcel_position[0]:
+                            function_1()
+                            agent_position[0] -= 1
+                        if agent_position[1] < parcel_position[1]:
+                            function_4()
+                            agent_position[1] += 1
+                        elif agent_position[1] > parcel_position[1]:
+                            function_3()
+                            agent_position[1] -= 1
+                    function_5()
+                
+    Intention ID: [9]
+    Executable: False
+    Description: The short term goal is to move the agent to the nearest key, pick it up and then navigate to the nearest door to unlock it.
+                def function_9():
+                    global belief_set
+                    key_coordinates = belief_set['keys'][1]['coordinates']
+                    agent_coordinates = belief_set['agent']['coordinates']
+                    while agent_coordinates != key_coordinates:
+                        if key_coordinates[0] < agent_coordinates[0]:
+                            function_1()
+                        elif key_coordinates[0] > agent_coordinates[0]:
+                            function_2()
+                        elif key_coordinates[1] < agent_coordinates[1]:
+                            function_3()
+                        elif key_coordinates[1] > agent_coordinates[1]:
+                            function_4()
+                    function_5()
+                    door_coordinates = belief_set['doors'][1]['coordinates']
+                    while agent_coordinates != door_coordinates:
+                        if door_coordinates[0] < agent_coordinates[0]:
+                            function_1()
+                        elif door_coordinates[0] > agent_coordinates[0]:
+                            function_2()
+                        elif door_coordinates[1] < agent_coordinates[1]:
+                            function_3()
+                        elif door_coordinates[1] > agent_coordinates[1]:
+                            function_4()
+                    function_6()
+                
+    Intention ID: [10]
+    Executable: False
+    Description: The short term goal of the agent is to navigate to the nearest walkable cell on the grid that has a key, pick it up, and then navigate to the nearest parcel to pick it up.
+                def function_10():
+                    global belief_set
+                    keys = belief_set['keys']
+                    parcels = belief_set['parcels']
+                    agent = belief_set['agent']
+                    map_grid = belief_set['map']['grid']
+                    walkable_cells = [cell for cell in map_grid if cell['cell_type'] ==
+                        'walkable']
+                    key_cells = [cell for cell in walkable_cells if cell['cell_coordinates'
+                        ] in [keys[key]['coordinates'] for key in keys]]
+                    parcel_cells = [cell for cell in walkable_cells if cell[
+                        'cell_coordinates'] in [parcels[parcel]['coordinates'] for parcel in
+                        parcels]]
+                    if key_cells and not agent['has_key']:
+                        target_key_cell = min(key_cells, key=lambda cell: abs(cell[
+                            'cell_coordinates'][0] - agent['coordinates'][0]) + abs(cell[
+                            'cell_coordinates'][1] - agent['coordinates'][1]))
+                        while agent['coordinates'] != target_key_cell['cell_coordinates']:
+                            if agent['coordinates'][1] < target_key_cell['cell_coordinates'][1
+                                ]:
+                                function_4()
+                            elif agent['coordinates'][1] > target_key_cell['cell_coordinates'][
+                                1]:
+                                function_3()
+                            elif agent['coordinates'][0] < target_key_cell['cell_coordinates'][
+                                0]:
+                                function_2()
+                            elif agent['coordinates'][0] > target_key_cell['cell_coordinates'][
+                                0]:
+                                function_1()
+                        function_5()
+                    if parcel_cells and agent['parcels_carried_ids']:
+                        target_parcel_cell = min(parcel_cells, key=lambda cell: abs(cell[
+                            'cell_coordinates'][0] - agent['coordinates'][0]) + abs(cell[
+                            'cell_coordinates'][1] - agent['coordinates'][1]))
+                        while agent['coordinates'] != target_parcel_cell['cell_coordinates']:
+                            if agent['coordinates'][1] < target_parcel_cell['cell_coordinates'
+                                ][1]:
+                                function_4()
+                            elif agent['coordinates'][1] > target_parcel_cell[
+                                'cell_coordinates'][1]:
+                                function_3()
+                            elif agent['coordinates'][0] < target_parcel_cell[
+                                'cell_coordinates'][0]:
+                                function_2()
+                            elif agent['coordinates'][0] > target_parcel_cell[
+                                'cell_coordinates'][0]:
+                                function_1()
+                        function_5()
+                
+    Intention ID: [11]
+    Executable: True
+    Description: The short term goal is to navigate the agent towards the delivery cell and deliver the parcel it is currently carrying.
+                def function_11():
+                    global belief_set
+                    agent_coordinates = belief_set['agent']['coordinates']
+                    delivery_cell_coordinates = [cell['cell_coordinates'] for cell in
+                        belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]
+                    while agent_coordinates != delivery_cell_coordinates:
+                        if agent_coordinates[0] < delivery_cell_coordinates[0]:
+                            function_2()
+                        elif agent_coordinates[0] > delivery_cell_coordinates[0]:
+                            function_1()
+                        elif agent_coordinates[1] < delivery_cell_coordinates[1]:
+                            function_4()
+                        elif agent_coordinates[1] > delivery_cell_coordinates[1]:
+                            function_3()
+                        agent_coordinates = belief_set['agent']['coordinates']
+                    function_6()
+                
+Executable: True
+Trigger function:
+def function_dtf_1(belief_set):
+    parcels = belief_set['parcels']
+    agent = belief_set['agent']
+    keys = belief_set['keys']
+    if parcels and any(parcel['carried_by_id'] is None for parcel in
+        parcels.values()):
+        return True
+    if agent['has_key'] is False and keys and any(key['carried_by_id'] is
+        None for key in keys.values()):
+        return True
+    if agent['coordinates'] != [1, 3]:
+        return True
+    return False
+
+
+

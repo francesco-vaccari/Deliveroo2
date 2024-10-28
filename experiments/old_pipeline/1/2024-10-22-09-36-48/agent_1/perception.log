@@ -1,0 +1,65 @@
+2024-10-22 09:36:49,997 - DEBUG - [STORE_EVENTS] Started storing events thread
+2024-10-22 09:36:49,997 - DEBUG - [PROCESS_EVENTS] Started processing events thread
+2024-10-22 09:36:50,003 - DEBUG - [LOOP] Started loop thread
+2024-10-22 09:36:50,622 - INFO - [STORE_EVENTS] New object type detected: map
+2024-10-22 09:36:50,622 - INFO - [STORE_EVENTS] New object type detected: parcel
+2024-10-22 09:36:50,622 - INFO - [STORE_EVENTS] New object type detected: agent
+2024-10-22 09:36:50,633 - INFO - [LOOP] Generating perception function for object type: map
+2024-10-22 09:36:55,803 - INFO - [LOOP] Adding perception function for object type: map
+def update_belief(event, belief_set):
+    if event['object_type'] == 'map':
+        if event['event_type'] == 'object added':
+            belief_set['map'] = event['object']
+        elif event['event_type'] == 'object changed':
+            belief_set['map'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            del belief_set['map']
+    return belief_set
+2024-10-22 09:36:55,803 - INFO - [LOOP] Generating perception function for object type: parcel
+2024-10-22 09:36:55,803 - INFO - [PROCESS_EVENTS] Processing events for object type: map
+2024-10-22 09:37:05,561 - INFO - [LOOP] Adding perception function for object type: parcel
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'parcel':
+        if event['event_type'] == 'object added':
+            if 'parcels' not in belief_set:
+                belief_set['parcels'] = {}
+            belief_set['parcels'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object changed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set['parcels']:
+                belief_set['parcels'][event['object']['id']].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set['parcels']:
+                del belief_set['parcels'][event['object']['id']]
+    return belief_set
+2024-10-22 09:37:05,598 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 09:37:05,598 - INFO - [LOOP] Generating perception function for object type: agent
+2024-10-22 09:37:09,926 - INFO - [LOOP] Adding perception function for object type: agent
+def update_belief_set(event, belief_set):
+    event_type = event['event_type']
+    object_type = event['object_type']
+    if object_type == 'agent':
+        if event_type == 'object added':
+            belief_set['agent'] = {event['object']['id']: event['object']}
+        elif event_type == 'object changed':
+            belief_set['agent'][event['object']['id']] = event['object']
+        elif event_type == 'object removed':
+            del belief_set['agent'][event['object']['id']]
+    return belief_set
+2024-10-22 09:37:09,932 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:38:02,572 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:38:03,293 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:38:45,274 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 09:38:45,293 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:38:57,817 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 09:38:57,824 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:39:41,703 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 09:39:41,734 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:39:56,561 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 09:39:56,616 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:39:57,136 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 09:39:57,136 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:39:57,714 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-10-22 09:39:57,727 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-10-22 09:40:15,245 - DEBUG - [STORE_EVENTS] Stopped storing events thread
+2024-10-22 09:40:15,245 - DEBUG - [PROCESS_EVENTS] Stopped processing events thread
+2024-10-22 09:40:15,245 - DEBUG - [LOOP] Stopped loop thread
