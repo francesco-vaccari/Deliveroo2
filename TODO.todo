@@ -1,11 +1,12 @@
 Testare:
-- Stateless intention generation devo solo modificare la funzione manager.get_library() per includere solo le azioni base
-- No desire triggering semplicemente non chiamo la prima parte in nel loop in control
-- A quanto pare la mia idea che il desire può essere eseguito utilizzando tutte le intenzioni che contiene è sbagliata, sembrerebbe che sia sufficiente eseguire solamente l'ultima intenzione che scrive, cambiato in run_desire nel manager
-- desire implementati listati nella control question 1
-- desire trigger evaluation se è positiva o negativa per supportare l'ambiente che cambia nel tempo
-- testare invalidazione di called intentions dopo 3 valutazioni negative (per gestire cambiamenti dell'ambiente)
-- no evaluation of desires triggered
+- no-desire-triggering
+- no-evaluation-triggered-desires
+- Desire che viene eseguito solamente con l'ultima intention
+- Desire implementati listati nella control question 1
+- Invalidazione di called intentions dopo 3 valutazioni negative o errori di fila
+
+
+Magari fare qualche esperimento con user generated desires?
 
 
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown

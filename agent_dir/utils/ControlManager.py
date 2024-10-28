@@ -7,6 +7,7 @@ import astor
 import importlib
 import subprocess
 import threading
+import random
 
 class Intention:
     def __init__(self, id, function_name, function_string, description):
@@ -35,7 +36,6 @@ class ControlManager:
         self.desires = {} # id -> Desire
         self.logger = logger
         self.base_actions_max_id = 0
-        self.last_triggered_desire = -1
         if not os.path.exists("agent_dir/functions/" + agent_folder):
             os.makedirs("agent_dir/functions/" + agent_folder)
         self.functions_file = "agent_dir/functions/" + agent_folder + "/functions.py"
@@ -62,17 +62,20 @@ class ControlManager:
     
     def check_if_desire_triggered(self, belief_set):
         self.logger.log_info(f"Checking if a desire has been triggered ...\nDesires: {self.get_printable_desires()}")
+        desires_triggered = []
         for id, desire in self.desires.items():
             if desire.executable and desire.trigger_function_string is not None:
                 if self.run_desire_trigger(id, belief_set):
-                    self.logger.log_info(f"Desire {id} has been triggered.")
-                    if id == self.last_triggered_desire:
-                        self.logger.log_info(f"Desire {id} was last desire triggered. Avoiding repetition. No desire triggered.")
-                        self.last_triggered_desire = -1
-                        return None
-                    self.last_triggered_desire = id
-                    return id
-        return None
+                    self.logger.log_info(f"Desire {id} could be triggered. Adding it to the list...")
+                    desires_triggered.append(id)
+        self.logger.log_info(f"Desires triggered: {desires_triggered}. Now randomly choosing which one to run.")
+        if len(desires_triggered) == 0:
+            self.logger.log_info("No desire has been triggered.")
+            return None
+        else:
+            id = random.choice(desires_triggered)
+            self.logger.log_info(f"Desire {id} was randomly chosen. Desire {id} has been triggered.")
+            return id
     
     def test_intention(self, function_string):
         self.logger.log_info(f"Testing intention \n{function_string}")
