@@ -111,10 +111,6 @@ class ControlManager:
         return self.intention_id - 1
     
     def run_intention(self, id, get_belief_set, execute_action):
-        if not self.intentions[id].executable:
-            self.logger.log_info(f"Intention {id} is not executable.")
-            return "Intention is not executable.", None, None
-        
         self.logger.log_info(f"Running intention {id} ...")
 
         with open(self.functions_file, 'w') as f:
@@ -296,8 +292,9 @@ class ControlManager:
         if id is None:
             self.logger.log_info("No desire triggered.")
             return "No desire triggered.", None, None
-        self.logger.log_info(f"Generating plan for desire {id} ...")
-        if True: # get the plan by executing only last intention
+        self.logger.log_info(f"Desire {id} is about to be executed ...")
+        if False: # execute only last intention
+            self.logger.log_info(f"Executing only last intention for desire {id} ...")
             intention = self.desires[id].intentions[-1]
             error, plan, events = self.run_intention(intention.id, get_belief_set, execute_action)
             if error is None:
@@ -307,17 +304,31 @@ class ControlManager:
                 self.invalidate_intention(intention.id)
                 self.logger.log_error(f"Error during plan execution of desire {id}. Desire {id} is now invalid and last intention has been invalidated.")
             return error, plan, events
-        # else: # get the plan by executing all intentions and concatenating the plans [WRONG]
-            # concat_plans = []
-            # for intention in self.desires[id].intentions:
-            #     plan = self.run_intention(intention.id, belief_set)
-            #     if plan is None:
-            #         self.desires[id].executable = False
-            #         self.logger.log_error(f"Desire {id} is now invalid.")
-            #         return None
-            #     concat_plans += plan
-            # self.logger.log_info(f"Desire {id} plan has been generated.")
-            # return concat_plans
+        if True: # execute all valid intentions
+            self.logger.log_info(f"Executing all valid intentions for desire {id} ...")
+            for intention in self.desire[id].intentions:
+                if intention.executable:
+                    self.logger.log_info(f"Executing intention {intention.id} ...")
+                    error, plan, events = self.run_intention(intention.id, get_belief_set, execute_action)
+                    if error is None:
+                        self.logger.log_info(f"Intention {intention.id} has been executed with plan {plan} and events {events}.")
+                    else:
+                        self.desires[id].executable = False
+                        self.invalidate_intention(intention.id)
+                        self.logger.log_error(f"Error during intention {intention.id} execution. Desire {id} is now invalid and intention {intention.id} has been invalidated.")
+                        return error, plan, events
+        if False: # execute all intentions
+            self.logger.log_info(f"Executing all intentions for desire {id} ...")
+            for intention in self.desire[id].intentions:
+                self.logger.log_info(f"Executing intention {intention.id} ...")
+                error, plan, events = self.run_intention(intention.id, get_belief_set, execute_action)
+                if error is None:
+                    self.logger.log_info(f"Intention {intention.id} has been executed with plan {plan} and events {events}.")
+                else:
+                    self.desires[id].executable = False
+                    self.invalidate_intention(intention.id)
+                    self.logger.log_error(f"Error during intention {intention.id} execution. Desire {id} is now invalid and intention {intention.id} has been invalidated.")
+                    return error, plan, events
     
     def add_trigger_function(self, desire_id, function_string):
         function_string = self.rename_function(function_string, f"function_dtf_{self.dtf_number}")
