@@ -90,6 +90,8 @@ def analyze(folder):
 
     # folders_to_analyze = ['analyzable_DTF_S', 'analyzable_IF_NW_S', 'analyzable_IF_W_S', 'analyzable_IF_S', 'analyzable_PF_S']
     folders_to_analyze = ['analyzable_DTF_S', 'analyzable_IF_NW_S', 'analyzable_IF_W_S', 'analyzable_PF_S']
+    base_functions=['function_1.py', 'function_2.py', 'function_3.py', 'function_4.py', 'function_5.py', 'function_6.py']
+    ignore_files = ['analyzable_IF_W_S/' + base_function for base_function in base_functions]
 
     files = {}
 
@@ -120,11 +122,12 @@ def analyze(folder):
                 # print(f"\tNo files found in {file}")
                 pass
             for file_path in path:
-                print(f'\t{file_path.split('/')[-1].split('.')[0]}')
-                res = get_cc(file_path)
-                res = get_mi(file_path)
-                res = get_raw(file_path)
-                res = get_hal(file_path)
+                if all([ignore_file not in file_path for ignore_file in ignore_files]):
+                    print(f'\t{file_path.split('/')[-1].split('.')[0]}')
+                    res = get_cc(file_path)
+                    res = get_mi(file_path)
+                    res = get_raw(file_path)
+                    res = get_hal(file_path)
         print("-----------------------------------------------------")
 
     os.system("rm temp.json")

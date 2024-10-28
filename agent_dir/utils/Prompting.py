@@ -7,7 +7,7 @@ class Prompting:
     def __init__(self, folder, agent_id):
         self.client = AzureOpenAIClient()
         self.logger = ExperimentLogger(folder, 'prompting.log')
-        self.stop = True # change to False when ready to use
+        self.stop = False # change to False when ready to use
         self.requests_made = 0
         self.agent_id = agent_id
     
