@@ -295,6 +295,10 @@ class ControlManager:
         self.logger.log_info(f"Desire {id} is about to be executed ...")
         if False: # execute only last intention
             self.logger.log_info(f"Executing only last intention for desire {id} ...")
+            if not self.desire_has_executable_intentions(id):
+                self.logger.log_info(f"Desire {id} has no executable intentions.")
+                self.desires[id].executable = False
+                return f"Desire {id} has no executable intentions.", None, None
             intention = self.desires[id].intentions[-1]
             error, plan, events = self.run_intention(intention.id, get_belief_set, execute_action)
             if error is None:
@@ -306,17 +310,28 @@ class ControlManager:
             return error, plan, events
         if True: # execute all valid intentions
             self.logger.log_info(f"Executing all valid intentions for desire {id} ...")
+            if not self.desire_has_executable_intentions(id):
+                self.logger.log_info(f"Desire {id} has no executable intentions.")
+                self.desires[id].executable = False
+                return f"Desire {id} has no executable intentions.", None, None
+            final_plan = []
+            final_events = []
             for intention in self.desires[id].intentions:
                 if intention.executable:
                     self.logger.log_info(f"Executing intention {intention.id} ...")
                     error, plan, events = self.run_intention(intention.id, get_belief_set, execute_action)
                     if error is None:
                         self.logger.log_info(f"Intention {intention.id} has been executed with plan {plan} and events {events}.")
+                        for action in plan:
+                            final_plan.append(action)
+                        for event in events:
+                            final_events.append(event)
                     else:
                         self.desires[id].executable = False
                         self.invalidate_intention(intention.id)
                         self.logger.log_error(f"Error during intention {intention.id} execution. Desire {id} is now invalid and intention {intention.id} has been invalidated.")
-                        return error, plan, events
+                        return error, final_plan, final_events
+            return None, final_plan, final_events
         if False: # execute all intentions
             self.logger.log_info(f"Executing all intentions for desire {id} ...")
             for intention in self.desires[id].intentions:
@@ -438,6 +453,12 @@ class ControlManager:
 
         new_func_str = astor.to_source(tree)
         return new_func_str
+
+    def desire_has_executable_intentions(self, id):
+        for intention in self.desires[id].intentions:
+            if intention.executable:
+                return True
+        return False
 
     def get_library(self, stateless_intention_generation):
         intentions = {}

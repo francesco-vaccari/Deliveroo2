@@ -310,7 +310,8 @@ class Game:
                         key.to_draw = True
                         key.to_draw_on_agent = False
                         res = True
-                agent.has_key = False
+                if agent.has_key is not None:
+                    agent.has_key = False
         return res # True if at least one parcel was put down
 
     def print_map(self):
