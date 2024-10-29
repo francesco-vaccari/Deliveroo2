@@ -67,6 +67,9 @@ class Control:
                     self.logger.log_info("[LOOP] Checking if any desire is triggered")
                     self.status = "Checking if any desire is triggered"
                     desire_id = self.manager.check_if_desire_triggered(self.get_belief_set())
+                    self.logger.log_info(f"[LOOP] Desire triggered: {desire_id}")
+                    if desire_id is not None:
+                        self.status = f"Desire triggered: {desire_id}. Executing desire ..."
                     belief_set_before_execution = self.get_belief_set()
                     error, plan, events = self.manager.run_desire(desire_id, self.get_belief_set, self.execute_action)
                     belief_set_after_execution = self.get_belief_set()

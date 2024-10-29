@@ -306,7 +306,7 @@ class ControlManager:
             return error, plan, events
         if True: # execute all valid intentions
             self.logger.log_info(f"Executing all valid intentions for desire {id} ...")
-            for intention in self.desire[id].intentions:
+            for intention in self.desires[id].intentions:
                 if intention.executable:
                     self.logger.log_info(f"Executing intention {intention.id} ...")
                     error, plan, events = self.run_intention(intention.id, get_belief_set, execute_action)
@@ -319,7 +319,7 @@ class ControlManager:
                         return error, plan, events
         if False: # execute all intentions
             self.logger.log_info(f"Executing all intentions for desire {id} ...")
-            for intention in self.desire[id].intentions:
+            for intention in self.desires[id].intentions:
                 self.logger.log_info(f"Executing intention {intention.id} ...")
                 error, plan, events = self.run_intention(intention.id, get_belief_set, execute_action)
                 if error is None:
