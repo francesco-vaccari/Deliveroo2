@@ -1,0 +1,341 @@
+2024-10-29 19:22:43,758 - DEBUG - [LOOP] Started loop thread
+2024-10-29 19:22:43,770 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-29 19:22:44,781 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-29 19:22:45,797 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-29 19:22:46,812 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-29 19:22:47,844 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-29 19:22:48,857 - INFO - [LOOP] Waiting for belief set to be ready...
+2024-10-29 19:22:49,877 - INFO - [LOOP] Belief set is ready, waiting 30 seconds...
+2024-10-29 19:22:50,894 - INFO - [LOOP] Belief set is ready, waiting 29 seconds...
+2024-10-29 19:22:51,915 - INFO - [LOOP] Belief set is ready, waiting 28 seconds...
+2024-10-29 19:22:52,934 - INFO - [LOOP] Belief set is ready, waiting 27 seconds...
+2024-10-29 19:22:53,942 - INFO - [LOOP] Belief set is ready, waiting 26 seconds...
+2024-10-29 19:22:54,950 - INFO - [LOOP] Belief set is ready, waiting 25 seconds...
+2024-10-29 19:22:55,979 - INFO - [LOOP] Belief set is ready, waiting 24 seconds...
+2024-10-29 19:22:57,015 - INFO - [LOOP] Belief set is ready, waiting 23 seconds...
+2024-10-29 19:22:58,023 - INFO - [LOOP] Belief set is ready, waiting 22 seconds...
+2024-10-29 19:22:59,052 - INFO - [LOOP] Belief set is ready, waiting 21 seconds...
+2024-10-29 19:23:00,066 - INFO - [LOOP] Belief set is ready, waiting 20 seconds...
+2024-10-29 19:23:01,100 - INFO - [LOOP] Belief set is ready, waiting 19 seconds...
+2024-10-29 19:23:02,124 - INFO - [LOOP] Belief set is ready, waiting 18 seconds...
+2024-10-29 19:23:03,141 - INFO - [LOOP] Belief set is ready, waiting 17 seconds...
+2024-10-29 19:23:04,163 - INFO - [LOOP] Belief set is ready, waiting 16 seconds...
+2024-10-29 19:23:05,199 - INFO - [LOOP] Belief set is ready, waiting 15 seconds...
+2024-10-29 19:23:06,217 - INFO - [LOOP] Belief set is ready, waiting 14 seconds...
+2024-10-29 19:23:07,242 - INFO - [LOOP] Belief set is ready, waiting 13 seconds...
+2024-10-29 19:23:08,272 - INFO - [LOOP] Belief set is ready, waiting 12 seconds...
+2024-10-29 19:23:09,288 - INFO - [LOOP] Belief set is ready, waiting 11 seconds...
+2024-10-29 19:23:10,306 - INFO - [LOOP] Belief set is ready, waiting 10 seconds...
+2024-10-29 19:23:11,330 - INFO - [LOOP] Belief set is ready, waiting 9 seconds...
+2024-10-29 19:23:12,339 - INFO - [LOOP] Belief set is ready, waiting 8 seconds...
+2024-10-29 19:23:13,365 - INFO - [LOOP] Belief set is ready, waiting 7 seconds...
+2024-10-29 19:23:14,395 - INFO - [LOOP] Belief set is ready, waiting 6 seconds...
+2024-10-29 19:23:15,424 - INFO - [LOOP] Belief set is ready, waiting 5 seconds...
+2024-10-29 19:23:16,439 - INFO - [LOOP] Belief set is ready, waiting 4 seconds...
+2024-10-29 19:23:17,461 - INFO - [LOOP] Belief set is ready, waiting 3 seconds...
+2024-10-29 19:23:18,489 - INFO - [LOOP] Belief set is ready, waiting 2 seconds...
+2024-10-29 19:23:19,511 - INFO - [LOOP] Belief set is ready, waiting 1 seconds...
+2024-10-29 19:23:21,132 - INFO - [LOOP] Checking if any desire is triggered
+2024-10-29 19:23:21,170 - INFO - [LOOP] Desire triggered: None
+2024-10-29 19:23:21,170 - INFO - [LOOP] Generating new desire
+2024-10-29 19:23:22,972 - INFO - [LOOP] Desire generated: The agent should aim to identify optimal paths that avoid non-walkable cells to efficiently collect and deliver as many parcels as possible.
+2024-10-29 19:23:22,985 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:23:30,111 - INFO - [LOOP] Intention generated: The agent should aim to move towards the parcel spawn location and pick up a parcel.
+def function():
+    global belief_set
+    spawn_location = [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'parcels_spawn'][0]
+    while belief_set['agent'][1]['coordinates'] != spawn_location:
+        if belief_set['agent'][1]['coordinates'][0] > spawn_location[0]:
+            function_1()
+        elif belief_set['agent'][1]['coordinates'][0] < spawn_location[0]:
+            function_2()
+        if belief_set['agent'][1]['coordinates'][1] > spawn_location[1]:
+            function_3()
+        elif belief_set['agent'][1]['coordinates'][1] < spawn_location[1]:
+            function_4()
+    function_5()
+2024-10-29 19:23:32,596 - INFO - [LOOP] Plan executed: ['action_1', 'action_3', 'action_5']
+2024-10-29 19:23:32,596 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1, 2], 'score': 0}}]]
+2024-10-29 19:23:32,596 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-29 19:23:33,703 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-29 19:23:33,703 - INFO - [LOOP] Obtained memory update: 
+2024-10-29 19:23:33,703 - INFO - [LOOP] Memory updated: 
+2024-10-29 19:23:33,703 - INFO - [LOOP] Intention evaluation positive
+2024-10-29 19:23:33,709 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-29 19:23:34,455 - INFO - [LOOP] Obtained evaluation for desire: False
+2024-10-29 19:23:34,455 - INFO - [LOOP] Desire not yet satisfied
+2024-10-29 19:23:34,455 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:23:46,794 - INFO - [LOOP] Intention generated: The agent should move towards the delivery cell while avoiding the non-walkable cells, and deliver the parcels it is carrying.
+def function():
+    global belief_set
+    delivery_cell = next(cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell')
+    agent = belief_set['agent'][1]
+    while agent['coordinates'] != delivery_cell['cell_coordinates']:
+        if agent['coordinates'][0] < delivery_cell['cell_coordinates'][0] and [agent['coordinates'][0] + 1, agent['coordinates'][1]] not in [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'non_walkable']:
+            function_2()
+        elif agent['coordinates'][0] > delivery_cell['cell_coordinates'][0] and [agent['coordinates'][0] - 1, agent['coordinates'][1]] not in [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'non_walkable']:
+            function_1()
+        elif agent['coordinates'][1] < delivery_cell['cell_coordinates'][1] and [agent['coordinates'][0], agent['coordinates'][1] + 1] not in [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'non_walkable']:
+            function_4()
+        elif agent['coordinates'][1] > delivery_cell['cell_coordinates'][1] and [agent['coordinates'][0], agent['coordinates'][1] - 1] not in [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'non_walkable']:
+            function_3()
+    function_6()
+2024-10-29 19:24:02,516 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 15 seconds
+2024-10-29 19:24:08,282 - INFO - [LOOP] [Q7] Obtained memory update: Avoid creating infinite loops: The agent should not repetitively perform the same action without a termination condition. The agent's function was likely stuck in an infinite loop because it was continuously performing action_2 without meeting the exit condition. This could be due to incorrect logic in the function or the agent's inability to reach the delivery cell due to environmental constraints such as non-walkable cells. So, ensure proper logic to handle such situations. In addition, consider setting a maximum limit to the number of attempts for a specific action or sequence of actions to prevent the function from running indefinitely. The short term goal that the agent was trying to achieve was to move towards the delivery cell while avoiding non-walkable cells and deliver the parcels it was carrying.
+2024-10-29 19:24:08,313 - INFO - [LOOP] Memory updated: Avoid creating infinite loops: The agent should not repetitively perform the same action without a termination condition. The agent's function was likely stuck in an infinite loop because it was continuously performing action_2 without meeting the exit condition. This could be due to incorrect logic in the function or the agent's inability to reach the delivery cell due to environmental constraints such as non-walkable cells. So, ensure proper logic to handle such situations. In addition, consider setting a maximum limit to the number of attempts for a specific action or sequence of actions to prevent the function from running indefinitely. The short term goal that the agent was trying to achieve was to move towards the delivery cell while avoiding non-walkable cells and deliver the parcels it was carrying.
+2024-10-29 19:24:08,313 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-29 19:24:08,326 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:24:20,776 - INFO - [LOOP] Intention generated: The agent's short term goal is to move towards the delivery cell while avoiding non-walkable cells and deliver the parcels it is carrying. The function achieves this by first checking if the agent is carrying any parcels, and if so, it tries to move towards the delivery cell while avoiding non-walkable cells. Once it reaches the delivery cell, it puts down the parcels. The function also includes a termination condition to prevent infinite loops.
+def function():
+    global belief_set
+    max_attempts = 10
+    attempts = 0
+    while attempts < max_attempts and belief_set['agent'][1]['parcels_carried_ids']:
+        coordinates = belief_set['agent'][1]['coordinates']
+        if [coordinates[0]+1, coordinates[1]] in [item['cell_coordinates'] for item in belief_set['map']['grid'] if item['cell_type']=='walkable']:
+            function_2()
+        elif [coordinates[0], coordinates[1]+1] in [item['cell_coordinates'] for item in belief_set['map']['grid'] if item['cell_type']=='walkable']:
+            function_4()
+        elif [coordinates[0]-1, coordinates[1]] in [item['cell_coordinates'] for item in belief_set['map']['grid'] if item['cell_type']=='walkable']:
+            function_1()
+        elif [coordinates[0], coordinates[1]-1] in [item['cell_coordinates'] for item in belief_set['map']['grid'] if item['cell_type']=='walkable']:
+            function_3()
+        attempts += 1
+    if belief_set['agent'][1]['coordinates'] in [item['cell_coordinates'] for item in belief_set['map']['grid'] if item['cell_type']=='delivery_cell'] and belief_set['agent'][1]['parcels_carried_ids']:
+        function_6()
+
+2024-10-29 19:24:26,796 - INFO - [LOOP] Plan executed: ['action_4', 'action_4', 'action_1', 'action_2', 'action_1', 'action_2', 'action_1', 'action_2', 'action_1', 'action_2']
+2024-10-29 19:24:26,828 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}]]
+2024-10-29 19:24:26,853 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-29 19:24:30,598 - INFO - [LOOP] Obtained evaluation for intention: False
+2024-10-29 19:24:30,598 - INFO - [LOOP] Obtained memory update: The agent is stuck in a loop of actions without making progress towards the delivery cell. The generated plan lacks an effective pathfinding strategy. The agent should adopt a heuristic, such as A* algorithm to find the shortest path avoiding non-walkable cells. Also, the plan should include a termination condition when no progress is made to prevent infinite loops.
+2024-10-29 19:24:30,605 - INFO - [LOOP] Memory updated: The agent is stuck in a loop of actions without making progress towards the delivery cell. The generated plan lacks an effective pathfinding strategy. The agent should adopt a heuristic, such as A* algorithm to find the shortest path avoiding non-walkable cells. Also, the plan should include a termination condition when no progress is made to prevent infinite loops.
+2024-10-29 19:24:30,623 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-29 19:24:30,630 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:24:42,197 - ERROR - [LOOP] [Q2MEM] Error while making request: Unable to parse JSON, error: Expecting property name enclosed in double quotes: line 1 column 398 (char 397)
+2024-10-29 19:24:54,738 - INFO - [LOOP] Intention generated: The agent should aim to reach the delivery cell with a parcel by finding a shortest path that does not cross any non-walkable cells, put the parcel down, then return back to the parcel spawn location, while avoiding getting stuck in loops.
+def function():
+    global belief_set
+    agent = belief_set['agent'][1]
+    map_grid = belief_set['map']['grid']
+    non_walkable_cells = [cell for cell in map_grid if cell['cell_type'] == 'non_walkable']
+    delivery_cell = [cell for cell in map_grid if cell['cell_type'] == 'delivery_cell'][0]
+    parcels_spawn_cell = [cell for cell in map_grid if cell['cell_type'] == 'parcels_spawn'][0]
+    path_to_delivery = a_star_pathfinding(agent['coordinates'], delivery_cell['cell_coordinates'], non_walkable_cells)
+    if path_to_delivery is not None:
+        for step in path_to_delivery:
+            if step[0] < agent['coordinates'][0]:
+                function_1()
+            elif step[0] > agent['coordinates'][0]:
+                function_2()
+            elif step[1] < agent['coordinates'][1]:
+                function_3()
+            else:
+                function_4()
+        function_6()
+    path_to_spawn = a_star_pathfinding(agent['coordinates'], parcels_spawn_cell['cell_coordinates'], non_walkable_cells)
+    if path_to_spawn is not None:
+        for step in path_to_spawn:
+            if step[0] < agent['coordinates'][0]:
+                function_1()
+            elif step[0] > agent['coordinates'][0]:
+                function_2()
+            elif step[1] < agent['coordinates'][1]:
+                function_3()
+            else:
+                function_4()
+    function_5()
+
+2024-10-29 19:25:10,134 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 15 seconds
+2024-10-29 19:25:17,580 - INFO - [LOOP] [Q7] Obtained memory update: The error that occurred was a timeout error, which typically indicates a problem with an infinite loop or an algorithm that is too complex and time-consuming for the given time limit. In this case, the function is trying to perform pathfinding using the A* algorithm, which can be computationally expensive, especially for larger grid sizes. It's possible that the A* algorithm is not efficiently implemented, resulting in a timeout. To avoid this in the future, ensure that the pathfinding algorithm is optimized for efficiency. Also, consider incorporating a mechanism that breaks the loop if it's taking too long to find a path. It's also crucial to make sure that the agent's goal is achievable within the constraints of the environment, for instance, if there is a valid path to the target cell. The short term goal was for the agent to reach the delivery cell with a parcel, avoiding any non-walkable cells, put the parcel down, then return back to the parcel spawn location, while avoiding getting stuck in loops.
+2024-10-29 19:25:17,592 - INFO - [LOOP] Memory updated: The error that occurred was a timeout error, which typically indicates a problem with an infinite loop or an algorithm that is too complex and time-consuming for the given time limit. In this case, the function is trying to perform pathfinding using the A* algorithm, which can be computationally expensive, especially for larger grid sizes. It's possible that the A* algorithm is not efficiently implemented, resulting in a timeout. To avoid this in the future, ensure that the pathfinding algorithm is optimized for efficiency. Also, consider incorporating a mechanism that breaks the loop if it's taking too long to find a path. It's also crucial to make sure that the agent's goal is achievable within the constraints of the environment, for instance, if there is a valid path to the target cell. The short term goal was for the agent to reach the delivery cell with a parcel, avoiding any non-walkable cells, put the parcel down, then return back to the parcel spawn location, while avoiding getting stuck in loops.
+2024-10-29 19:25:17,599 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-29 19:25:17,629 - INFO - [LOOP] Intention evaluation or intention run failed 3 times, generating new desire and invalidating called intentions: [1, 2, 3, 4, 6]
+2024-10-29 19:25:18,970 - INFO - [LOOP] Checking if any desire is triggered
+2024-10-29 19:25:18,983 - INFO - [LOOP] Desire triggered: None
+2024-10-29 19:25:19,007 - INFO - [LOOP] Generating new desire
+2024-10-29 19:25:20,980 - INFO - [LOOP] Desire generated: The agent's long term goal is to strategically plan a route that minimizes travel time and maximizes the delivery of parcels from the spawning area to the delivery cell, while also avoiding non-walkable cells.
+2024-10-29 19:25:21,031 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:25:27,422 - INFO - [LOOP] Intention generated: The short term goal is to navigate the agent towards the delivery cell while avoiding non-walkable cells, and then drop the parcels that it is carrying.
+def function():
+    global belief_set
+    agent = belief_set['agent'][1]
+    delivery_cell = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]
+    if agent['coordinates'][0] < delivery_cell['cell_coordinates'][0]:
+        function_2()
+    elif agent['coordinates'][0] > delivery_cell['cell_coordinates'][0]:
+        function_1()
+    elif agent['coordinates'][1] < delivery_cell['cell_coordinates'][1]:
+        function_4()
+    elif agent['coordinates'][1] > delivery_cell['cell_coordinates'][1]:
+        function_3()
+    else:
+        function_6()
+2024-10-29 19:25:28,674 - INFO - [LOOP] Plan executed: ['action_4']
+2024-10-29 19:25:28,674 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [1, 2], 'score': 0}}]]
+2024-10-29 19:25:28,687 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-29 19:25:33,343 - INFO - [LOOP] Obtained evaluation for intention: False
+2024-10-29 19:25:33,343 - INFO - [LOOP] Obtained memory update: The agent was able to successfully navigate towards the delivery cell while avoiding non-walkable cells, and managed to transport the parcels to the delivery cell. However, it seems the agent did not drop the parcels that it is carrying at the delivery cell, which was part of the goal. The agent should include an action to drop the parcels once it reaches the delivery cell. This can be confirmed by the fact that the final belief set still shows the parcels as being carried by the agent. The plan generation should be improved to always include a drop action after a successful navigation to the delivery cell with parcels.
+2024-10-29 19:25:33,343 - INFO - [LOOP] Memory updated: The agent was able to successfully navigate towards the delivery cell while avoiding non-walkable cells, and managed to transport the parcels to the delivery cell. However, it seems the agent did not drop the parcels that it is carrying at the delivery cell, which was part of the goal. The agent should include an action to drop the parcels once it reaches the delivery cell. This can be confirmed by the fact that the final belief set still shows the parcels as being carried by the agent. The plan generation should be improved to always include a drop action after a successful navigation to the delivery cell with parcels.
+2024-10-29 19:25:33,343 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-29 19:25:33,349 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:25:44,745 - INFO - [LOOP] Intention generated: The agent's short term goal is to move towards the spawn location of the parcels, pick up the parcels and then move towards the delivery cell while avoiding non-walkable cells.
+def function():
+    global belief_set
+    spawn_location = [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'parcels_spawn'][0]
+    delivery_location = [cell['cell_coordinates'] for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]
+    agent_location = belief_set['agent'][1]['coordinates']
+    while agent_location != spawn_location:
+        if agent_location[0] > spawn_location[0]:
+            function_1()
+        elif agent_location[0] < spawn_location[0]:
+            function_2()
+        if agent_location[1] > spawn_location[1]:
+            function_3()
+        elif agent_location[1] < spawn_location[1]:
+            function_4()
+        agent_location = belief_set['agent'][1]['coordinates']
+    function_5()
+    while agent_location != delivery_location:
+        if agent_location[0] > delivery_location[0]:
+            function_1()
+        elif agent_location[0] < delivery_location[0]:
+            function_2()
+        if agent_location[1] > delivery_location[1]:
+            function_3()
+        elif agent_location[1] < delivery_location[1]:
+            function_4()
+        agent_location = belief_set['agent'][1]['coordinates']
+    function_6()
+2024-10-29 19:25:51,160 - INFO - [LOOP] Plan executed: ['action_1', 'action_3', 'action_3', 'action_3', 'action_5', 'action_2', 'action_4', 'action_4', 'action_4', 'action_6']
+2024-10-29 19:25:51,160 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [0, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 3], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [0, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 2], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [0, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [1, 2], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 3, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 4, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 5, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 6, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 7, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 8, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [1, 2, 3, 4, 5, 6, 7, 8], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 3, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 4, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 5, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 6, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 7, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 8, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [1, 2, 3, 4, 5, 6, 7, 8], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 3, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 4, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 5, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 6, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 7, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 8, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [1, 2, 3, 4, 5, 6, 7, 8], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 3, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 4, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 5, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 6, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 7, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 8, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [1, 2, 3, 4, 5, 6, 7, 8], 'score': 0}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'score': 160}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 1, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 2, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 3, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 4, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 5, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 6, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 7, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 8, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}]]
+2024-10-29 19:25:51,160 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-29 19:25:52,911 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-29 19:25:52,911 - INFO - [LOOP] Obtained memory update: 
+2024-10-29 19:25:52,911 - INFO - [LOOP] Memory updated: 
+2024-10-29 19:25:52,911 - INFO - [LOOP] Intention evaluation positive
+2024-10-29 19:25:52,917 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-29 19:25:53,742 - INFO - [LOOP] Obtained evaluation for desire: True
+2024-10-29 19:25:53,755 - INFO - [LOOP] Desire evaluation positive
+2024-10-29 19:25:59,859 - INFO - [LOOP] Obtained trigger function for desire: The agent's long term goal is to strategically plan a route that minimizes travel time and maximizes the delivery of parcels from the spawning area to the delivery cell, while also avoiding non-walkable cells.
+def should_pursue_goal(belief_set):
+    parcels_spawn_exists = any(cell['cell_type'] == 'parcels_spawn' for cell in belief_set['map']['grid'])
+    delivery_cell_exists = any(cell['cell_type'] == 'delivery_cell' for cell in belief_set['map']['grid'])
+    walkable_path_exists = any(cell['cell_type'] == 'walkable' for cell in belief_set['map']['grid'])
+    parcels_exist = any(parcel['carried_by_id'] is None for parcel in belief_set['parcels'].values())
+    agent_parcels = belief_set['agent'][1]['parcels_carried_ids']
+    if parcels_spawn_exists and delivery_cell_exists and walkable_path_exists and (parcels_exist or agent_parcels):
+        return True
+    else:
+        return False
+2024-10-29 19:25:59,877 - INFO - [LOOP] Desire satisfied
+2024-10-29 19:26:01,673 - INFO - [LOOP] Checking if any desire is triggered
+2024-10-29 19:26:01,674 - INFO - [LOOP] Desire triggered: 2
+2024-10-29 19:26:08,141 - INFO - [LOOP] Desire triggered : 2
+2024-10-29 19:26:08,160 - INFO - [LOOP] Plan generated: ['action_1', 'action_3', 'action_3', 'action_3', 'action_5', 'action_2', 'action_4', 'action_4', 'action_4', 'action_6']
+2024-10-29 19:26:08,223 - INFO - [LOOP] Plan executed, asking for desire evaluation...
+2024-10-29 19:26:09,007 - INFO - [LOOP] Obtained evaluation for desire: True
+2024-10-29 19:26:09,007 - INFO - [LOOP] Desire triggered evaluated positively
+2024-10-29 19:26:09,812 - INFO - [LOOP] Checking if any desire is triggered
+2024-10-29 19:26:09,812 - INFO - [LOOP] Desire triggered: None
+2024-10-29 19:26:09,813 - INFO - [LOOP] Generating new desire
+2024-10-29 19:26:11,376 - INFO - [LOOP] Desire generated: The agent's long term goal is to efficiently manage its energy usage by minimizing unnecessary movements and optimizing the path for parcel delivery, ensuring its sustainability and productivity in the long run.
+2024-10-29 19:26:11,413 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:26:15,174 - INFO - [LOOP] Intention generated: The short term goal is to navigate the agent towards the parcel, pick it up, and then deliver it to the delivery cell while avoiding non-walkable cells.
+def function():
+    global belief_set
+    # The agent moves towards the parcel spawn location
+    function_7()
+    # The agent picks up the parcel
+    function_5()
+    # The agent delivers the parcel to the delivery cell avoiding non-walkable cells
+    function_12()
+
+2024-10-29 19:26:22,612 - INFO - [LOOP] Plan executed: ['action_1', 'action_3', 'action_3', 'action_3', 'action_5', 'action_5', 'action_5', 'action_2', 'action_4', 'action_4', 'action_4', 'action_6']
+2024-10-29 19:26:22,656 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 3], 'parcels_carried_ids': [], 'score': 180}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 2], 'parcels_carried_ids': [], 'score': 180}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 180}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'score': 180}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 10, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [10], 'score': 180}}], [], [], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 10, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [10], 'score': 180}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 10, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 1], 'parcels_carried_ids': [10], 'score': 180}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 10, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [10], 'score': 180}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 10, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [10], 'score': 180}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'score': 200}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 10, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}]]
+2024-10-29 19:26:22,656 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-29 19:26:24,065 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-29 19:26:24,065 - INFO - [LOOP] Obtained memory update: 
+2024-10-29 19:26:24,065 - INFO - [LOOP] Memory updated: 
+2024-10-29 19:26:24,065 - INFO - [LOOP] Intention evaluation positive
+2024-10-29 19:26:24,078 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-29 19:26:24,852 - INFO - [LOOP] Obtained evaluation for desire: True
+2024-10-29 19:26:24,852 - INFO - [LOOP] Desire evaluation positive
+2024-10-29 19:26:27,472 - ERROR - [LOOP] [Q6] Error while testing trigger function: The function does not return the boolean True for the prior belief set.
+2024-10-29 19:26:27,485 - ERROR - [LOOP] Unable to obtain trigger function for desire
+2024-10-29 19:26:27,485 - INFO - [LOOP] Desire satisfied
+2024-10-29 19:26:28,707 - INFO - [LOOP] Checking if any desire is triggered
+2024-10-29 19:26:28,751 - INFO - [LOOP] Desire triggered: None
+2024-10-29 19:26:28,763 - INFO - [LOOP] Generating new desire
+2024-10-29 19:26:30,927 - INFO - [LOOP] Desire generated: The agent's long term goal is to optimize its movement and actions based on the frequency and pattern of parcel spawning, to ensure continuous and efficient parcel pickup, transportation, and delivery while avoiding non-walkable cells.
+2024-10-29 19:26:31,004 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:26:34,952 - INFO - [LOOP] Intention generated: The agent's short term goal is to navigate towards the parcel spawn location, pick up the parcel, and then move towards the delivery cell while avoiding non-walkable cells.
+def function():
+    global belief_set
+    if belief_set['agent'][1]['coordinates'] != [0, 0]:
+        function_1()
+    function_5()
+    while belief_set['agent'][1]['coordinates'] != [1, 3]:
+        function_4()
+    function_6()
+
+2024-10-29 19:26:50,421 - ERROR - [LOOP] Error while running intention generated: Command '['python3', 'agent_dir/functions/agent_1/functions.py']' timed out after 15 seconds
+2024-10-29 19:26:57,709 - INFO - [LOOP] [Q7] Obtained memory update: The error occurred due to a timeout, suggesting that the function was stuck in an infinite loop. Looking at the function, it's clear that the while loop could have caused this problem. It keeps executing function_4() until the agent's coordinates become [1, 3]. However, the agent's coordinates were [0, 3] at the end of execution, meaning that function_4(), which increases the second coordinate, was not able to achieve the desired condition. To avoid this in the future, ensure that the loop conditions can always be met within a finite number of steps. Use specific conditions and check that the functions within the loop change the state of the program in a way that eventually meets the loop termination condition. Also, it could be beneficial to add a maximum iteration limit to loops to prevent infinite loops. The short term goal that the agent was trying to achieve was to navigate towards the parcel spawn location, pick up the parcel, and then move towards the delivery cell while avoiding non-walkable cells.
+2024-10-29 19:26:57,709 - INFO - [LOOP] Memory updated: The error occurred due to a timeout, suggesting that the function was stuck in an infinite loop. Looking at the function, it's clear that the while loop could have caused this problem. It keeps executing function_4() until the agent's coordinates become [1, 3]. However, the agent's coordinates were [0, 3] at the end of execution, meaning that function_4(), which increases the second coordinate, was not able to achieve the desired condition. To avoid this in the future, ensure that the loop conditions can always be met within a finite number of steps. Use specific conditions and check that the functions within the loop change the state of the program in a way that eventually meets the loop termination condition. Also, it could be beneficial to add a maximum iteration limit to loops to prevent infinite loops. The short term goal that the agent was trying to achieve was to navigate towards the parcel spawn location, pick up the parcel, and then move towards the delivery cell while avoiding non-walkable cells.
+2024-10-29 19:26:57,709 - INFO - [LOOP] Intention evaluated negatively or failed to run
+2024-10-29 19:26:57,747 - INFO - [LOOP] Generating new intention ...
+2024-10-29 19:27:10,440 - INFO - [LOOP] Intention generated: The short term goal is to navigate the agent towards the parcel, pick it up, and then deliver it to the delivery cell while avoiding non-walkable cells.
+def function():
+  global belief_set
+  parcel_spawn = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'parcels_spawn'][0]['cell_coordinates']
+  delivery_cell = [cell for cell in belief_set['map']['grid'] if cell['cell_type'] == 'delivery_cell'][0]['cell_coordinates']
+  agent_coordinates = belief_set['agent'][1]['coordinates']
+  while agent_coordinates != parcel_spawn:
+    if agent_coordinates[0] < parcel_spawn[0]:
+      function_2()
+      agent_coordinates[0] += 1
+    elif agent_coordinates[0] > parcel_spawn[0]:
+      function_1()
+      agent_coordinates[0] -= 1
+    elif agent_coordinates[1] < parcel_spawn[1]:
+      function_4()
+      agent_coordinates[1] += 1
+    elif agent_coordinates[1] > parcel_spawn[1]:
+      function_3()
+      agent_coordinates[1] -= 1
+  function_5()
+  while agent_coordinates != delivery_cell:
+    if agent_coordinates[0] < delivery_cell[0]:
+      function_2()
+      agent_coordinates[0] += 1
+    elif agent_coordinates[0] > delivery_cell[0]:
+      function_1()
+      agent_coordinates[0] -= 1
+    elif agent_coordinates[1] < delivery_cell[1]:
+      function_4()
+      agent_coordinates[1] += 1
+    elif agent_coordinates[1] > delivery_cell[1]:
+      function_3()
+      agent_coordinates[1] -= 1
+  function_6()
+2024-10-29 19:27:16,349 - INFO - [LOOP] Plan executed: ['action_3', 'action_3', 'action_3', 'action_5', 'action_2', 'action_4', 'action_4', 'action_4', 'action_6']
+2024-10-29 19:27:16,361 - INFO - [LOOP] Events received: [[{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 2], 'parcels_carried_ids': [], 'score': 200}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 1], 'parcels_carried_ids': [], 'score': 200}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [], 'score': 200}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 11, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 12, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 13, 'coordinates': [0, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [0, 0], 'parcels_carried_ids': [11, 12, 13], 'score': 200}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 11, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 12, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 13, 'coordinates': [1, 0], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 0], 'parcels_carried_ids': [11, 12, 13], 'score': 200}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 11, 'coordinates': [1, 1], 'score': 20, 'carried_by_id': 1}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 11, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 12, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 13, 'coordinates': [1, 2], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 2], 'parcels_carried_ids': [11, 12, 13], 'score': 200}}], [{'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 11, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 12, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'parcel', 'object': {'id': 13, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [11, 12, 13], 'score': 200}}], [{'event_type': 'object changed', 'object_type': 'agent', 'object': {'id': 1, 'coordinates': [1, 3], 'parcels_carried_ids': [], 'score': 260}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 11, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 12, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}, {'event_type': 'object removed', 'object_type': 'parcel', 'object': {'id': 13, 'coordinates': [1, 3], 'score': 20, 'carried_by_id': 1}}]]
+2024-10-29 19:27:16,374 - INFO - [LOOP] Asking for intention evaluation and memory update...
+2024-10-29 19:27:17,865 - INFO - [LOOP] Obtained evaluation for intention: True
+2024-10-29 19:27:17,890 - INFO - [LOOP] Obtained memory update: 
+2024-10-29 19:27:17,891 - INFO - [LOOP] Memory updated: 
+2024-10-29 19:27:17,891 - INFO - [LOOP] Intention evaluation positive
+2024-10-29 19:27:17,891 - INFO - [LOOP] Asking for desire evaluation...
+2024-10-29 19:27:18,662 - INFO - [LOOP] Obtained evaluation for desire: True
+2024-10-29 19:27:18,662 - INFO - [LOOP] Desire evaluation positive
+2024-10-29 19:27:23,573 - ERROR - [LOOP] [Q6] Error while testing trigger function: The function does not return the boolean True for the prior belief set.
+2024-10-29 19:27:23,598 - ERROR - [LOOP] Unable to obtain trigger function for desire
+2024-10-29 19:27:23,616 - INFO - [LOOP] Desire satisfied
+2024-10-29 19:27:36,231 - INFO - [LOOP] Checking if any desire is triggered
+2024-10-29 19:27:36,262 - INFO - [LOOP] Desire triggered: 2
+2024-10-29 19:27:42,363 - INFO - [LOOP] Desire triggered : 2
+2024-10-29 19:27:42,369 - INFO - [LOOP] Plan generated: ['action_1', 'action_3', 'action_3', 'action_3', 'action_5', 'action_2', 'action_4', 'action_4', 'action_4', 'action_6']
+2024-10-29 19:27:42,394 - INFO - [LOOP] Plan executed, asking for desire evaluation...
+2024-10-29 19:27:43,214 - INFO - [LOOP] Obtained evaluation for desire: True
+2024-10-29 19:27:43,214 - INFO - [LOOP] Desire triggered evaluated positively
+2024-10-29 19:27:44,652 - DEBUG - [LOOP] Stopped loop thread

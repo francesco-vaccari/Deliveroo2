@@ -1,0 +1,11 @@
+experiments/5/2024-10-29-15-55-01
+5.1
+Primo desire perfetto, poi triggerato ma non ha eseguito nessuna azione ed è stato valutato come negativo. Secondo desire timeout e casini ma arriva con le parcelle alla delivery cell senza però consegnare. Terzo desire torna indietro, raccoglie e consegna alla prima intention e genera trigger function che viene triggerata, consegna parcelle correttamente e poi non triggera peché non ce ne sono da consegnare più. Quarto desire timeout e casini di nuovo e non consegna. Desire 3 perfetto.
+
+experiments/5/2024-10-29-19-22-39
+5.2
+Primo desire falllimento. Secondo desire alla second intention e triggera subito dopo. Terzo desire utilizza intention già implementate e riesce con la intention del secondo desire senza però generare trigger function correttamente. Seconda intention del quarto desire perfetta ma non genera correttamente trigger function. Dopodiché triggera desire 2 che consegna e poi niente trigger e fine esperimento. Entrambe i trigger sono stati valutati positivamente.
+
+experiments/5/2024-10-30-18-43-43
+5.3
+Desire 1 perfetto e triggerato una volta correttamente. Secondo desire niente. Poi viene triggerato il desire 1 che fallisce e viene invalidato. Terzo desire riesce alla fine e viene triggerato una volta correttamente. Quarto desire va a prendere delle parcelle lasciate in giro in desire precedenti, le consegna, ma non riconosce come completato e fallisce. Per errore ho avviato desire 5 ha avviatio generazione ma dovrei aver tolto tutto dai log riguardo al desire 5. In caso ignorare in analisi intention 18 e desire 5.

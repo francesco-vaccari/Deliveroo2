@@ -1,14 +1,14 @@
 You have to evaluate whether the agent has achieved the following long term goal:
 ```desire```
 
-To perform this evaluation, consider the belief set prior to the agent pursuing the goal, and the current belief set.
+To perform this evaluation, consider the belief set prior to the agent pursuing the goal, and the current belief set. A belief set is the internal representation of the agent's knowledge about the environment.
 
-This is the belief set of the agent prior to pursuing the goal:
+This is the belief set of the agent prior to pursuing the goal and prior to executing the plan to achieve the goal:
 
 ```belief_set_prior```
 
 
-This is the belief set of the agent after having pursued the goal:
+This is the belief set of the agent after having executed the plan to achieve the goal:
 
 ```belief_set_current```
 

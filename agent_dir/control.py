@@ -13,7 +13,7 @@ class Control:
         self.get_belief_set = get_belief_set
         self.logger = ExperimentLogger(folder, 'control.log')
         self.evolution_logger = ExperimentLogger(folder, 'evolution.log')
-        self.desire_steps = 0
+        self.desire_steps = 3
         self.intention_steps = 0
         self.cumulative_intention_steps = 0
         self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'), folder.split('/')[-1])
@@ -98,6 +98,14 @@ class Control:
                             self.status = "Desire triggered evaluated negatively"
                             self.manager.invalidate_desire(desire_id)
                 else:
+                    if self.desire_steps == 5:
+                        print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+                        print("|||||||||||||||||||||||||| THIS IS THE END OF EXPERIMENT ||||||||||||||||||||||||")
+                        print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+                        res = input("About to start new desire generation after 4 desire steps, type 'stop' to interrupt: ")
+                        if res == "stop":
+                            self.stop = True
+                            break
                     self.evolution_logger.log_info(f"[{self.desire_steps}]\tGenerating new desire...")
                     self.logger.log_info("[LOOP] Generating new desire")
                     self.status = "Generating new desire"

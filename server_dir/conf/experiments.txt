@@ -5,6 +5,9 @@ Experiments:
                 - perception generation only on error
                 - no desire triggering
                 - no evaluation of triggered desires
+            Limit:
+                - agent delivers the parcel
+                - 4 desires generated
             Types:
                 (1) 1 parcel to deliver and 1 delivery cell                                                                             [1]
                 (2) 1 parcel to deliver and 1 blocked delivery cell                                                                     [2]
@@ -13,13 +16,14 @@ Experiments:
         Continuous Learning:
             Configuration:
                 - perception generation only on error
-                - no evaluation of triggered desires
+            Limit:
+                - 4 desires generated
+                - infinite desire triggers (both correct or incorrect, no further development is possibile)
             Types:
                 (1) 1 parcel spawn cell and 1 delivery cell                                                                             [5]
                 (2) 1 parcel spawn cell and 1 delivery cell and 1 battery spawn cell                                                    [6]
-                (3) 1 parcel spawn cell and 1 free delivery cell and 1 blocked double points delivery cell                              [7]
-                (4) 1 parcel spawn cell and 1 blocked delivery cell and 1 blocked double points delivery cell                           [8]
-                (5) 1 parcel spawn cell and 1 blocked delivery cell and 1 blocked double points delivery cell and 1 battery spawn cell  [9]
+                (3) 1 parcel spawn cell and 1 blocked delivery cell and 1 battery spawn cell                                            [7]
+                (4) 1 parcel spawn cell and 1 blocked delivery cell and 1 blocked double points delivery cell and 1 battery spawn cell  [8]
     
     Multiple Agents:
         Configuration:
@@ -28,7 +32,3 @@ Experiments:
         Types:
             (1) all objects but with 2 agents                                                                                           [10]
             (2) map is a line that forces agents to cooperate to deliver a parcel                                                       [11]
-
-Experiment is concluded if
-- objective is reached (human evaluation)
-- 4 desire steps are completed (4 desire generation attempts are made)
