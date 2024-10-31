@@ -248,11 +248,11 @@ class Game:
 
     def agent_pick_up(self, agent_id):
         res = False
+        picked_up_battery = False
         for agent in self.agents:
             if agent.id == agent_id:
                 if self.init_battery != -1:
-                    agent.energy -= self.energy_consumption
-                    if agent.energy < 0:
+                    if agent.energy <= 0:
                         agent.energy = 0
                         return False
                 for parcel in self.parcels:
@@ -268,6 +268,7 @@ class Game:
                         battery.to_draw = False
                         self.batteries.remove(battery)
                         res = True
+                        picked_up_battery = True
                 for key in self.keys:
                     if key.x == agent.x and key.y == agent.y and key.carried_by == None:
                         key.carried_by = agent.id
@@ -275,6 +276,9 @@ class Game:
                         key.to_draw_on_agent = True
                         agent.has_key = True
                         res = True
+                if self.init_battery != -1 and res:
+                    if not picked_up_battery:
+                        agent.energy -= self.energy_consumption
         return res # True if at least one object (parcel, battery, key) was picked up
 
     def agent_put_down(self, agent_id):
@@ -282,8 +286,7 @@ class Game:
         for agent in self.agents:
             if agent.id == agent_id:
                 if self.init_battery != -1:
-                    agent.energy -= self.energy_consumption
-                    if agent.energy < 0:
+                    if agent.energy <= 0:
                         agent.energy = 0
                         return False
                 for parcel_id in agent.parcels_carried:
@@ -312,6 +315,8 @@ class Game:
                         res = True
                 if agent.has_key is not None:
                     agent.has_key = False
+                if self.init_battery != -1 and res:
+                    agent.energy -= self.energy_consumption
         return res # True if at least one parcel was put down
 
     def print_map(self):
