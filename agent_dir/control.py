@@ -13,7 +13,8 @@ class Control:
         self.get_belief_set = get_belief_set
         self.logger = ExperimentLogger(folder, 'control.log')
         self.evolution_logger = ExperimentLogger(folder, 'evolution.log')
-        self.desire_steps = 3
+        self.desire_steps = 0
+        self.desires_generated = 0
         self.intention_steps = 0
         self.cumulative_intention_steps = 0
         self.manager = ControlManager(ExperimentLogger(folder, 'control_manager.log'), folder.split('/')[-1])
@@ -98,7 +99,7 @@ class Control:
                             self.status = "Desire triggered evaluated negatively"
                             self.manager.invalidate_desire(desire_id)
                 else:
-                    if self.desire_steps == 5:
+                    if self.desires_generated == 4:
                         print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
                         print("|||||||||||||||||||||||||| THIS IS THE END OF EXPERIMENT ||||||||||||||||||||||||")
                         print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
@@ -123,6 +124,7 @@ class Control:
                         generate_new_desire = True
                     else:
                         self.logger.log_info(f"[LOOP] Desire generated: {desire_description}")
+                        self.desires_generated += 1
                         self.status = f"Desire generated: {desire_description}"
                         desire_id = self.manager.add_desire(desire_description)
                         self.evolution_logger.log_info(f"[{self.desire_steps}]\tDesire generated: {desire_id}")

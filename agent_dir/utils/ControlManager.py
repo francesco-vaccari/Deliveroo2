@@ -164,7 +164,7 @@ class ControlManager:
             f.write(f"thread.start()\n")
             f.write(f"time.sleep(0.2)\n")
 
-            for id, intention in self.intentions.items():
+            for _, intention in self.intentions.items():
                 f.write("\n")
                 f.write(intention.function_string)
                 f.write("\n")
