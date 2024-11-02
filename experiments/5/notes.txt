@@ -1,3 +1,11 @@
 experiments/5/2024-10-29-15-55-01
 5.1
 Primo desire perfetto, poi triggerato ma non ha eseguito nessuna azione ed è stato valutato come negativo. Secondo desire timeout e casini ma arriva con le parcelle alla delivery cell senza però consegnare. Terzo desire torna indietro, raccoglie e consegna alla prima intention e genera trigger function che viene triggerata, consegna parcelle correttamente e poi non triggera peché non ce ne sono da consegnare più. Quarto desire timeout e casini di nuovo e non consegna. Desire 3 perfetto.
+
+experiments/5/2024-11-01-09-48-01
+5.2
+Primo desire consegna e poi viene triggerato una volta ma valutato negativamente. Seconde desire genera 3 intention tutte timeout. Terzo desire completa alla prima intention ma non triggera subito perché nessuna parcella nell'ambiente. Quarto desire seconda intention utilizza intention riuscita del primo desire per fare il giro raccogliendo parcelle e arrivando alla delivery cell per poi consegnare e ripete all'infinito perciò da timeout, altrimenti funzionante, mentre ultima intention è one-action. Poi triggera due volte desire 3 per consegnare i 2 blocchi di parcelle in giro e fine.
+
+experiments/5/2024-11-02-09-03-00
+5.3
+Primo desire riuscito. Secondo desire riuscito ma fallisce a generare trigger function. Desire 3 fallisce. Desire 1 triggerato una volta. Quarto desire riuscito con generazione trigger function. Nessun desire triggerato. Guardando le trigger function sono strane perché danno risultato positivo se lo score dell'angte è sotto una soglia o se non supera lo score ottenuto consegnando le parcelle nell'ambiente. Forse dovuto al desire che menziona 'ottimizzare' consegne o desire successivi alla prima consegna riuscita che quindi hanno descrizione diverse che portano a generazioni differenti e un po' strane.
