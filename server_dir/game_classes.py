@@ -121,6 +121,22 @@ class Game:
             self.parcels_ids += 1
             self.parcels.append(parcel)
     
+    def can_spawn_new_battery(self):
+        coords = []
+        for x, row in enumerate(self.map.grid):
+            for y, cell in enumerate(row):
+                if cell == 5:
+                    coords.append([x, y])
+        ignore_coords = []
+        for battery in self.batteries:
+            for coord in coords:
+                if battery.x == coord[0] and battery.y == coord[1]:
+                    ignore_coords.append(coord)
+        coords = [coord for coord in coords if coord not in ignore_coords]
+        if len(coords) == 0:
+            return False
+        return True
+    
     def new_battery(self):
         coords = []
         for x, row in enumerate(self.map.grid):
@@ -352,7 +368,7 @@ class Game:
             self.spawning_rate = -1
         if self.spawning_rate > 0:
             self.spawn_timer += 1
-            if self.spawn_timer == self.spawning_rate:
+            if self.spawn_timer >= self.spawning_rate:
                 self.new_parcel()
                 self.spawn_timer = 0
 
@@ -363,10 +379,11 @@ class Game:
             self.new_battery()
             self.batteries_spawning_rate = -1
         if self.batteries_spawning_rate > 0:
-            self.batteries_spawn_timer += 1
-            if self.batteries_spawn_timer == self.batteries_spawning_rate:
-                self.new_battery()
-                self.batteries_spawn_timer = 0
+            if self.can_spawn_new_battery():
+                self.batteries_spawn_timer += 1
+                if self.batteries_spawn_timer >= self.batteries_spawning_rate:
+                    self.new_battery()
+                    self.batteries_spawn_timer = 0
 
     def spawn_keys(self):
         if self.n_keys == -1:
