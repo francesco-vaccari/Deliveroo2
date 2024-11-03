@@ -345,12 +345,13 @@ class Game:
                 agent.parcels_carried = []
                 for key in self.keys:
                     if key.carried_by == agent.id:
-                        key.carried_by = None
-                        key.to_draw = True
-                        key.to_draw_on_agent = False
-                        res = True
-                if agent.has_key is not None:
-                    agent.has_key = False
+                        if self.map.grid[agent.x][agent.y] != 2 and self.map.grid[agent.x][agent.y] != 3:
+                            key.carried_by = None
+                            key.to_draw = True
+                            key.to_draw_on_agent = False
+                            res = True
+                            if agent.has_key is not None:
+                                agent.has_key = False
                 if self.init_battery != -1 and res:
                     agent.energy -= self.energy_consumption
         return res # True if at least one parcel was put down
