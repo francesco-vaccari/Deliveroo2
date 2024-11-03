@@ -165,7 +165,12 @@ class Game:
                             for door in self.doors:
                                 if door.x == agent.x and door.y == agent.y - 1:
                                     if not agent.has_key:
-                                        return False
+                                        key_in_door = False
+                                        for key in self.keys:
+                                            if key.x == door.x and key.y == door.y:
+                                                key_in_door = True
+                                        if not key_in_door:
+                                            return False
                             if self.init_battery != -1:
                                 agent.energy -= self.energy_consumption
                                 if agent.energy < 0:
@@ -192,7 +197,12 @@ class Game:
                             for door in self.doors:
                                 if door.x == agent.x and door.y == agent.y + 1:
                                     if not agent.has_key:
-                                        return False
+                                        key_in_door = False
+                                        for key in self.keys:
+                                            if key.x == door.x and key.y == door.y:
+                                                key_in_door = True
+                                        if not key_in_door:
+                                            return False
                             if self.init_battery != -1:
                                 agent.energy -= self.energy_consumption
                                 if agent.energy < 0:
@@ -219,7 +229,12 @@ class Game:
                             for door in self.doors:
                                 if door.x == agent.x - 1 and door.y == agent.y:
                                     if not agent.has_key:
-                                        return False
+                                        key_in_door = False
+                                        for key in self.keys:
+                                            if key.x == door.x and key.y == door.y:
+                                                key_in_door = True
+                                        if not key_in_door:
+                                            return False
                             if self.init_battery != -1:
                                 agent.energy -= self.energy_consumption
                                 if agent.energy < 0:
@@ -246,7 +261,12 @@ class Game:
                             for door in self.doors:
                                 if door.x == agent.x + 1 and door.y == agent.y:
                                     if not agent.has_key:
-                                        return False
+                                        key_in_door = False
+                                        for key in self.keys:
+                                            if key.x == door.x and key.y == door.y:
+                                                key_in_door = True
+                                        if not key_in_door:
+                                            return False
                             if self.init_battery != -1:
                                 agent.energy -= self.energy_consumption
                                 if agent.energy < 0:
