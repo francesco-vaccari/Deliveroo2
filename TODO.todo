@@ -8,9 +8,10 @@ Testare:
 
 Magari fare qualche esperimento con user generated desires?
 
-Controllare nei vari desires.txt e dentro le cartelle con i file analizzabili, le intention in cui interrompo io l'esperimento perché l'agente ha finito l'energia non sono segnate come executable False, cambiare in desires.txt e nei file analizzabili.
-Modificati:
-- experiments/7/2024-11-04-10-09-27 (intention 17, non evolution steps o intentions.txt)
+Se l'agente finisce energia interrompo l'esperimento, però modifico intention così nei log non vengono segnate come executable.
+Modificati (non modificato evolution_steps.txt):
+- experiments/7/2024-11-04-10-09-27 (intention 17, non dovrebbe essere mai stata generata)
+- experiments/6/2024-11-02-12-00-24 (intention 15, non dovrebbe essere executable)
 
 
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown
