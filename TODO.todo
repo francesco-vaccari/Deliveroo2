@@ -8,6 +8,10 @@ Testare:
 
 Magari fare qualche esperimento con user generated desires?
 
+Controllare nei vari desires.txt e dentro le cartelle con i file analizzabili, le intention in cui interrompo io l'esperimento perché l'agente ha finito l'energia non sono segnate come executable False, cambiare in desires.txt e nei file analizzabili.
+Modificati:
+- experiments/7/2024-11-04-10-09-27 (intention 17, non evolution steps o intentions.txt)
+
 
 1: moveup, 2: movedown, 3: moveleft, 4: moveright, 5: pickup, 6: putdown
 
@@ -76,3 +80,24 @@ Note su incontro:
 Cose di cui parlare:
 - chiedere per titolo tesi: Software Evolution in LLM-based Autonomous Agents
 - chiedere per documento fine tirocinio
+- sto andando avanti con gli esperimenti, per settimana prossima dovrei aver finito, in caso non mi venga in mente di farne altri
+- poi cerco di capire come fare analisi con il tool che ho e con quello che mi sono annotato (categorie per funzioni generate, timeout, one-action, generali e funzionanti, specifiche all'istanza di ambiente, tipi di desire testuali generati, anche di intention, evoluzione dopo aver completato obiettivo, assunzioni fatte da LLM su funzionamento dell'ambiente, stessa cosa per trigger function se sono generali, specifiche, funzionanti e rispecchiano obiettivo desire)
+
+Note su incontro:
+- fare esperimenti in cui elementi dell'ambiente cambiano (aggiunta di porte e chiavi, o magari della batteria, o di cella che da più punti)
+- cominciare a scrivere tesi, soprattutto indice
+- mandare modulo tirocinio
+- struttura tesi:
+    abstract
+    primo capitolo 3 4 pagine di introduzione: parlare del contesto (software engeneering per software evolution e cosa é, capacità di modificare requisiti e adattare codice) poi contesto di questo scenario, poi andare più nello specifico e dire che l'evoluzione prevede generazione di codice rispetto a quello passato, normalmente fatto da sviluppatori, noi vediamo se è possibile rendere automatica questa cosa (openai codex e copilot e stato dell'arte in questo contesto) anche se sono senza concetto di software evoluition, poi definisco obiettivo della tesi ovvero sviluppare software agents, agenti automatici che sono in grado di adattare obiettivi e comportamenti, e creare architettura per prendere codice generato in modo da automatizzare quelloc he prima veniva fatto a mano. primo oviettivo è stato quello di estendere architettura BDI (control e perception), poi una serie di esperimenti e alla fine risultati attesi dalla tesi (agenti che evolvono software in maniera automatica) e poi descrizione dei capitoli della tesi
+    primo capitolo: stato dell'arte su quello che uso nella tesi (sistemi software autonomi, agenti che usano LLM, anche articoli che affrontano il mio problema affrontato), altro background è su LLM e come sta evolvendo lo scenario e gli strumenti dedicati all'ingegneria del software
+    poi capitoli che riguardano la mia tesi: pseudo codice e formalizzazione della proposta architetturale di agente autonomo che evolve
+    capitolo che va nel dettaglio del funzionamneto di tutto
+    poi parte sperimentale con evoluzione nei vari scenari e che significa evoluzione
+    capitolo di conclusione di 2 3 pagine che riprende obiettivi della tesi, spiegando i risultati e i limiti e possibili sviluppi futuri
+
+Cose di cui parlare:
+- titolo tesi perché ho provato ad iscrivermi e serve quello finale
+- esperimenti miei finiti (senza contare se voglio fare user generated desire e con due agenti)
+- esperimenti con ambiente dinamico
+- indice tesi

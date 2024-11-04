@@ -1,0 +1,399 @@
+2024-11-04 10:09:28,041 - DEBUG - [8080] Started listening on 127.0.0.1:8080
+2024-11-04 10:09:28,404 - INFO - [8080] Received message from ('127.0.0.1', 8081): connect
+2024-11-04 10:09:28,514 - INFO - [8080] Received message from ('127.0.0.1', 8081): connect
+2024-11-04 10:09:28,886 - INFO - [8080] Received message from ('127.0.0.1', 8081): connect
+2024-11-04 10:09:28,886 - INFO - [8080] Received message from ('127.0.0.1', 8081): connect
+2024-11-04 10:09:28,886 - INFO - [8080] Received message from ('127.0.0.1', 8081): connect
+2024-11-04 10:09:28,886 - INFO - [8080] Received message from ('127.0.0.1', 8081): connect
+2024-11-04 10:09:28,895 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: connected 1
+2024-11-04 10:09:28,895 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "map", "object": {"width": 4, "height": 4, "grid": [{"cell_coordinates": [0, 0], "cell_type": "parcels_spawn"}, {"cell_coordinates": [0, 1], "cell_type": "walkable"}, {"cell_coordinates": [0, 2], "cell_type": "walkable"}, {"cell_coordinates": [0, 3], "cell_type": "walkable"}, {"cell_coordinates": [1, 0], "cell_type": "batteries_spawn"}, {"cell_coordinates": [1, 1], "cell_type": "walkable"}, {"cell_coordinates": [1, 2], "cell_type": "walkable"}, {"cell_coordinates": [1, 3], "cell_type": "delivery_cell"}, {"cell_coordinates": [2, 0], "cell_type": "non_walkable"}, {"cell_coordinates": [2, 1], "cell_type": "non_walkable"}, {"cell_coordinates": [2, 2], "cell_type": "non_walkable"}, {"cell_coordinates": [2, 3], "cell_type": "non_walkable"}, {"cell_coordinates": [3, 0], "cell_type": "non_walkable"}, {"cell_coordinates": [3, 1], "cell_type": "non_walkable"}, {"cell_coordinates": [3, 2], "cell_type": "non_walkable"}, {"cell_coordinates": [3, 3], "cell_type": "non_walkable"}]}}
+2024-11-04 10:09:28,901 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": false, "score": 0, "energy": 100}}
+2024-11-04 10:09:28,902 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": null}}
+2024-11-04 10:09:28,902 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "door", "object": {"id": 1, "coordinates": [0, 2]}}
+2024-11-04 10:09:28,902 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "door", "object": {"id": 2, "coordinates": [1, 2]}}
+2024-11-04 10:09:44,466 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "battery", "object": {"id": 1, "coordinates": [1, 0]}}
+2024-11-04 10:09:49,577 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:10:09,947 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 2, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:10:29,121 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:10:29,138 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": false, "score": 0, "energy": 98}}
+2024-11-04 10:10:29,639 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:10:29,642 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": false, "score": 0, "energy": 96}}
+2024-11-04 10:10:30,184 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:10:30,199 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:10:30,199 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:10:30,199 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [1, 2], "has_key": false, "score": 0, "energy": 94}}
+2024-11-04 10:10:30,318 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 3, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:10:30,720 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:10:30,725 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:10:30,725 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:10:30,725 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [1, 2], "has_key": false, "score": 0, "energy": 92}}
+2024-11-04 10:10:31,388 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:10:31,405 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:10:31,405 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:10:31,405 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [1, 2], "has_key": false, "score": 0, "energy": 90}}
+2024-11-04 10:10:32,049 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:10:32,602 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:10:33,174 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:10:33,180 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 1], "score": 20, "carried_by_id": null}}
+2024-11-04 10:10:33,180 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [1, 1], "score": 20, "carried_by_id": null}}
+2024-11-04 10:10:33,181 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": false, "score": 0, "energy": 88}}
+2024-11-04 10:10:49,802 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:10:49,806 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:10:49,806 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:10:49,806 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [1, 2], "has_key": false, "score": 0, "energy": 86}}
+2024-11-04 10:10:50,685 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 4, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:11:04,405 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:04,420 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [0, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:11:04,420 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [0, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:11:04,420 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [1, 2], "has_key": false, "score": 0, "energy": 84}}
+2024-11-04 10:11:04,953 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:05,467 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:06,061 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:06,655 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:07,310 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:07,966 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:08,527 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:09,143 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:09,784 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:10,332 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:10,905 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:11,044 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 5, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:11:11,563 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:12,145 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:12,685 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:13,314 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:13,851 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:14,388 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:14,957 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:15,549 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:16,052 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:16,662 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:17,278 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:17,812 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:18,375 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:18,992 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:11:31,405 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 6, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:11:51,759 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 7, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:12:05,343 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:12:05,355 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [1, 2], "has_key": true, "score": 0, "energy": 82}}
+2024-11-04 10:12:05,355 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": 1}}
+2024-11-04 10:12:05,839 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:12:05,848 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:05,848 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:05,848 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [1, 2], "has_key": true, "score": 0, "energy": 80}}
+2024-11-04 10:12:05,848 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-11-04 10:12:06,355 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:12:06,356 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:06,356 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:06,356 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [1, 2], "has_key": true, "score": 0, "energy": 78}}
+2024-11-04 10:12:06,356 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-11-04 10:12:06,900 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:12:06,915 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:06,915 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 2, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:06,915 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [1, 2], "has_key": true, "score": 0, "energy": 76}}
+2024-11-04 10:12:06,915 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-11-04 10:12:07,444 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:12:07,459 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 40, "energy": 74}}
+2024-11-04 10:12:07,459 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 1, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:07,459 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 2, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:12,124 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 8, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:12:16,378 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:12:16,387 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 3], "parcels_carried_ids": [], "has_key": true, "score": 40, "energy": 72}}
+2024-11-04 10:12:16,387 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 3], "carried_by_id": 1}}
+2024-11-04 10:12:16,983 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:12:17,000 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 2], "parcels_carried_ids": [], "has_key": true, "score": 40, "energy": 70}}
+2024-11-04 10:12:17,000 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 2], "carried_by_id": 1}}
+2024-11-04 10:12:17,563 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:12:17,576 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": true, "score": 40, "energy": 68}}
+2024-11-04 10:12:17,576 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": 1}}
+2024-11-04 10:12:18,100 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:12:18,103 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": true, "score": 40, "energy": 66}}
+2024-11-04 10:12:18,103 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 0], "carried_by_id": 1}}
+2024-11-04 10:12:18,663 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:12:18,663 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 3, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:18,663 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 4, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:18,663 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 5, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:18,663 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 6, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:18,663 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 7, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:18,664 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 8, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:18,664 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [3, 4, 5, 6, 7, 8], "has_key": true, "score": 40, "energy": 64}}
+2024-11-04 10:12:19,206 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:12:19,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 3, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 4, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 5, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 6, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 7, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 8, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [3, 4, 5, 6, 7, 8], "has_key": true, "score": 40, "energy": 62}}
+2024-11-04 10:12:19,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-11-04 10:12:19,740 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:12:19,752 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 3, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,752 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 4, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,752 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 5, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,752 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 6, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,752 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 7, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,752 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 8, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:19,752 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [3, 4, 5, 6, 7, 8], "has_key": true, "score": 40, "energy": 60}}
+2024-11-04 10:12:19,752 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-11-04 10:12:20,308 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:12:20,312 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 3, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,312 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 4, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,312 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 5, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,312 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 6, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,312 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 7, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,312 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 8, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,312 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [3, 4, 5, 6, 7, 8], "has_key": true, "score": 40, "energy": 58}}
+2024-11-04 10:12:20,312 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-11-04 10:12:20,834 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:12:20,837 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 3, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,837 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 4, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,837 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 5, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,837 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 6, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,837 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 7, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,837 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 8, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:20,837 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [3, 4, 5, 6, 7, 8], "has_key": true, "score": 40, "energy": 56}}
+2024-11-04 10:12:20,837 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-11-04 10:12:21,430 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:12:21,443 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 160, "energy": 54}}
+2024-11-04 10:12:21,443 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 3, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:21,443 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 4, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:21,443 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 5, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:21,443 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 6, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:21,443 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 7, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:21,443 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 8, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:12:22,060 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:12:32,497 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 9, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:12:42,136 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:12:42,141 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [], "has_key": true, "score": 160, "energy": 52}}
+2024-11-04 10:12:42,141 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-11-04 10:12:42,682 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:12:42,685 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [], "has_key": true, "score": 160, "energy": 50}}
+2024-11-04 10:12:42,685 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-11-04 10:12:43,212 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:12:43,227 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [], "has_key": true, "score": 160, "energy": 48}}
+2024-11-04 10:12:43,227 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-11-04 10:12:43,765 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:12:43,770 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [], "has_key": true, "score": 160, "energy": 100}}
+2024-11-04 10:12:43,770 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "battery", "object": {"id": 1, "coordinates": [1, 0]}}
+2024-11-04 10:12:44,402 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:12:52,870 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 10, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:12:59,030 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "battery", "object": {"id": 2, "coordinates": [1, 0]}}
+2024-11-04 10:13:03,128 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:13:03,131 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": true, "score": 160, "energy": 98}}
+2024-11-04 10:13:03,131 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 0], "carried_by_id": 1}}
+2024-11-04 10:13:03,725 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:13:03,742 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 9, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:03,742 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 10, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:03,742 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [9, 10], "has_key": true, "score": 160, "energy": 96}}
+2024-11-04 10:13:04,259 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:13:04,267 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 9, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:04,267 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 10, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:04,267 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [9, 10], "has_key": true, "score": 160, "energy": 94}}
+2024-11-04 10:13:04,267 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-11-04 10:13:04,803 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:13:04,805 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 9, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:04,805 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 10, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:04,805 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [9, 10], "has_key": true, "score": 160, "energy": 92}}
+2024-11-04 10:13:04,805 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-11-04 10:13:05,395 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:13:05,398 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 9, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:05,398 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 10, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:05,398 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [9, 10], "has_key": true, "score": 160, "energy": 90}}
+2024-11-04 10:13:05,398 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-11-04 10:13:05,900 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:13:05,905 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 9, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:05,905 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 10, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:05,905 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [9, 10], "has_key": true, "score": 160, "energy": 88}}
+2024-11-04 10:13:05,906 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-11-04 10:13:06,489 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:13:06,501 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 200, "energy": 86}}
+2024-11-04 10:13:06,501 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 9, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:06,501 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 10, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:13,209 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 11, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:13:33,578 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 12, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:13:48,524 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:13:49,023 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:13:49,047 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 2], "parcels_carried_ids": [], "has_key": true, "score": 200, "energy": 82}}
+2024-11-04 10:13:49,047 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 2], "carried_by_id": 1}}
+2024-11-04 10:13:49,520 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:13:49,523 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": true, "score": 200, "energy": 80}}
+2024-11-04 10:13:49,523 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": 1}}
+2024-11-04 10:13:50,036 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:13:50,050 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": true, "score": 200, "energy": 78}}
+2024-11-04 10:13:50,050 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 0], "carried_by_id": 1}}
+2024-11-04 10:13:50,641 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:13:50,643 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 11, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:50,643 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 12, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:50,643 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [11, 12], "has_key": true, "score": 200, "energy": 76}}
+2024-11-04 10:13:51,209 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:13:51,219 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 11, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:51,219 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 12, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:51,219 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [11, 12], "has_key": true, "score": 200, "energy": 74}}
+2024-11-04 10:13:51,219 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-11-04 10:13:51,817 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:13:51,826 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 11, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:51,826 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 12, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:51,826 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [11, 12], "has_key": true, "score": 200, "energy": 72}}
+2024-11-04 10:13:51,826 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-11-04 10:13:52,422 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:13:52,436 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 11, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:52,436 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 12, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:52,436 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [11, 12], "has_key": true, "score": 200, "energy": 70}}
+2024-11-04 10:13:52,436 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-11-04 10:13:52,981 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:13:52,996 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 11, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:52,996 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 12, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:52,996 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [11, 12], "has_key": true, "score": 200, "energy": 68}}
+2024-11-04 10:13:52,996 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-11-04 10:13:53,533 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:13:53,538 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 240, "energy": 66}}
+2024-11-04 10:13:53,538 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 11, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:53,538 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 12, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:13:54,119 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:13:54,747 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 13, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:14:02,505 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:14:02,518 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 3], "parcels_carried_ids": [], "has_key": true, "score": 240, "energy": 64}}
+2024-11-04 10:14:02,518 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 3], "carried_by_id": 1}}
+2024-11-04 10:14:03,102 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:03,114 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 2], "parcels_carried_ids": [], "has_key": true, "score": 240, "energy": 62}}
+2024-11-04 10:14:03,114 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 2], "carried_by_id": 1}}
+2024-11-04 10:14:03,689 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:03,691 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": true, "score": 240, "energy": 60}}
+2024-11-04 10:14:03,691 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": 1}}
+2024-11-04 10:14:04,377 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:04,388 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": true, "score": 240, "energy": 58}}
+2024-11-04 10:14:04,388 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 0], "carried_by_id": 1}}
+2024-11-04 10:14:04,987 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:14:04,999 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 13, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:04,999 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [13], "has_key": true, "score": 240, "energy": 56}}
+2024-11-04 10:14:05,506 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:14:05,523 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 13, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:05,523 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [13], "has_key": true, "score": 240, "energy": 54}}
+2024-11-04 10:14:05,523 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-11-04 10:14:06,079 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:06,084 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 13, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:06,084 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [13], "has_key": true, "score": 240, "energy": 52}}
+2024-11-04 10:14:06,084 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-11-04 10:14:06,713 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:06,730 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 13, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:06,730 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [13], "has_key": true, "score": 240, "energy": 50}}
+2024-11-04 10:14:06,730 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-11-04 10:14:07,225 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:07,240 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 13, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:07,240 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [13], "has_key": true, "score": 240, "energy": 48}}
+2024-11-04 10:14:07,240 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-11-04 10:14:07,808 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:14:07,815 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 260, "energy": 46}}
+2024-11-04 10:14:07,815 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 13, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:08,432 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:14:15,092 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 14, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:14:22,637 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:14:22,645 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 3], "parcels_carried_ids": [], "has_key": true, "score": 260, "energy": 44}}
+2024-11-04 10:14:22,645 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 3], "carried_by_id": 1}}
+2024-11-04 10:14:23,201 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:23,204 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 2], "parcels_carried_ids": [], "has_key": true, "score": 260, "energy": 42}}
+2024-11-04 10:14:23,204 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 2], "carried_by_id": 1}}
+2024-11-04 10:14:23,750 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:23,765 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": true, "score": 260, "energy": 40}}
+2024-11-04 10:14:23,765 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": 1}}
+2024-11-04 10:14:24,255 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:24,272 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": true, "score": 260, "energy": 38}}
+2024-11-04 10:14:24,272 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 0], "carried_by_id": 1}}
+2024-11-04 10:14:24,781 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:14:24,796 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 14, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:24,796 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [14], "has_key": true, "score": 260, "energy": 36}}
+2024-11-04 10:14:25,352 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:14:25,356 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 14, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:25,356 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [14], "has_key": true, "score": 260, "energy": 34}}
+2024-11-04 10:14:25,356 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-11-04 10:14:25,898 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:25,899 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 14, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:25,900 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [14], "has_key": true, "score": 260, "energy": 32}}
+2024-11-04 10:14:25,900 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-11-04 10:14:26,554 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:26,564 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 14, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:26,564 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [14], "has_key": true, "score": 260, "energy": 30}}
+2024-11-04 10:14:26,564 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-11-04 10:14:27,145 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:27,159 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 14, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:27,159 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [14], "has_key": true, "score": 260, "energy": 28}}
+2024-11-04 10:14:27,159 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-11-04 10:14:27,705 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:14:27,717 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 280, "energy": 26}}
+2024-11-04 10:14:27,717 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 14, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:35,453 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 15, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:14:37,264 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:14:37,271 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 3], "parcels_carried_ids": [], "has_key": true, "score": 280, "energy": 24}}
+2024-11-04 10:14:37,271 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 3], "carried_by_id": 1}}
+2024-11-04 10:14:37,762 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:37,766 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 2], "parcels_carried_ids": [], "has_key": true, "score": 280, "energy": 22}}
+2024-11-04 10:14:37,766 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 2], "carried_by_id": 1}}
+2024-11-04 10:14:38,329 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:38,340 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": true, "score": 280, "energy": 20}}
+2024-11-04 10:14:38,340 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": 1}}
+2024-11-04 10:14:38,895 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:14:38,897 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [], "has_key": true, "score": 280, "energy": 18}}
+2024-11-04 10:14:38,897 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 0], "carried_by_id": 1}}
+2024-11-04 10:14:39,487 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_5
+2024-11-04 10:14:39,493 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 15, "coordinates": [0, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:39,493 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 0], "parcels_carried_ids": [15], "has_key": true, "score": 280, "energy": 16}}
+2024-11-04 10:14:40,059 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:14:40,070 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 15, "coordinates": [1, 0], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:40,070 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 0], "parcels_carried_ids": [15], "has_key": true, "score": 280, "energy": 14}}
+2024-11-04 10:14:40,070 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 0], "carried_by_id": 1}}
+2024-11-04 10:14:40,638 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:40,649 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 15, "coordinates": [1, 1], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:40,649 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 1], "parcels_carried_ids": [15], "has_key": true, "score": 280, "energy": 12}}
+2024-11-04 10:14:40,649 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 1], "carried_by_id": 1}}
+2024-11-04 10:14:41,205 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:41,207 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 15, "coordinates": [1, 2], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:41,208 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 2], "parcels_carried_ids": [15], "has_key": true, "score": 280, "energy": 10}}
+2024-11-04 10:14:41,208 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 2], "carried_by_id": 1}}
+2024-11-04 10:14:41,804 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_4
+2024-11-04 10:14:41,815 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "parcel", "object": {"id": 15, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:41,815 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [15], "has_key": true, "score": 280, "energy": 8}}
+2024-11-04 10:14:41,815 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [1, 3], "carried_by_id": 1}}
+2024-11-04 10:14:42,311 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_6
+2024-11-04 10:14:42,320 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [1, 3], "parcels_carried_ids": [], "has_key": true, "score": 300, "energy": 6}}
+2024-11-04 10:14:42,320 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object removed", "object_type": "parcel", "object": {"id": 15, "coordinates": [1, 3], "score": 20, "carried_by_id": 1}}
+2024-11-04 10:14:55,792 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 16, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:15:16,152 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 17, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:15:20,779 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:20,785 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 3], "parcels_carried_ids": [], "has_key": true, "score": 300, "energy": 4}}
+2024-11-04 10:15:20,785 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 3], "carried_by_id": 1}}
+2024-11-04 10:15:21,322 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:21,328 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 2], "parcels_carried_ids": [], "has_key": true, "score": 300, "energy": 2}}
+2024-11-04 10:15:21,328 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 2], "carried_by_id": 1}}
+2024-11-04 10:15:21,926 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:22,484 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:22,496 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "agent", "object": {"id": 1, "coordinates": [0, 1], "parcels_carried_ids": [], "has_key": true, "score": 300, "energy": 0}}
+2024-11-04 10:15:22,496 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object changed", "object_type": "key", "object": {"id": 1, "coordinates": [0, 1], "carried_by_id": 1}}
+2024-11-04 10:15:23,022 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:23,601 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:24,149 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:24,787 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:25,347 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:25,990 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:26,595 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:27,130 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:27,661 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:28,233 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:28,775 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:29,362 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:29,915 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:30,482 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:31,192 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:31,769 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:32,328 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:32,851 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:33,424 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:33,960 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:34,557 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_1
+2024-11-04 10:15:35,214 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_3
+2024-11-04 10:15:36,507 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 18, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:15:57,063 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 19, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:16:01,913 - INFO - [8080] Received message from ('127.0.0.1', 8081): action_2
+2024-11-04 10:16:17,418 - INFO - [8080] Sent message to agent (ID:1) 127.0.0.1:8081: {"event_type": "object added", "object_type": "parcel", "object": {"id": 20, "coordinates": [0, 0], "score": 20, "carried_by_id": null}}
+2024-11-04 10:16:17,724 - DEBUG - [8080] Closing connection on 127.0.0.1:8080
+2024-11-04 10:16:17,724 - INFO - [8080] Received message from ('127.0.0.1', 8080): exit
+2024-11-04 10:16:17,724 - DEBUG - [8080] Connection closed
