@@ -131,6 +131,18 @@ def game_loop(communication, game, graphics, clock, logger):
                     game.agent_pick_up(1)
                 if event.key == pygame.K_RETURN:
                     game.agent_put_down(1)
+                if event.key == pygame.K_1:
+                    game.experiment_step = 1
+                if event.key == pygame.K_2:
+                    game.experiment_step = 2
+                if event.key == pygame.K_3:
+                    game.experiment_step = 3
+                if event.key == pygame.K_4:
+                    game.experiment_step = 4
+                if event.key == pygame.K_5:
+                    game.experiment_step = 5
+                if event.key == pygame.K_6:
+                    game.experiment_step = 6
                     
         
         actions = handle_messages(communication, logger, agents_ports_to_ids)
@@ -172,7 +184,7 @@ if __name__ == '__main__':
     logger.log_debug("Server started")
 
     communication = Communication(args.folder, args.host, args.port)
-    game = Game(args.conf, args.folder)
+    game = Game(args.folder)
     
     pygame.init()
     

@@ -55,10 +55,16 @@ class Control:
             if generate_new_desire:
                 # everytime it generates a new desire or checks for triggers, passes here
                 self.desire_steps += 1
-                res = input("Step concluded. Type 'stop' to avoid further generation: ")
+                res = input("Step concluded. Type 'stop' or 'trigger': ")
+                self.desires_generated += 1
+                print(self.desires_generated)
                 if res == "stop":
                     self.stop = True
                     break
+                elif res == "trigger":
+                    print("Desire triggering is now active")
+                    self.desires_generated = 0
+                    self.no_desire_triggering = False
                 self.intention_steps = 0
                 last_intention_error = False
                 plan = None
@@ -99,7 +105,7 @@ class Control:
                             self.status = "Desire triggered evaluated negatively"
                             self.manager.invalidate_desire(desire_id)
                 else:
-                    if self.desires_generated == 4:
+                    if self.desires_generated == 4 and not self.no_desire_triggering:
                         print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
                         print("|||||||||||||||||||||||||| THIS IS THE END OF EXPERIMENT ||||||||||||||||||||||||")
                         print("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")

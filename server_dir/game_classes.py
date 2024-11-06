@@ -3,65 +3,58 @@ import json
 import copy
 
 class Game:
-    def __init__(self, conf_folder, folder):
+    def __init__(self, folder):
         self.replay = {}
         self.replay_frame = 0
         self.replay_file = folder + '/replay.json'
 
-        map_conf_path = conf_folder + '/map.conf'
-        parcels_conf_path = conf_folder + '/parcels.conf'
-        batteries_conf_path = conf_folder + '/batteries.conf'
-        agents_conf_path = conf_folder + '/agents.conf'
-        keys_conf_path = conf_folder + '/keys.conf'
-        doors_conf_path = conf_folder + '/doors.conf'
-
-        self.map = Map(map_conf_path)
+        self.map = Map()
 
         self.parcels = []
         self.parcels_ids = 1
         self.decay_timer = 0
         self.spawn_timer = 0
-        with open(parcels_conf_path) as f:
-            self.spawning_rate = int(f.readline().split()[0])
-            self.score_range = list(f.readline().split()[0:2])
-            self.decay_rate = int(f.readline().split()[0])
+        self.spawning_rate = -1
+        self.score_range = [20, 20]
+        self.decay_rate = 0
         
         self.batteries = []
         self.batteries_ids = 1
         self.batteries_spawn_timer = 0
-        with open(batteries_conf_path) as f:
-            self.batteries_spawning_rate = int(f.readline().split()[0])
+        self.batteries_spawning_rate = -1
 
         self.agents = []
         self.agents_ids = 1
-        with open(agents_conf_path) as f:
-            self.n_agents = int(f.readline().split()[0])
-            self.init_battery = int(f.readline().split()[0])
-            self.energy_consumption = int(f.readline().split()[0])
-            self.init_positions = eval(f.readline().split()[0])
+        self.n_agents = 1
+        self.init_battery = 100
+        self.energy_consumption = 1
+        self.init_positions = [(0,0)]
         
         self.keys = []
         self.keys_ids = 1
-        with open(keys_conf_path) as f:
-            self.n_keys = int(f.readline().split()[0])
-            if self.n_keys > 0:
-                self.keys_init_positions = eval(f.readline().split()[0])
-            else:
-                self.n_keys = -1
+        self.n_keys = 0
+        self.keys_init_positions = []
         
         self.doors = []
         self.doors_ids = 1
-        with open(doors_conf_path) as f:
-            self.n_doors = int(f.readline().split()[0])
-            if self.n_doors > 0:
-                self.doors_init_positions = eval(f.readline().split()[0])
-            else:
-                self.n_doors = -1
+        self.doors_init_positions = 0
+        self.doors_init_positions = []
 
         self.entities_to_track = [self.map, self.parcels, self.agents, self.batteries, self.keys, self.doors]
         self.entities_labels = ["map", "parcels", "agents", "batteries", "keys", "doors"]
         self.last_entities_string_values = [""] * len(self.entities_labels)
         self.environment_state = []
+
+        # agent.has_key has to be None to exclude the field from the event
+        # agent.energy has to be -1 to exclude the field from the event
+
+        print("Ready to start dynamic experiment...")
+
+        # variable to control the steps of the experiment, changed from pygame window with keyboard events
+        self.experiment_step = 0
+        self.current_step = 0
+        # # # # # # # # # # # # # # # # # # #
+
         self.set_initial_state()
     
     def log_state(self):
@@ -423,13 +416,118 @@ class Game:
             self.doors_ids += 1
             self.doors.append(door)
         self.n_doors = 0
+    
+    def step_1(self):
+        # parcel spawn cell appears in (2,3) with 2 parcels with different score
+        self.map.grid[2][3] = 4
+        self.parcels.append(Parcel(1, 2, 3, 15))
+        self.parcels.append(Parcel(2, 2, 3, 42))
+    
+    def exit_step_1(self):
+        # change back the spawn cell to normal cell
+        self.map.grid[2][3] = 1
+    
+    def step_2(self):
+        # delivery cell appears in (0,1)
+        self.map.grid[0][2] = 2
+
+    def exit_step_2(self):
+        # change back the delivery cell to normal cell
+        self.map.grid[0][2] = 1
+
+    def step_3(self):
+        # battery spawn cell appears in (2,2) with 1 battery
+        self.map.grid[2][2] = 5
+        self.batteries.append(Battery(1, 2, 2))
+    
+    def exit_step_3(self):
+        # change back the spawn cell to normal cell
+        self.map.grid[2][2] = 1
+    
+    def step_4(self):
+        # key appears in (1,0)
+        self.keys.append(Key(1, 1, 0))
+    
+    def exit_step_4(self):
+        pass
+
+    def step_5(self):
+        # door appears in (3,2)
+        self.doors.append(Door(1, 3, 2))
+    
+    def exit_step_5(self):
+        # reset environment and agent
+        self.doors = []
+        self.keys = []
+        self.parcels = []
+        self.batteries = []
+        for agent in self.agents:
+            agent.has_key = False
+            agent.parcels_carried = []
+            agent.score = 0
+            agent.energy = self.init_battery
+    
+    def step_6(self):
+        # delivery cell appears in (0,0) with doors in (0,1) and (1,0), parcel spawn cell appears in (2,3) with 2 parcels 
+        # with different score, battery spawn cell appears in (3,2) with 1 battery, 1 key spawns in 2,2
+        self.map.grid[0][0] = 2
+        self.map.grid[2][3] = 4
+        self.map.grid[3][2] = 5
+        self.parcels.append(Parcel(3, 2, 3, 15))
+        self.parcels.append(Parcel(4, 2, 3, 42))
+        self.batteries.append(Battery(2, 3, 2))
+        self.keys.append(Key(2, 2, 2))
+        self.doors.append(Door(2, 0, 1))
+        self.doors.append(Door(3, 1, 0))
+        for agent in self.agents:
+            agent.x = 2
+            agent.y = 0
+
 
     def next_frame(self):
-        self.decay_parcels()
-        self.spawn_parcels()
-        self.spawn_batteries()
-        self.spawn_keys()
-        self.spawn_doors()
+        # I need to do this manually when I need to change the environment
+        # self.decay_parcels() # decays parcels (if enabled)
+        # self.spawn_parcels() # spawn parcels on parcels spawn cells periodically or only once (if enabled)
+        # self.spawn_batteries() # spawn batteries on keys spawn cells periodically or only once (if enabled)
+        # self.spawn_keys() # spawn keys, if any, on their starting positions (only once)
+        # self.spawn_doors() # spawn doors, if any, on their starting positions (only once)
+
+        # self.init_battery has to not be -1 (done in agents.conf)
+        # self.conf_keys has to be 0 (done in __init__ after loading everything)
+
+        # agent.has_key has to be None to exclude the field from the event
+        # agent.energy has to be -1 to exclude the field from the event
+
+        if self.experiment_step == 1 and self.experiment_step == self.current_step + 1:
+            self.current_step = 1
+            print("Entering step 1...")
+            self.step_1()
+        elif self.experiment_step == 2 and self.experiment_step == self.current_step + 1:
+            self.current_step = 2
+            self.exit_step_1()
+            print("Entering step 2...")
+            self.step_2()
+        elif self.experiment_step == 3 and self.experiment_step == self.current_step + 1:
+            self.current_step = 3
+            self.exit_step_2()
+            print("Entering step 3...")
+            self.step_3()
+        elif self.experiment_step == 4 and self.experiment_step == self.current_step + 1:
+            self.current_step = 4
+            self.exit_step_3()
+            print("Entering step 4...")
+            self.step_4()
+        elif self.experiment_step == 5 and self.experiment_step == self.current_step + 1:
+            self.current_step = 5
+            self.exit_step_4()
+            print("Entering step 5...")
+            self.step_5()
+        elif self.experiment_step == 6 and self.experiment_step == self.current_step + 1:
+            self.current_step = 6
+            self.exit_step_5()
+            print("Entering step 6...")
+            self.step_6()
+            print("Now you can activate desire triggering")
 
     def set_initial_state(self):
         for element in self.entities_to_track:
@@ -499,14 +597,12 @@ class Game:
 
 class Map:
     def __init__(self, map_conf_path=None):
-        self.width = 0
-        self.height = 0
         self.grid = []
-        if map_conf_path:
-            with open(map_conf_path) as f:
-                self.width = self.height = int(f.readline().split()[0])
-                for line in f:
-                    self.grid.append([int(cell) for cell in line.split()])
+        self.width = self.height = 4
+        self.grid.append([1, 1, 1, 1])
+        self.grid.append([1, 1, 1, 1])
+        self.grid.append([1, 1, 1, 1])
+        self.grid.append([1, 1, 1, 1])
     
     def print_map(self):
         print("Map size: ", self.width, self.height)
