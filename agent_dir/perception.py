@@ -83,13 +83,14 @@ class Perception:
                             res, updated_belief_set = self.manager.run_function(object_type, event, copy.deepcopy(self.belief_set))
                             if res:
                                 self.belief_set = updated_belief_set
+                                self.belief_set_lock.release()
                             else:
                                 self.logger.log_error(f"[PROCESS_EVENTS] Error while processing object type: {object_type} with event: {event}")
                                 self.status = f"Error while processing object type: {object_type} with event: {event}"
                                 self.error_event_by_type[object_type] = event
                                 self.manager.remove_function(object_type)
+                                self.belief_set_lock.release()
                                 break
-                            self.belief_set_lock.release()
                             # unlock belief_set
             self.events_by_type_lock.release()
             # unlock events_by_type

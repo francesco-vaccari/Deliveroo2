@@ -56,8 +56,6 @@ class Control:
                 # everytime it generates a new desire or checks for triggers, passes here
                 self.desire_steps += 1
                 res = input("Step concluded. Type 'stop' or 'trigger': ")
-                self.desires_generated += 1
-                print(self.desires_generated)
                 if res == "stop":
                     self.stop = True
                     break

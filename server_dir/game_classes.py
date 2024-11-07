@@ -457,10 +457,14 @@ class Game:
     
     def exit_step_5(self):
         # reset environment and agent
-        self.doors = []
-        self.keys = []
-        self.parcels = []
-        self.batteries = []
+        while len(self.parcels) > 0:
+            self.parcels.pop()
+        while len(self.batteries) > 0:
+            self.batteries.pop()
+        while len(self.keys) > 0:
+            self.keys.pop()
+        while len(self.doors) > 0:
+            self.doors.pop()
         for agent in self.agents:
             agent.has_key = False
             agent.parcels_carried = []
@@ -480,8 +484,8 @@ class Game:
         self.doors.append(Door(2, 0, 1))
         self.doors.append(Door(3, 1, 0))
         for agent in self.agents:
-            agent.x = 2
-            agent.y = 0
+            agent.x = 1
+            agent.y = 1
 
 
     def next_frame(self):
