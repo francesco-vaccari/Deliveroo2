@@ -5,6 +5,8 @@ from collections import defaultdict
 from datetime import datetime
 import textwrap
 from termcolor import colored
+import json
+import tqdm
 
 def read_files(directory, filenames):
     all_lines = []
@@ -59,6 +61,34 @@ def print_perception_functions(perception_functions):
             print(colored(f"    Function:", 'yellow'))
             print(textwrap.indent(function['function'], ' ' * 8))
             print(colored(f"    Error event: ", 'red') + function['error_event'])
+        print()
+
+def print_desires_analysis(desires):
+    for desire_id in desires:
+        print(colored(f"Desire {desire_id}:", 'cyan'))
+        for intention in desires[desire_id]['intentions']:
+            print(colored(f"    Intention ID: [{intention['id']}]", 'yellow'))
+            print(f"        CC: {intention['analysis']['cc']}")
+            print(f"        MI: {intention['analysis']['mi']}")
+            print(f"        RAW: {intention['analysis']['raw']}")
+            print(f"        HAL: {intention['analysis']['hal']}")
+        if desires[desire_id]['trigger_function'] is not None:
+            print(colored(f"    Trigger function:", 'magenta'))
+            print(f"        CC: {desires[desire_id]['trigger_function_analysis']['cc']}")
+            print(f"        MI: {desires[desire_id]['trigger_function_analysis']['mi']}")
+            print(f"        RAW: {desires[desire_id]['trigger_function_analysis']['raw']}")
+            print(f"        HAL: {desires[desire_id]['trigger_function_analysis']['hal']}")
+        print()
+
+def print_perception_functions_analysis(perception_functions):
+    for object_type in perception_functions:
+        print(colored(f"Object type: {object_type}", 'cyan'))
+        for function in perception_functions[object_type]:
+            print(colored(f"    Function:", 'yellow'))
+            print(f"        CC: {function['analysis']['cc']}")
+            print(f"        MI: {function['analysis']['mi']}")
+            print(f"        RAW: {function['analysis']['raw']}")
+            print(f"        HAL: {function['analysis']['hal']}")
         print()
 
 def load_info_from_logs(lines, perception_functions, desires):
@@ -254,28 +284,6 @@ def add_intentions_graph(directory, desires):
 
     return desires
 
-'''
-now I need to know about desires:
-# - if it was ever satisfied
-# - which intentions were valid when the desire was closed
-# - if the trigger function was generated correctly
-# - if it was ever triggered
-# - if it was invalidated after triggering (error or negative evaluation from LLM)
-
-Desire: #satisfied (bool), #intentions_executable_at_end (list of bools), #trigger_function_generated (bool), #triggered (int), #evaluations (list of bools), #evaluations types (last trigger if error or negative evaluation)
-
-about intentions:
-# - if it was evaluated as executable (no error and positive evaluation from LLM)
-# - if it was invalidated because of error or negative evaluation from LLM
-# - if it was invalidated when executing for a triggered desire
-# - by which and how many other intentions it calls
-# - by which and how many other intentions it was called
-
-about perception functions:
-# - the event that triggered the errors
-
-'''
-
 def fix_data_types(perception_functions, desires):
     new_perception_functions = {}
     for object_type, functions in perception_functions.items():
@@ -307,7 +315,9 @@ def fix_data_types(perception_functions, desires):
         new_desires[int(desire_id)]['triggered_n_times'] = int(desire['triggered_n_times'])
         new_desires[int(desire_id)]['evaluations'] = [bool(evaluation) for evaluation in desire['evaluations']]
         new_desires[int(desire_id)]['error'] = bool(desire['error'])
-        new_desires[int(desire_id)]['trigger_function'] = textwrap.dedent(desire['trigger_function'].strip('\n'))
+        new_desires[int(desire_id)]['trigger_function'] = textwrap.dedent(desire['trigger_function'].strip('\n').strip(' ').strip('\n'))
+        if new_desires[int(desire_id)]['trigger_function'] == "None":
+            new_desires[int(desire_id)]['trigger_function'] = None
 
     return new_perception_functions, new_desires
 
@@ -411,9 +421,113 @@ def load_desires(directory):
 
     return desires_dict
 
+def get_cc(function_string):
+    with open("temp.py", "w") as f:
+        f.write(function_string)
+        f.close()
+    
+    os.system(f"radon cc -s -j temp.py > temp.json")
+
+    with open("temp.json", "r") as f:
+        data = json.load(f)
+        f.close()
+    
+    names = []
+    ranks = []
+    complexities = []
+    n_lines = []
+
+    for function in data['temp.py']:
+        names.append(function['name'])
+        ranks.append(function['rank'])
+        complexities.append(function['complexity'])
+        n_lines.append(function['endline'] - function['lineno'] + 1)
+    
+    assert len(names) == len(ranks) == len(complexities) == len(n_lines) == 1
+    
+    os.system("rm temp.py temp.json")
+
+    # return names[0], ranks[0], complexities[0], n_lines[0]
+    return ranks[0], complexities[0]
+
+def get_mi(function_string):
+    with open("temp.py", "w") as f:
+        f.write(function_string)
+        f.close()
+    
+    os.system(f"radon mi -s -j temp.py > temp.json")
+
+    with open("temp.json", "r") as f:
+        data = json.load(f)
+        f.close()
+    
+    mi = data['temp.py']['mi']
+    rank = data['temp.py']['rank']
+
+    os.system("rm temp.py temp.json")
+
+    return (mi, rank)
+
+def get_raw(function_string):
+    with open("temp.py", "w") as f:
+        f.write(function_string)
+        f.close()
+    
+    os.system(f"radon raw -j temp.py > temp.json")
+
+    with open("temp.json", "r") as f:
+        data = json.load(f)
+        f.close()
+    
+    lloc = data['temp.py']['lloc']
+    sloc = data['temp.py']['sloc']
+    comments = data['temp.py']['comments']
+
+    os.system("rm temp.py temp.json")
+
+    return (lloc, sloc, comments)
+
+def get_hal(function_string):
+    with open("temp.py", "w") as f:
+        f.write(function_string)
+        f.close()
+    
+    os.system(f"radon hal -f -j temp.py > temp.json")
+    
+    with open("temp.json", "r") as f:
+        data = json.load(f)
+        f.close()
+    
+    names = []
+    volumes = []
+    difficulties = []
+    efforts = []
+    times = []
+    bugs = []
+    for function_name, metrics in data['temp.py']['functions'].items():
+        names.append(function_name)
+        volumes.append(metrics['volume'])
+        difficulties.append(metrics['difficulty'])
+        efforts.append(metrics['effort'])
+        times.append(metrics['time'])
+        bugs.append(metrics['bugs'])
+
+    assert len(names) == len(volumes) == len(difficulties) == len(efforts) == len(times) == len(bugs)
+    
+    os.system("rm temp.py temp.json")
+
+    # return (names, volumes, difficulties, efforts, times, bugs)
+    return volumes[0], difficulties[0], efforts[0], times[0], bugs[0]
+
+def parse_date(line):
+        match = re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}', line)
+        if match:
+            return datetime.strptime(match.group(), '%Y-%m-%d %H:%M:%S,%f')
+        return None
+
 def main():
-    parser = argparse.ArgumentParser(description='Merge text files from a directory.')
-    parser.add_argument('directory', type=str, help='The directory containing the files to merge')
+    parser = argparse.ArgumentParser(description='Experiment Analysis')
+    parser.add_argument('directory', type=str, help='The experiment directory to analyze')
     args = parser.parse_args()
 
     perception_functions = load_perception_functions(args.directory)
@@ -422,12 +536,6 @@ def main():
     filenames = ['agent_1/control.log', 'agent_1/perception.log', 'agent_1/control_manager.log', 'agent_1/perception_manager.log']
 
     files = read_files(args.directory, filenames)
-
-    def parse_date(line):
-        match = re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}', line)
-        if match:
-            return datetime.strptime(match.group(), '%Y-%m-%d %H:%M:%S,%f')
-        return None
 
     merged_lines = []
     for file in files:
@@ -446,22 +554,100 @@ def main():
 
     merged_lines = [line.replace('\n', '␤') for line in merged_lines]
 
-    with open('merged.log', 'w') as file:
-        for line in merged_lines:
-            file.write(line)
-            file.write('\n')
-            file.write('\n')
-
     perception_functions, desires = load_info_from_logs(merged_lines, perception_functions, desires)
     desires = add_intentions_graph(args.directory, desires)
-
-
     perception_functions, desires = fix_data_types(perception_functions, desires)
 
-    print_desires(desires)
-    print_perception_functions(perception_functions)
+    total_items = sum(len(desire['intentions']) for desire in desires.values()) + len(desires) + sum(len(functions) for functions in perception_functions.values())
+    progress_bar = tqdm.tqdm(total=total_items, desc="Analyzing functions")
 
-    # now it's analysis time
+    for desire_id, desire in desires.items():
+        for intention in desire['intentions']:
+            rank, complexity = get_cc(intention['function'])
+            mi, rank = get_mi(intention['function'])
+            lloc, sloc, comments = get_raw(intention['function'])
+            volume, difficulty, effort, time, bugs = get_hal(intention['function'])
+            intention['analysis'] = {
+                                        'cc': {'rank': rank, 'complexity': complexity},
+                                        'mi': {'mi': mi, 'rank': rank},
+                                        'raw': {'lloc': lloc, 'sloc': sloc, 'comments': comments},
+                                        'hal': {'volume': volume, 'difficulty': difficulty, 'effort': effort, 'time': time, 'bugs': bugs}
+                                        }
+            progress_bar.update(1)
+        if desire['trigger_function'] is not None:
+            rank, complexity = get_cc(desire['trigger_function'])
+            mi, rank = get_mi(desire['trigger_function'])
+            lloc, sloc, comments = get_raw(desire['trigger_function'])
+            volume, difficulty, effort, time, bugs = get_hal(desire['trigger_function'])
+            desire['trigger_function_analysis'] = {
+                                                    'cc': {'rank': rank, 'complexity': complexity},
+                                                    'mi': {'mi': mi, 'rank': rank},
+                                                    'raw': {'lloc': lloc, 'sloc': sloc, 'comments': comments},
+                                                    'hal': {'volume': volume, 'difficulty': difficulty, 'effort': effort, 'time': time, 'bugs': bugs}
+                                                    }
+        progress_bar.update(1)
+    
+    for object_type, functions in perception_functions.items():
+        for function in functions:
+            rank, complexity = get_cc(function['function'])
+            mi, rank = get_mi(function['function'])
+            lloc, sloc, comments = get_raw(function['function'])
+            volume, difficulty, effort, time, bugs = get_hal(function['function'])
+            function['analysis'] = {
+                                    'cc': {'rank': rank, 'complexity': complexity},
+                                    'mi': {'mi': mi, 'rank': rank},
+                                    'raw': {'lloc': lloc, 'sloc': sloc, 'comments': comments},
+                                    'hal': {'volume': volume, 'difficulty': difficulty, 'effort': effort, 'time': time, 'bugs': bugs}
+                                    }
+            progress_bar.update(1)
+    
+    progress_bar.close()
+    
+    # print_desires(desires)
+    # print_perception_functions(perception_functions)
+    # print_desires_analysis(desires)
+    # print_perception_functions_analysis(perception_functions)
+
+    # now what do I want to do with this data?
+
 
 if __name__ == "__main__":
+    if os.path.exists("temp.json") or os.path.exists("temp.py"):
+        print("Please remove temp.json and temp.py from the current directory before running this script.")
+        exit()
     main()
+
+'''
+now I need to know about desires:
+# - if it was ever satisfied
+# - which intentions were valid when the desire was closed
+# - if the trigger function was generated correctly
+# - if it was ever triggered
+# - if it was invalidated after triggering (error or negative evaluation from LLM)
+
+Desire: #satisfied (bool), #intentions_executable_at_end (list of bools), #trigger_function_generated (bool), #triggered (int), #evaluations (list of bools), #evaluations types (last trigger if error or negative evaluation)
+
+about intentions:
+# - if it was evaluated as executable (no error and positive evaluation from LLM)
+# - if it was invalidated because of error or negative evaluation from LLM
+# - if it was invalidated when executing for a triggered desire
+# - by which and how many other intentions it calls
+# - by which and how many other intentions it was called
+
+about perception functions:
+# - the event that triggered the errors
+
+'''
+
+# CC score	Rank	Risk
+# 1 - 5	    A	    low - simple block
+# 6 - 10	B	    low - well structured and stable block
+# 11 - 20	C	    moderate - slightly complex block
+# 21 - 30	D	    more than moderate - more complex block
+# 31 - 40	E	    high - complex block, alarming
+# 41+	    F	    very high - error-prone, unstable block
+
+# MI score	Rank	Maintainability
+# 100 - 20	A	    Very high
+# 19 - 10	B	    Medium
+# 9 - 0	    C	    Extremely low
