@@ -51,7 +51,7 @@ def print_desires(desires):
         print(colored(f"    Triggered n times: ", 'magenta') + str(desire['triggered_n_times']))
         print(colored(f"    Evaluations: ", 'magenta') + str(desire['evaluations']))
         print(colored(f"    Error: ", 'magenta') + str(desire['error']))
-        print(colored(f"    Trigger function:\n", 'magenta') + textwrap.indent(desire['trigger_function'], ' ' * 4))
+        print(colored(f"    Trigger function:\n", 'magenta') + textwrap.indent(str(desire['trigger_function']), ' ' * 4))
         print()
 
 def print_perception_functions(perception_functions):
@@ -525,9 +525,21 @@ def parse_date(line):
             return datetime.strptime(match.group(), '%Y-%m-%d %H:%M:%S,%f')
         return None
 
+def perform_human_analysis(perception_functions, desires):
+    # print to the user all desires and intention descriptions to get how many objectives the description is made of (int value)
+    # print to the user all intention functions to get the category the function belongs to
+    # Adaptive, Fixed or Static, Scripted or Predetermined potrebbero essere i nomi delle categorie
+    # poi c'è anche la questione delle one-action che è un attributo aggiuntivo per le prime due categorie
+
+    # gli obiettivi possono essere da 1 a n, (ex 1,2,3,4,5,... sono validi input)
+    # A, S, P, O sono le categorie che l'utente immette (ex. a, s, p, ao, so, AO, A, S, P, PO sono validi input)
+
+    pass
+
 def main():
     parser = argparse.ArgumentParser(description='Experiment Analysis')
     parser.add_argument('directory', type=str, help='The experiment directory to analyze')
+    parser.add_argument('--human-analysis', action='store_true', help='Inputs the user with descriptions and functions to perform a human analysis')
     args = parser.parse_args()
 
     perception_functions = load_perception_functions(args.directory)
@@ -557,6 +569,9 @@ def main():
     perception_functions, desires = load_info_from_logs(merged_lines, perception_functions, desires)
     desires = add_intentions_graph(args.directory, desires)
     perception_functions, desires = fix_data_types(perception_functions, desires)
+
+    if args.human_analysis:
+        perform_human_analysis(perception_functions, desires)
 
     total_items = sum(len(desire['intentions']) for desire in desires.values()) + len(desires) + sum(len(functions) for functions in perception_functions.values())
     progress_bar = tqdm.tqdm(total=total_items, desc="Analyzing functions")
@@ -608,14 +623,25 @@ def main():
     # print_desires_analysis(desires)
     # print_perception_functions_analysis(perception_functions)
 
-    # now what do I want to do with this data?
-
 
 if __name__ == "__main__":
     if os.path.exists("temp.json") or os.path.exists("temp.py"):
         print("Please remove temp.json and temp.py from the current directory before running this script.")
         exit()
     main()
+
+# CC score	Rank	Risk
+# 1 - 5	    A	    low - simple block
+# 6 - 10	B	    low - well structured and stable block
+# 11 - 20	C	    moderate - slightly complex block
+# 21 - 30	D	    more than moderate - more complex block
+# 31 - 40	E	    high - complex block, alarming
+# 41+	    F	    very high - error-prone, unstable block
+
+# MI score	Rank	Maintainability
+# 100 - 20	A	    Very high
+# 19 - 10	B	    Medium
+# 9 - 0	    C	    Extremely low
 
 '''
 now I need to know about desires:
@@ -638,16 +664,115 @@ about perception functions:
 # - the event that triggered the errors
 
 '''
+'''
+Desire:
+- satisfied con triggeer function e executable alla fine dell'esperimento (executable at desire end)
+- satisfied con trigger function ma non executable alla fine dell'esperimento (numero trigger)
+- satisfied senza trigger function
+- non satisfied
 
-# CC score	Rank	Risk
-# 1 - 5	    A	    low - simple block
-# 6 - 10	B	    low - well structured and stable block
-# 11 - 20	C	    moderate - slightly complex block
-# 21 - 30	D	    more than moderate - more complex block
-# 31 - 40	E	    high - complex block, alarming
-# 41+	    F	    very high - error-prone, unstable block
+Intention:
+- generazione corretta e executable alla fine dell'esperimento
+- generazione corretta ma non executable alla fine dell'esperimento, invalidata durante desire trigger
+- generazione corretta ma non executable alla fine dell'esperimento, invalidata per via di dependency
+- generazione non corretta per via di errore di esecuzione
+- generazione non corretta per via di valutazione negativa
 
-# MI score	Rank	Maintainability
-# 100 - 20	A	    Very high
-# 19 - 10	B	    Medium
-# 9 - 0	    C	    Extremely low
+Calcolo metriche per ogni gruppo e posso confrontare average di gruppi diversi. Mi aspetto che codice funzionante abbia metriche migliore o peggiore in certi aspetti rispetto a codice non funzionante.
+
+
+Mi aspetto che nel corso dell'esperimento le metriche peggiorino per via del fatto che l'agente impara a fare cose più complesse.
+
+Posso comparare codice generato in categorie di esperimento diverse, più elementi nel belief set dovrebbero portare a codice più complesso sia perché ci sono più elementi e anche perché la LLM fa più "fatica" a comprendere l'ambiente.
+
+Mi aspetto che intention che chiamano altre intention implementate prima siano meno complesse e quindi con metriche migliori e mi aspetto anche che abbiano successo più spesso visto che parti sono state confermante come funzionanti in precedenza.
+
+
+
+
+Posso dividere le descrizioni di intention e desire in categorie differenti, in base all'obiettivo che viene descritto. Mi aspetto che intention che hanno obiettivi più complessi abbiano metriche peggiori, sia a livello di desire che a livello di intention.
+
+Posso contare il numero di obiettivi descritti
+    
+    ex. Desire 1: The agent should strive to collect as many parcels as possible from the parcels spawn point and deliver them to their respective destinations while maintaining a high energy level.
+può essere diviso in 3 obiettivi: raccolta, consegna, mantenimento energia
+    
+    ex. Desire 1: The agent's long term goal is to collect all the keys available on the map, open all the doors and deliver all the parcels to the delivery cell and maximize the score.
+può essere diviso in 4 obiettivi: raccolta chiavi, apertura porte, consegna pacchi, massimizzazione punteggio
+
+Maggiore il numero di obiettivi, mi aspetto una complessità maggiore e quindi metriche peggiori. Stessa cosa per intention nel caso specifichino più passaggi. Anche in base al numreo di obiettivi descritti dal desire, posso andare a vedere quanti obiettivi sono contenuti nelle intention generate per quel desire.
+
+
+
+Infine posso fare una analisi del codice stesso dividendo in categorie il codice generato per le intention. Ad esempio
+            def function_7():
+                global belief_set
+                parcel_coordinates = belief_set['parcel'][1]['coordinates']
+                agent_coordinates = belief_set['agent']['coordinates']
+                while agent_coordinates != parcel_coordinates:
+                    if agent_coordinates[0] < parcel_coordinates[0]:
+                        function_2()
+                        agent_coordinates[0] += 1
+                    elif agent_coordinates[0] > parcel_coordinates[0]:
+                        function_1()
+                        agent_coordinates[0] -= 1
+                    if agent_coordinates[1] < parcel_coordinates[1]:
+                        function_4()
+                        agent_coordinates[1] += 1
+                    elif agent_coordinates[1] > parcel_coordinates[1]:
+                        function_3()
+                        agent_coordinates[1] -= 1
+                function_5()
+    non è specifica alle istanze contenute nel belief set, il piano prodotto si adatta alle posizioni dell'agente e delle parcelle
+
+            def function_19():
+                global belief_set
+                agent_coords = belief_set['agent']['coordinates']
+                if belief_set['agent']['energy'] > 50:
+                    if agent_coords[0] > 0 and belief_set['map']['grid'][agent_coords[0
+                        ] - 1][agent_coords[1]]['cell_type'] == 'walkable':
+                        function_1()
+                    elif agent_coords[0] < belief_set['map']['width'] - 1 and belief_set[
+                        'map']['grid'][agent_coords[0] + 1][agent_coords[1]]['cell_type'
+                        ] == 'walkable':
+                        function_2()
+                    elif agent_coords[1] > 0 and belief_set['map']['grid'][agent_coords[0]
+                        ][agent_coords[1] - 1]['cell_type'] == 'walkable':
+                        function_3()
+                    elif agent_coords[1] < belief_set['map']['height'] - 1 and belief_set[
+                        'map']['grid'][agent_coords[0]][agent_coords[1] + 1]['cell_type'
+                        ] == 'walkable':
+                        function_4()
+                else:
+                    pass
+    questa funzione è generale, ma produce piani con una azione soltanto visto che non ci sono while o for loop, queste intention le chiamo one-action intentions perché producono una solo azione, generalmente sono una lista di if
+            
+            def function_34():
+                global belief_set
+                if belief_set['agent']['coordinates'] == [0, 0] and len(belief_set[
+                    'agent']['parcels_carried_ids']) > 0:
+                    function_6()
+                else:
+                    function_11()
+                if belief_set['agent']['energy'] < 50 and belief_set['agent']['coordinates'
+                    ] != [3, 2]:
+                    function_2() if belief_set['agent']['coordinates'][0] < [3, 2][0
+                        ] else function_1()
+                    function_4() if belief_set['agent']['coordinates'][1] < [3, 2][1
+                        ] else function_3()
+                    function_5()
+    questa funzione invece fa riferimento a specifiche coordinate della mappa (ed è anche one-action), quindi è più specifica e meno generica
+
+            def function_25():
+                global belief_set
+                agent = belief_set['agent']
+                if agent['energy'] > 50:
+                    function_1()
+                    function_2()
+                    function_3()
+                    function_4()
+                    function_5()
+                else:
+                    pass
+    ed infine ci sono funzioni che sono solamente una lista di azioni predeterminate, quindi non soltanto specifiche alla situazione in cui si trova l'agente quando sono generate, ancora più specifiche perché non si basano su coordinate per generare il piano ma il piano viene "generato" direttamente dalla LLM
+'''
