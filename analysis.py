@@ -91,6 +91,15 @@ def print_perception_functions_analysis(perception_functions):
             print(f"        HAL: {function['analysis']['hal']}")
         print()
 
+def print_desire_human_analysis(desires_analysis):
+    for desire_id, desire in desires_analysis.items():
+        print(colored(f"Desire {desire_id}: {desire['n_objectives']} objectives", 'cyan'))
+        for intention_id, intention in desire['intentions'].items():
+            print(colored(f"    Intention {intention_id}: {intention['n_objectives']} objectives", 'yellow'))
+            print(colored(f"    Category: ", 'green') + intention['category'])
+            print(colored(f"    One action: ", 'green') + str(intention['one_action']))
+        print()
+
 def load_info_from_logs(lines, perception_functions, desires):
     perception_functions_errors = {}
     for line in lines:
@@ -525,7 +534,7 @@ def parse_date(line):
             return datetime.strptime(match.group(), '%Y-%m-%d %H:%M:%S,%f')
         return None
 
-def perform_human_analysis(perception_functions, desires):
+def perform_human_analysis(desires, directory):
     # print to the user all desires and intention descriptions to get how many objectives the description is made of (int value)
     # print to the user all intention functions to get the category the function belongs to
     # Adaptive, Fixed or Static, Scripted or Predetermined potrebbero essere i nomi delle categorie
@@ -534,7 +543,70 @@ def perform_human_analysis(perception_functions, desires):
     # gli obiettivi possono essere da 1 a n, (ex 1,2,3,4,5,... sono validi input)
     # A, S, P, O sono le categorie che l'utente immette (ex. a, s, p, ao, so, AO, A, S, P, PO sono validi input)
 
-    pass
+    desire_analysis = load_desire_analysis(directory)
+    if desire_analysis is not None:
+        print("Desire human analysis already performed. If you want to redo it, please delete the desire_human_analysis.json file.")
+        return
+    
+    desires_analysis = {}
+    for desire_id, desire in desires.items():
+        desires_analysis[desire_id] = {}
+        n = None
+        while n is None:
+            n = input(colored(f"Desire {desire_id}: {desire['description']}\nHow many objectives does this description contain? ", 'cyan'))
+            try:
+                n = int(n)
+            except ValueError:
+                print(colored("Please input a valid integer.", 'red'))
+                n = None
+        desires_analysis[desire_id]['n_objectives'] = n
+
+        desires_analysis[desire_id]['intentions'] = {}
+        for intention in desire['intentions']:
+            desires_analysis[desire_id]['intentions'][intention['id']] = {}
+            n = None
+            while n is None:
+                n = input(colored(f"Intention {intention['id']}: {intention['description']}\nHow many objectives does this description contain? ", 'yellow'))
+                try:
+                    n = int(n)
+                except ValueError:
+                    print(colored("Please input a valid integer.", 'red'))
+                    n = None
+            desires_analysis[desire_id]['intentions'][intention['id']]['n_objectives'] = n
+
+            category = None
+            one_action = False
+            while category is None:
+                category = input(colored(f"Intention {intention['id']} function:\n{intention['function']}\nWhich category does the function belong to? (A, S, P, AO, SO, OA, OS) ", 'green'))
+                if category.lower() in ['a', 'ao', 'oa', 's', 'so', 'os', 'p']:
+                    if 'o' in category.lower():
+                        one_action = True
+                    if category.lower() in ['a', 'ao', 'oa']:
+                        category = 'adaptive'
+                    elif category.lower() in ['s', 'so', 'os']:
+                        category = 'static'
+                    elif category.lower() == 'p':
+                        category = 'predetermined'
+                else:
+                    print(colored("Please input a valid category: A, S, P, AO, SO, OA, OS", 'red'))
+                    category = None
+            desires_analysis[desire_id]['intentions'][intention['id']]['category'] = category
+            desires_analysis[desire_id]['intentions'][intention['id']]['one_action'] = one_action
+    
+    with open(os.path.join(directory, 'agent_1', 'desire_human_analysis.json'), 'w') as f:
+        json.dump(desires_analysis, f, indent=4)
+    
+    print(colored("Human analysis saved to desire_human_analysis.json", 'cyan'))
+
+def load_desire_analysis(directory):
+    if not os.path.exists(os.path.join(directory, 'agent_1', 'desire_human_analysis.json')):
+        return None
+    
+    with open(os.path.join(directory, 'agent_1', 'desire_human_analysis.json'), 'r') as f:
+        data = json.load(f)
+        f.close()
+    
+    return data
 
 def main():
     parser = argparse.ArgumentParser(description='Experiment Analysis')
@@ -571,7 +643,14 @@ def main():
     perception_functions, desires = fix_data_types(perception_functions, desires)
 
     if args.human_analysis:
-        perform_human_analysis(perception_functions, desires)
+        perform_human_analysis(desires, args.directory)
+        exit()
+    else:
+        desires_analysis = load_desire_analysis(args.directory)
+        if desires_analysis is None:
+            print("Desire human analysis not performed. If you want to perform it, please run the script with the --human-analysis flag.")
+            exit()
+
 
     total_items = sum(len(desire['intentions']) for desire in desires.values()) + len(desires) + sum(len(functions) for functions in perception_functions.values())
     progress_bar = tqdm.tqdm(total=total_items, desc="Analyzing functions")
@@ -622,6 +701,7 @@ def main():
     # print_perception_functions(perception_functions)
     # print_desires_analysis(desires)
     # print_perception_functions_analysis(perception_functions)
+    print_desire_human_analysis(desires_analysis)
 
 
 if __name__ == "__main__":
