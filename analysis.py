@@ -1,4 +1,5 @@
 import os
+import importlib.util
 import argparse
 import re
 from collections import defaultdict
@@ -152,7 +153,7 @@ def load_info_from_logs(lines, perception_functions, desires):
             desires_triggered[desire_triggered_id]['error'] = error
             desires_triggered[desire_triggered_id]['evaluations'].append(False)
         if "Desire triggered evaluated positively" in line:
-            desires_triggered[desire_triggered_id]['evaluations'] = True
+            desires_triggered[desire_triggered_id]['evaluations'].append(True)
     
     for desire_id, desire in new_desires.items():
         if desire_id in desires_triggered:
@@ -369,9 +370,6 @@ def load_desires(directory):
     with open(os.path.join(directory, 'agent_1', 'result', 'desires.txt'), 'r') as file:
         lines = file.readlines()
     
-    # desire = {'id': None, 'description': None, 'intentions': [], 'executable': None, 'trigger_function': None}
-    # intention = {'id': None, 'description': None, 'executable': None}
-    
     current_desire_id = None
     now_reading_function = False
     now_reading_trigger_function = False
@@ -584,7 +582,7 @@ def perform_human_analysis(desires, directory):
                     if category.lower() in ['a', 'ao', 'oa']:
                         category = 'adaptive'
                     elif category.lower() in ['s', 'so', 'os']:
-                        category = 'static'
+                        category = 'grounded'
                     elif category.lower() == 'p':
                         category = 'predetermined'
                 else:
@@ -608,18 +606,10 @@ def load_desire_analysis(directory):
     
     return data
 
-def main():
-    parser = argparse.ArgumentParser(description='Experiment Analysis')
-    parser.add_argument('directory', type=str, help='The experiment directory to analyze')
-    parser.add_argument('--human-analysis', action='store_true', help='Inputs the user with descriptions and functions to perform a human analysis')
-    args = parser.parse_args()
-
-    perception_functions = load_perception_functions(args.directory)
-    desires = load_desires(args.directory)
-
+def load_logs(directory):
     filenames = ['agent_1/control.log', 'agent_1/perception.log', 'agent_1/control_manager.log', 'agent_1/perception_manager.log']
 
-    files = read_files(args.directory, filenames)
+    files = read_files(directory, filenames)
 
     merged_lines = []
     for file in files:
@@ -638,20 +628,9 @@ def main():
 
     merged_lines = [line.replace('\n', '␤') for line in merged_lines]
 
-    perception_functions, desires = load_info_from_logs(merged_lines, perception_functions, desires)
-    desires = add_intentions_graph(args.directory, desires)
-    perception_functions, desires = fix_data_types(perception_functions, desires)
+    return merged_lines
 
-    if args.human_analysis:
-        perform_human_analysis(desires, args.directory)
-        exit()
-    else:
-        desires_analysis = load_desire_analysis(args.directory)
-        if desires_analysis is None:
-            print("Desire human analysis not performed. If you want to perform it, please run the script with the --human-analysis flag.")
-            exit()
-
-
+def compute_metrics(perception_functions, desires):
     total_items = sum(len(desire['intentions']) for desire in desires.values()) + len(desires) + sum(len(functions) for functions in perception_functions.values())
     progress_bar = tqdm.tqdm(total=total_items, desc="Analyzing functions")
 
@@ -696,19 +675,57 @@ def main():
             progress_bar.update(1)
     
     progress_bar.close()
+
+    return perception_functions, desires
+
+if __name__ == "__main__":
+
+    if os.path.exists("temp.json") or os.path.exists("temp.py"):
+        print("Please remove temp.json and temp.py from the current directory before running this script.")
+        exit()
+    
+    parser = argparse.ArgumentParser(description='Experiment Analysis')
+    parser.add_argument('directory', type=str, help='The experiment directory to analyze')
+    parser.add_argument('--human-analysis', action='store_true', help='Inputs the user with descriptions and functions to perform a human analysis')
+    args = parser.parse_args()
+
+    perception_functions = load_perception_functions(args.directory)
+    desires = load_desires(args.directory)
+
+    logs_lines = load_logs(args.directory)
+    perception_functions, desires = load_info_from_logs(logs_lines, perception_functions, desires)
+    
+    desires = add_intentions_graph(args.directory, desires)
+    perception_functions, desires = fix_data_types(perception_functions, desires)
+
+    if args.human_analysis:
+        perform_human_analysis(desires, args.directory)
+        exit()
+    else:
+        desires_analysis = load_desire_analysis(args.directory)
+        if desires_analysis is None:
+            print("Desire human analysis not performed. If you want to perform it, please run the script with the --human-analysis flag.")
+            exit()
+
+    perception_functions, desires = compute_metrics(perception_functions, desires)
     
     # print_desires(desires)
     # print_perception_functions(perception_functions)
     # print_desires_analysis(desires)
     # print_perception_functions_analysis(perception_functions)
-    print_desire_human_analysis(desires_analysis)
+    # print_desire_human_analysis(desires_analysis)
 
+    for filename in os.listdir('analysis_pipeline'):
+        if filename.endswith(".py") and filename != "__init__.py":
+            file_path = os.path.join('analysis_pipeline', filename)
+            module_name = filename[:-3]
+            spec = importlib.util.spec_from_file_location(module_name, file_path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            if hasattr(module, module_name):
+                func = getattr(module, module_name)
+                func(perception_functions, desires, desires_analysis)
 
-if __name__ == "__main__":
-    if os.path.exists("temp.json") or os.path.exists("temp.py"):
-        print("Please remove temp.json and temp.py from the current directory before running this script.")
-        exit()
-    main()
 
 # CC score	Rank	Risk
 # 1 - 5	    A	    low - simple block
@@ -745,6 +762,10 @@ about perception functions:
 
 '''
 '''
+Ovviamente come analisi base vado a vedere in quanti esperimenti l'obiettivo fissato per la categoria è stato effettivamente completato.
+
+Un'altra cosa che posso fare è andare a vedere che tipi di obiettivi vengono proposti dalla LLM, quindi raccogliere parcelle, consegnare, aprire porte, ma anche massimizzare punteggio, navigare efficientemente la mappa, esplorare le celle... e vedere in base all'obiettivo proposto come cambiano le metriche. Forse questo è superfluo perché non mi dice niente di significativo, non mi interessa se con certi elementi specifici all'ambiente la LLM fa meglio o peggio.
+
 Desire:
 - satisfied con triggeer function e executable alla fine dell'esperimento (executable at desire end)
 - satisfied con trigger function ma non executable alla fine dell'esperimento (numero trigger)
@@ -780,7 +801,8 @@ può essere diviso in 3 obiettivi: raccolta, consegna, mantenimento energia
     ex. Desire 1: The agent's long term goal is to collect all the keys available on the map, open all the doors and deliver all the parcels to the delivery cell and maximize the score.
 può essere diviso in 4 obiettivi: raccolta chiavi, apertura porte, consegna pacchi, massimizzazione punteggio
 
-Maggiore il numero di obiettivi, mi aspetto una complessità maggiore e quindi metriche peggiori. Stessa cosa per intention nel caso specifichino più passaggi. Anche in base al numreo di obiettivi descritti dal desire, posso andare a vedere quanti obiettivi sono contenuti nelle intention generate per quel desire.
+Maggiore il numero di obiettivi, mi aspetto una complessità maggiore e quindi metriche peggiori. Stessa cosa per intention nel caso specifichino più passaggi. Anche in base al numreo di obiettivi descritti dal desire, posso andare a vedere quanti obiettivi sono contenuti nelle intention generate per quel desire. Mi aspetto che più la tipologia di esperimento è complessa, più obiettivi ci sono nelle intention generate. Un altro modo di contare è semplicemente numero di caratteri nelle descrizioni.
+Una cosa da considerare è che intention con molti obiettivi ma che contengono chiamate ad altre intention hanno probabilmente metriche migliore perché appunto sono più corte per via delle intention chiamate.
 
 
 
