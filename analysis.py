@@ -679,47 +679,59 @@ def compute_metrics(perception_functions, desires, n=1, total_n=1, typ=1, total_
     return perception_functions, desires
 
 if __name__ == "__main__":
-    if os.path.exists("temp.json") or os.path.exists("temp.py"):
-        print("Please remove temp.json and temp.py from the current directory before running this script.")
-        exit()
+    # if the data file exists, load it and skip the analysis
+    if os.path.exists("data.json"):
+        data = None
+        with open('data.json', 'r') as f:
+            data = json.load(f)
+            f.close()
+    else:
+        if os.path.exists("temp.json") or os.path.exists("temp.py"):
+            print("Please remove temp.json and temp.py from the current directory before running this script.")
+            exit()
 
-    experiment_folders = ['1', '2', '3', '4', '5', '6', '7', '8']
-    experiment_paths = [os.path.join('experiments', folder) for folder in experiment_folders]
+        experiment_folders = ['1', '2', '3', '4', '5', '6', '7', '8']
+        experiment_paths = [os.path.join('experiments', folder) for folder in experiment_folders]
 
-    data = {}
+        data = {}
 
-    for i, folder in enumerate(experiment_paths):
-        dirs = os.listdir(folder)
-        dirs = [d for d in dirs if os.path.isdir(os.path.join(folder, d))]
-        total_n = len(dirs)
-        n = 1
-        data[folder] = []
-        for dir in dirs:
-            experiment = {'typology': experiment_folders[i], 'path': os.path.join(folder, dir), 'perception_functions': None, 'desires': None, 'desire_analysis': None}
-            perception_functions = load_perception_functions(experiment['path'])
-            desires = load_desires(experiment['path'])
-            logs_lines = load_logs(experiment['path'])
-            perception_functions, desires = load_info_from_logs(logs_lines, perception_functions, desires)
-            desires = add_intentions_graph(experiment['path'], desires)
-            perception_functions, desires = fix_data_types(perception_functions, desires)
-            desires_analysis = load_desire_analysis(experiment['path'])
-            if desires_analysis is None:
-                print(f"Desire human analysis not performed for experiment {dir}. Exiting.")
-                exit()
-            perception_functions, desires = compute_metrics(perception_functions, desires, n=n, total_n=total_n, typ=i+1, total_typ=len(experiment_folders))
-            experiment['perception_functions'] = perception_functions
-            experiment['desires'] = desires
-            experiment['desire_analysis'] = desires_analysis
-            data[folder].append(experiment)
-            n += 1
+        for i, folder in enumerate(experiment_paths):
+            dirs = os.listdir(folder)
+            dirs = [d for d in dirs if os.path.isdir(os.path.join(folder, d))]
+            total_n = len(dirs)
+            n = 1
+            data[folder] = []
+            for dir in dirs:
+                experiment = {'typology': experiment_folders[i], 'path': os.path.join(folder, dir), 'perception_functions': None, 'desires': None, 'desire_analysis': None}
+                perception_functions = load_perception_functions(experiment['path'])
+                desires = load_desires(experiment['path'])
+                logs_lines = load_logs(experiment['path'])
+                perception_functions, desires = load_info_from_logs(logs_lines, perception_functions, desires)
+                desires = add_intentions_graph(experiment['path'], desires)
+                perception_functions, desires = fix_data_types(perception_functions, desires)
+                desires_analysis = load_desire_analysis(experiment['path'])
+                if desires_analysis is None:
+                    print(f"Desire human analysis not performed for experiment {dir}. Exiting.")
+                    exit()
+                perception_functions, desires = compute_metrics(perception_functions, desires, n=n, total_n=total_n, typ=i+1, total_typ=len(experiment_folders))
+                experiment['perception_functions'] = perception_functions
+                experiment['desires'] = desires
+                experiment['desire_analysis'] = desires_analysis
+                data[folder].append(experiment)
+                n += 1
 
-    # for folder, experiments in data.items():
-    #     print(f"Folder {folder}:")
-    #     for experiment in experiments:
-    #         print(f"    Experiment {experiment['path']}:")
-    #         print(f"        Perception functions: {len(experiment['perception_functions'])}")
-    #         print(f"        Desires: {len(experiment['desires'])}")
-    #         print(f"        Desire human analysis: {len(experiment['desire_analysis'])}")
+        # for folder, experiments in data.items():
+        #     print(f"Folder {folder}:")
+        #     for experiment in experiments:
+        #         print(f"    Experiment {experiment['path']}:")
+        #         print(f"        Perception functions: {len(experiment['perception_functions'])}")
+        #         print(f"        Desires: {len(experiment['desires'])}")
+        #         print(f"        Desire human analysis: {len(experiment['desire_analysis'])}")
+
+        # save the data into a file
+        with open('data.json', 'w') as f:
+            json.dump(data, f, indent=4)
+
 
     for filename in os.listdir('analysis_pipeline'):
         if filename.endswith(".py") and filename != "__init__.py":
