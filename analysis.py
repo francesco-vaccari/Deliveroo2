@@ -865,5 +865,18 @@ Infine posso fare una analisi del codice stesso dividendo in categorie il codice
                     function_5()
     questa funzione invece fa riferimento a specifiche coordinate della mappa (ed è anche one-action), quindi è più specifica e meno generica
 
+            def function_25():
+                global belief_set
+                agent = belief_set['agent']
+                if agent['energy'] > 50:
+                    function_1()
+                    function_2()
+                    function_3()
+                    function_4()
+                    function_5()
+                else:
+                    pass
+    ed infine ci sono funzioni che sono solamente una lista di azioni predeterminate, quindi non soltanto specifiche alla situazione in cui si trova l'agente quando sono generate, ancora più specifiche perché non si basano su coordinate per generare il piano ma il piano viene "generato" direttamente dalla LLM
+
 Una cosa che ho notato è che verso la fine degli esperimenti le funzioni tendono ad essere peggiori (grounded o one-action), questo potrebbe essere dovuto all'accumularsi di oggetti nella mappa che spawnano e quindi che 'mandano in confusione' la LLM che genera azioni meno generiche in quanto meno complesse saltando astrazioni che in altre funzioni fa. Potrebbe essere anche interessante vedere se pure le metriche peggiorano.
 '''
