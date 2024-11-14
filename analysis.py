@@ -630,9 +630,9 @@ def load_logs(directory):
 
     return merged_lines
 
-def compute_metrics(perception_functions, desires):
+def compute_metrics(perception_functions, desires, n=1, total_n=1, typ=1, total_typ=1):
     total_items = sum(len(desire['intentions']) for desire in desires.values()) + len(desires) + sum(len(functions) for functions in perception_functions.values())
-    progress_bar = tqdm.tqdm(total=total_items, desc="Analyzing functions")
+    progress_bar = tqdm.tqdm(total=total_items, desc=f"Computing metrics for experiment {n}/{total_n} of typology {typ}/{total_typ}")
 
     for desire_id, desire in desires.items():
         for intention in desire['intentions']:
@@ -679,41 +679,47 @@ def compute_metrics(perception_functions, desires):
     return perception_functions, desires
 
 if __name__ == "__main__":
-
     if os.path.exists("temp.json") or os.path.exists("temp.py"):
         print("Please remove temp.json and temp.py from the current directory before running this script.")
         exit()
-    
-    parser = argparse.ArgumentParser(description='Experiment Analysis')
-    parser.add_argument('directory', type=str, help='The experiment directory to analyze')
-    parser.add_argument('--human-analysis', action='store_true', help='Inputs the user with descriptions and functions to perform a human analysis')
-    args = parser.parse_args()
 
-    perception_functions = load_perception_functions(args.directory)
-    desires = load_desires(args.directory)
+    experiment_folders = ['1', '2', '3', '4', '5', '6', '7', '8']
+    experiment_paths = [os.path.join('experiments', folder) for folder in experiment_folders]
 
-    logs_lines = load_logs(args.directory)
-    perception_functions, desires = load_info_from_logs(logs_lines, perception_functions, desires)
-    
-    desires = add_intentions_graph(args.directory, desires)
-    perception_functions, desires = fix_data_types(perception_functions, desires)
+    data = {}
 
-    if args.human_analysis:
-        perform_human_analysis(desires, args.directory)
-        exit()
-    else:
-        desires_analysis = load_desire_analysis(args.directory)
-        if desires_analysis is None:
-            print("Desire human analysis not performed. If you want to perform it, please run the script with the --human-analysis flag.")
-            exit()
+    for i, folder in enumerate(experiment_paths):
+        dirs = os.listdir(folder)
+        dirs = [d for d in dirs if os.path.isdir(os.path.join(folder, d))]
+        total_n = len(dirs)
+        n = 1
+        data[folder] = []
+        for dir in dirs:
+            experiment = {'typology': experiment_folders[i], 'path': os.path.join(folder, dir), 'perception_functions': None, 'desires': None, 'desire_analysis': None}
+            perception_functions = load_perception_functions(experiment['path'])
+            desires = load_desires(experiment['path'])
+            logs_lines = load_logs(experiment['path'])
+            perception_functions, desires = load_info_from_logs(logs_lines, perception_functions, desires)
+            desires = add_intentions_graph(experiment['path'], desires)
+            perception_functions, desires = fix_data_types(perception_functions, desires)
+            desires_analysis = load_desire_analysis(experiment['path'])
+            if desires_analysis is None:
+                print(f"Desire human analysis not performed for experiment {dir}. Exiting.")
+                exit()
+            perception_functions, desires = compute_metrics(perception_functions, desires, n=n, total_n=total_n, typ=i+1, total_typ=len(experiment_folders))
+            experiment['perception_functions'] = perception_functions
+            experiment['desires'] = desires
+            experiment['desire_analysis'] = desires_analysis
+            data[folder].append(experiment)
+            n += 1
 
-    perception_functions, desires = compute_metrics(perception_functions, desires)
-    
-    # print_desires(desires)
-    # print_perception_functions(perception_functions)
-    # print_desires_analysis(desires)
-    # print_perception_functions_analysis(perception_functions)
-    # print_desire_human_analysis(desires_analysis)
+    # for folder, experiments in data.items():
+    #     print(f"Folder {folder}:")
+    #     for experiment in experiments:
+    #         print(f"    Experiment {experiment['path']}:")
+    #         print(f"        Perception functions: {len(experiment['perception_functions'])}")
+    #         print(f"        Desires: {len(experiment['desires'])}")
+    #         print(f"        Desire human analysis: {len(experiment['desire_analysis'])}")
 
     for filename in os.listdir('analysis_pipeline'):
         if filename.endswith(".py") and filename != "__init__.py":
@@ -724,7 +730,40 @@ if __name__ == "__main__":
             spec.loader.exec_module(module)
             if hasattr(module, module_name):
                 func = getattr(module, module_name)
-                func(perception_functions, desires, desires_analysis)
+                func(data)
+
+
+# if __name__ == "__main__":    
+#     parser = argparse.ArgumentParser(description='Experiment Analysis')
+#     parser.add_argument('directory', type=str, help='The experiment directory to analyze')
+#     parser.add_argument('--human-analysis', action='store_true', help='Inputs the user with descriptions and functions to perform a human analysis')
+#     args = parser.parse_args()
+
+#     perception_functions = load_perception_functions(args.directory)
+#     desires = load_desires(args.directory)
+
+#     logs_lines = load_logs(args.directory)
+#     perception_functions, desires = load_info_from_logs(logs_lines, perception_functions, desires)
+    
+#     desires = add_intentions_graph(args.directory, desires)
+#     perception_functions, desires = fix_data_types(perception_functions, desires)
+
+#     if args.human_analysis:
+#         perform_human_analysis(desires, args.directory)
+#         exit()
+#     else:
+#         desires_analysis = load_desire_analysis(args.directory)
+#         if desires_analysis is None:
+#             print("Desire human analysis not performed. If you want to perform it, please run the script with the --human-analysis flag.")
+#             exit()
+
+#     perception_functions, desires = compute_metrics(perception_functions, desires)
+    
+#     # print_desires(desires)
+#     # print_perception_functions(perception_functions)
+#     # print_desires_analysis(desires)
+#     # print_perception_functions_analysis(perception_functions)
+#     # print_desire_human_analysis(desires_analysis)
 
 
 # CC score	Rank	Risk

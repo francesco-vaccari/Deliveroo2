@@ -1,2 +1,2 @@
-def _1(a, b, c):
+def _1(data):
     print('one')
