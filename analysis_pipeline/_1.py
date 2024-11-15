@@ -17,7 +17,7 @@ def _1(data):
         {'typology': 5, 'path': 'experiments/5/2024-11-01-09-48-01', 'completed': True, 'recognized': True},  
         {'typology': 5, 'path': 'experiments/5/2024-11-02-09-03-00', 'completed': True, 'recognized': True},
         {'typology': 6, 'path': 'experiments/6/2024-11-02-12-00-24', 'completed': True, 'recognized': True},
-        {'typology': 6, 'path': 'experiments/6/2024-11-02-10-59-50', 'completed': True, 'recognized': True},
+        {'typology': 6, 'path': 'experiments/6/2024-11-15-17-50-00', 'completed': True, 'recognized': True},
         {'typology': 6, 'path': 'experiments/6/2024-11-02-12-16-06', 'completed': True, 'recognized': True},
         {'typology': 7, 'path': 'experiments/7/2024-11-04-09-33-19', 'completed': True, 'recognized': True},
         {'typology': 7, 'path': 'experiments/7/2024-11-04-11-25-26', 'completed': True, 'recognized': False},
@@ -71,70 +71,51 @@ def _1(data):
 
     import matplotlib.pyplot as plt
 
-    # plot success rate and recognized rate for typologyes from 1 to 4
-    success_rate = []
-    recognized_rate = []
-    for i in range(1, 5):
-        success = 0
-        recognized = 0
-        total = 0
-        for experiment in experiment_completed:
-            if experiment['typology'] == i:
-                total += 1
-                if experiment['completed']:
-                    success += 1
-                    if experiment['recognized']:
-                        recognized += 1
-        success_rate.append(success / total)
-        recognized_rate.append(recognized / total)
-    
-    fig, ax = plt.subplots()
-    ax.plot(range(1, 5), success_rate, label='Success rate')
-    ax.plot(range(1, 5), recognized_rate, label='Recognized rate')
-    ax.set_xlabel('Typology')
-    ax.set_ylabel('Rate')
-    ax.legend()
+    typologies_1_to_4 = range(1, 5)
+    typologies_5_to_8 = range(5, 9)
 
-    for i in range(1, 5):
-        ax.vlines(i, 0, success_rate[i-1], colors='#1f77b4', linestyles='dashed')
-    
-    for i in range(1, 5):
-        ax.vlines(i, 0, recognized_rate[i-1], colors='#ff7f0e', linestyles='dashed')
+    def calculate_rates(typologies):
+        success_rates = []
+        recognized_rates = []
+        for i in typologies:
+            success = 0
+            success_recognized = 0
+            total = 0
+            for experiment in experiment_completed:
+                if experiment['typology'] == i:
+                    if experiment['completed']:
+                        success += 1
+                        if experiment['recognized']:
+                            success_recognized += 1
+                    total += 1
+            success_rate = success / total if total > 0 else 0
+            recognized_rate = success_recognized / total if total > 0 else 0
+            success_rates.append(success_rate)
+            recognized_rates.append(recognized_rate)
+        return success_rates, recognized_rates
 
-    plt.show()
+    success_rates_1_to_4, recognized_rates_1_to_4 = calculate_rates(typologies_1_to_4)
+    success_rates_5_to_8, recognized_rates_5_to_8 = calculate_rates(typologies_5_to_8)
 
+    plt.figure(figsize=(12, 6))
 
+    plt.subplot(1, 2, 1)
+    plt.plot(typologies_1_to_4, success_rates_1_to_4, label='Success Rate')
+    plt.plot(typologies_1_to_4, recognized_rates_1_to_4, label='Recognized Rate')
+    plt.xlabel('Typology')
+    plt.ylabel('Rate')
+    plt.title('Success and Recognized Rates for Typologies 1 to 4')
+    plt.legend()
 
-    # plot success rate and recognized rate for typologyes from 5 to 7
-    success_rate = []
-    recognized_rate = []
-    for i in range(5, 9):
-        success = 0
-        recognized = 0
-        total = 0
-        for experiment in experiment_completed:
-            if experiment['typology'] == i:
-                total += 1
-                if experiment['completed']:
-                    success += 1
-                    if experiment['recognized']:
-                        recognized += 1
-        success_rate.append(success / total)
-        recognized_rate.append(recognized / total)
+    plt.subplot(1, 2, 2)
+    plt.plot(typologies_5_to_8, success_rates_5_to_8, label='Success Rate')
+    plt.plot(typologies_5_to_8, recognized_rates_5_to_8, label='Recognized Rate')
+    plt.xlabel('Typology')
+    plt.ylabel('Rate')
+    plt.title('Success and Recognized Rates for Typologies 5 to 8')
+    plt.legend()
 
-    fig, ax = plt.subplots()
-    ax.plot(range(5, 9), success_rate, label='Success rate')
-    ax.plot(range(5, 9), recognized_rate, label='Recognized rate')
-    ax.set_xlabel('Typology')
-    ax.set_ylabel('Rate')
-    ax.legend()
-
-    for i in range(5, 9):
-        ax.vlines(i, 0, success_rate[i-5], colors='#1f77b4', linestyles='dashed')
-
-    for i in range(5, 9):
-        ax.vlines(i, 0, recognized_rate[i-5], colors='#ff7f0e', linestyles='dashed')
-
+    plt.tight_layout()
     plt.show()
 
     

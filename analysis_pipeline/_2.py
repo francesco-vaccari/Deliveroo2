@@ -1,4 +1,5 @@
 def _2(data):
+    return
     n_desires = 0
     total_satisfied_with_trigger_executable_at_end = 0
     total_satisfied_with_trigger_not_executable_at_end = 0
@@ -74,6 +75,47 @@ def _2(data):
     print()
 
     print(f"Total n desires: {n_desires}")
+
+    print("12 desires in total invalidated, 7 during their triggered execution")
+    print("all desires except one had a runtime error in accessing belief set with wrong key")
+    print("the remaining desire had a runtime error due to agent not having key to go through door and thus being stuck on moving action")
+
+    
+# error while accessing belief set, wrong key to read from 'keys' field
+# same
+# same
+# did not pick up key to go through door
+# same but batteris
+# same but keys
+# same but parcels
+
+# A desire could have also been invalidated if the agent runs out of energy during desire triggered execution, but did not happen.
+
+# 12 total invalidated desires, 7 during desire triggered execution
+
+
+# Desires invalidated:
+# experiments/6/2024-11-02-12-00-24/agent_1/control_manager.log
+# experiments/6/2024-11-02-12-16-06/agent_1/control_manager.log
+# experiments/6/2024-11-02-12-16-06/agent_1/control_manager.log
+# experiments/8/2024-11-08-10-51-41/agent_1/control_manager.log
+# experiments/8/2024-11-08-10-51-41/agent_1/control_manager.log
+# experiments/8/2024-11-08-17-40-54/agent_1/control_manager.log
+# experiments/8/2024-11-08-17-40-54/agent_1/control_manager.log
+# experiments/8/2024-11-07-18-30-26/agent_1/control_manager.log
+# experiments/8/2024-11-07-18-30-26/agent_1/control_manager.log
+# experiments/8/2024-11-07-18-30-26/agent_1/control_manager.log
+# experiments/5/2024-10-29-15-55-01/agent_1/control_manager.log
+# experiments/5/2024-11-01-09-48-01/agent_1/control_manager.log
+
+# Invalidate after trigger execution:
+# experiments/6/2024-11-02-12-16-06/agent_1/control_manager.log
+# experiments/8/2024-11-08-10-51-41/agent_1/control_manager.log
+# experiments/8/2024-11-08-17-40-54/agent_1/control_manager.log
+# experiments/8/2024-11-07-18-30-26/agent_1/control_manager.log
+# experiments/8/2024-11-07-18-30-26/agent_1/control_manager.log
+# experiments/8/2024-11-07-18-30-26/agent_1/control_manager.log
+# experiments/5/2024-10-29-15-55-01/agent_1/control_manager.log
 
 
     print('----------------------------------------------------------')
@@ -302,11 +344,11 @@ def _2(data):
 
 
 
-    for elem in triggers:
-        print(f"Typology: {elem['typology']}")
-        print(f"n: {elem['n']}")
-        print(f"result: {elem['result']}")
-        print()
+    # for elem in triggers:
+    #     print(f"Typology: {elem['typology']}")
+    #     print(f"n: {elem['n']}")
+    #     print(f"result: {elem['result']}")
+    #     print()
 
 
 
