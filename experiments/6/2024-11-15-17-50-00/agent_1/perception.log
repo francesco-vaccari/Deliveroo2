@@ -1,0 +1,236 @@
+2024-11-15 17:50:03,807 - DEBUG - [STORE_EVENTS] Started storing events thread
+2024-11-15 17:50:03,807 - DEBUG - [PROCESS_EVENTS] Started processing events thread
+2024-11-15 17:50:03,814 - DEBUG - [LOOP] Started loop thread
+2024-11-15 17:50:04,532 - INFO - [STORE_EVENTS] New object type detected: map
+2024-11-15 17:50:04,532 - INFO - [STORE_EVENTS] New object type detected: agent
+2024-11-15 17:50:04,538 - INFO - [LOOP] Generating perception function for object type: map
+2024-11-15 17:50:12,067 - INFO - [LOOP] Adding perception function for object type: map
+def update_beliefs(event, current_beliefs):
+    if event['object_type'] == 'map':
+        if event['event_type'] == 'object added':
+            current_beliefs['map'] = event['object']
+        elif event['event_type'] == 'object changed':
+            current_beliefs['map'].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            current_beliefs.pop('map', None)
+    return current_beliefs
+2024-11-15 17:50:12,068 - INFO - [LOOP] Generating perception function for object type: agent
+2024-11-15 17:50:12,068 - INFO - [PROCESS_EVENTS] Processing events for object type: map
+2024-11-15 17:50:19,195 - INFO - [LOOP] Adding perception function for object type: agent
+def update_beliefs(event, belief_set):
+    if event['object_type'] == 'agent':
+        if event['event_type'] == 'object added':
+            belief_set['agent'] = {event['object']['id']: event['object']}
+        elif event['event_type'] == 'object changed':
+            if 'agent' in belief_set and event['object']['id'] in belief_set['agent']:
+                belief_set['agent'][event['object']['id']].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            if 'agent' in belief_set and event['object']['id'] in belief_set['agent']:
+                del belief_set['agent'][event['object']['id']]
+    return belief_set
+2024-11-15 17:50:19,214 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:50:19,963 - INFO - [STORE_EVENTS] New object type detected: battery
+2024-11-15 17:50:19,993 - INFO - [LOOP] Generating perception function for object type: battery
+2024-11-15 17:50:25,079 - INFO - [STORE_EVENTS] New object type detected: parcel
+2024-11-15 17:50:31,029 - INFO - [LOOP] Adding perception function for object type: battery
+def update_beliefs(event, beliefs):
+    if event['object_type'] == 'battery':
+        if event['event_type'] == 'object added':
+            if 'batteries' not in beliefs:
+                beliefs['batteries'] = {}
+            beliefs['batteries'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object changed':
+            if 'batteries' in beliefs and event['object']['id'] in beliefs['batteries']:
+                beliefs['batteries'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object removed':
+            if 'batteries' in beliefs and event['object']['id'] in beliefs['batteries']:
+                del beliefs['batteries'][event['object']['id']]
+    return beliefs
+2024-11-15 17:50:31,055 - INFO - [PROCESS_EVENTS] Processing events for object type: battery
+2024-11-15 17:50:31,098 - INFO - [LOOP] Generating perception function for object type: parcel
+2024-11-15 17:50:40,254 - INFO - [LOOP] Adding perception function for object type: parcel
+def update_belief_set(event, belief_set):
+    if event['object_type'] == 'parcel':
+        if event['event_type'] == 'object added':
+            if 'parcels' not in belief_set:
+                belief_set['parcels'] = {}
+            belief_set['parcels'][event['object']['id']] = event['object']
+        elif event['event_type'] == 'object changed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set['parcels']:
+                belief_set['parcels'][event['object']['id']].update(event['object'])
+        elif event['event_type'] == 'object removed':
+            if 'parcels' in belief_set and event['object']['id'] in belief_set['parcels']:
+                del belief_set['parcels'][event['object']['id']]
+    return belief_set
+2024-11-15 17:50:40,267 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:50:46,597 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:51:06,268 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:51:06,986 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:51:27,507 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:51:47,889 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:52:06,697 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:52:08,213 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:52:28,529 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:52:36,654 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:52:37,068 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:52:37,120 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:52:37,173 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:52:37,181 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:52:48,820 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:09,223 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:12,521 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:12,757 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:12,795 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:12,832 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:53:12,833 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:29,561 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:31,121 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:31,599 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:53:31,599 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:49,945 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:53:53,503 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:53:53,510 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:10,224 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:19,575 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:54:19,600 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,122 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,141 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,147 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,154 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,211 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:54:20,212 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,665 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:54:20,666 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,710 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,716 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:20,728 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:30,542 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:54:46,227 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:54:47,405 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:54:47,450 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:54:48,032 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:54:48,069 - INFO - [PROCESS_EVENTS] Processing events for object type: battery
+2024-11-15 17:54:50,842 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:03,332 - INFO - [PROCESS_EVENTS] Processing events for object type: battery
+2024-11-15 17:55:11,224 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:11,509 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:12,129 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:13,116 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:13,123 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:13,180 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:13,418 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:13,449 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:13,562 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:13,562 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:13,781 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:13,994 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:13,994 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:14,344 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:14,369 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:14,747 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:14,766 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:14,878 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:14,890 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:15,305 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:15,311 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:15,485 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:15,606 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:15,635 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:16,152 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:16,152 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:16,226 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:31,536 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:34,028 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:34,705 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:35,433 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:36,339 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:36,339 - INFO - [PROCESS_EVENTS] Processing events for object type: battery
+2024-11-15 17:55:37,387 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:38,050 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:38,579 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:38,748 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:39,026 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:39,249 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:39,819 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:39,831 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:40,305 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:40,306 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:40,858 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:40,859 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:41,378 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:41,444 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:42,156 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:55:42,163 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:55:51,554 - INFO - [PROCESS_EVENTS] Processing events for object type: battery
+2024-11-15 17:55:52,061 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:02,817 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:03,483 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:12,201 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:14,382 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:15,041 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:15,427 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:15,950 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:15,963 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:16,062 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:16,692 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:16,711 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:16,717 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:17,337 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:17,337 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:17,823 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:17,829 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:17,879 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:18,484 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:18,603 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:18,604 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:19,154 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:19,167 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:19,671 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:19,671 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:27,273 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:28,032 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:28,255 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:28,983 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:29,529 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:30,738 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:31,189 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:31,836 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:32,365 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:32,590 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:32,783 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:44,156 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:44,775 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:45,240 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:45,888 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:46,330 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:46,946 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:46,971 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:47,381 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:47,442 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:48,003 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:48,003 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:48,501 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:48,545 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:49,090 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:49,090 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:49,647 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:49,876 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:50,126 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:50,318 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:52,857 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:56:58,908 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:56:59,409 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:57:00,255 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:57:00,656 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:57:01,201 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:57:02,090 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:57:02,090 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:57:02,433 - INFO - [PROCESS_EVENTS] Processing events for object type: agent
+2024-11-15 17:57:02,433 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:57:13,263 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:57:33,559 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:57:53,962 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:58:14,205 - INFO - [PROCESS_EVENTS] Processing events for object type: parcel
+2024-11-15 17:58:35,079 - DEBUG - [STORE_EVENTS] Stopped storing events thread
+2024-11-15 17:58:35,079 - DEBUG - [LOOP] Stopped loop thread
+2024-11-15 17:58:35,079 - DEBUG - [PROCESS_EVENTS] Stopped processing events thread
