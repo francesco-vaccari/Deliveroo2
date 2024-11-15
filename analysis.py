@@ -146,7 +146,7 @@ def load_info_from_logs(lines, perception_functions, desires):
             desire_triggered_id = extract(line, "Desire ", " is about to be executed ...␤")
             error = False
             if desire_triggered_id not in desires_triggered:
-                desires_triggered[desire_triggered_id] = {'triggered_n_times': 1, 'evaluations': [], 'error': False}
+                desires_triggered[desire_triggered_id] = {'evaluations': [], 'error': False}
         if "Error during intention " in line and " execution. Desire " in line and " is now invalid and intention " in line:
             error = True
         if "Desire triggered evaluated negatively" in line:
@@ -157,7 +157,7 @@ def load_info_from_logs(lines, perception_functions, desires):
     
     for desire_id, desire in new_desires.items():
         if desire_id in desires_triggered:
-            desire['triggered_n_times'] = desires_triggered[desire_id]['triggered_n_times']
+            desire['triggered_n_times'] = len(desires_triggered[desire_id]['evaluations'])
             desire['error'] = desires_triggered[desire_id]['error']
             desire['evaluations'] = desires_triggered[desire_id]['evaluations']
         else:
@@ -257,7 +257,7 @@ def load_info_from_logs(lines, perception_functions, desires):
                 intention['invalidation_after_generation_reason']
 
     # if a desire was satisfied but has no trigger function, it means that the generation of the trigger function failed
-    # the error for a desire is the error that happened during the last desire triggering
+    # the error for a desire is whether an error happened during the last triggering or if it was because of negative evaluation
     # the length of the evaluations list should be equal to the value of triggered_n_times
     # the invalidation reason for intentions indicates whether if failed right after generation, during a desire trigger, or due to dependecy
     # the invalidation after generation reason is None if the intention was not invalidated after generation, otherwise it shows the cause
