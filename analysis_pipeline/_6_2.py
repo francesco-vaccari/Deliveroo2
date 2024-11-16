@@ -2,7 +2,7 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
-def _6(data):
+def _6_2(data):
     return
     intention_metrics_by_n_objectives = {}
     intention_metrics_by_description_length = {}
@@ -27,20 +27,30 @@ def _6(data):
 
             desire_description_lengths = {}
             intention_description_lenghts = {}
+            ignore_intentions_ids = []
             for desire_id, desire in experiment['desires'].items():
                 desire_description_lengths[desire_id] = len(desire['description'])
                 for intention in desire['intentions']:
-                    experiment_intentions_metrics[intention['id']] = intention['analysis']
-                    if len(intention['description']) not in intention_metrics_by_description_length:
-                        intention_metrics_by_description_length[len(intention['description'])] = []
-                    intention_metrics_by_description_length[len(intention['description'])].append(intention['analysis'])
-                    intention_description_lenghts[intention['id']] = len(intention['description'])
+                    calls = []
+                    for id in intention['calls']:
+                        if int(id) not in [1,2,3,4,5,6]:
+                            calls.append(id)
+                    if len(calls) > 0:
+                        ignore_intentions_ids.append(intention['id'])
+                    else:
+                        experiment_intentions_metrics[intention['id']] = intention['analysis']
+                        if len(intention['description']) not in intention_metrics_by_description_length:
+                            intention_metrics_by_description_length[len(intention['description'])] = []
+                        intention_metrics_by_description_length[len(intention['description'])].append(intention['analysis'])
+                        intention_description_lenghts[intention['id']] = len(intention['description'])
             
 
             for desire_id, desire in experiment['desire_analysis'].items():
                 if desire_id not in desire_description_lengths:
                     raise ValueError(f"Desire {desire_id} not found in desire_description_lengths")
                 for intention_id, intention in desire['intentions'].items():
+                    if int(intention_id) in ignore_intentions_ids:
+                        continue
                     assert int(intention_id) in experiment_intentions_metrics
                     assert int(intention_id) in intention_description_lenghts
                     if intention['n_objectives'] not in intention_metrics_by_n_objectives:
@@ -118,25 +128,25 @@ def _6(data):
     axs[0, 0].errorbar(n_objectives, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity (cc)', marker='o', capsize=5)
     axs[0, 0].set_xlabel('Number of Objectives')
     axs[0, 0].set_ylabel('Cyclomatic Complexity (cc)')
-    axs[0, 0].set_title('Cyclomatic Complexity vs Number of Objectives')
+    axs[0, 0].set_title('Cyclomatic Complexity vs Number of Objectives w/o')
     axs[0, 0].grid(True)
 
     axs[0, 1].errorbar(n_objectives, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index (mi)', marker='o', capsize=5)
     axs[0, 1].set_xlabel('Number of Objectives')
     axs[0, 1].set_ylabel('Maintainability Index (mi)')
-    axs[0, 1].set_title('Maintainability Index vs Number of Objectives')
+    axs[0, 1].set_title('Maintainability Index vs Number of Objectives w/o')
     axs[0, 1].grid(True)
 
     axs[1, 0].errorbar(n_objectives, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code (raw)', marker='o', capsize=5)
     axs[1, 0].set_xlabel('Number of Objectives')
     axs[1, 0].set_ylabel('Logical Lines of Code (raw)')
-    axs[1, 0].set_title('Logical Lines of Code vs Number of Objectives')
+    axs[1, 0].set_title('Logical Lines of Code vs Number of Objectives w/o')
     axs[1, 0].grid(True)
 
     axs[1, 1].errorbar(n_objectives, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort (hal)', marker='o', capsize=5)
     axs[1, 1].set_xlabel('Number of Objectives')
     axs[1, 1].set_ylabel('Halstead Effort (hal)')
-    axs[1, 1].set_title('Halstead Effort vs Number of Objectives')
+    axs[1, 1].set_title('Halstead Effort vs Number of Objectives w/o')
     axs[1, 1].grid(True)
 
     plt.tight_layout()
@@ -313,25 +323,25 @@ def _6(data):
     axs[0, 0].errorbar(description_lengths, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity (cc)', marker='o', capsize=5)
     axs[0, 0].set_xlabel('Description Length (Binned)')
     axs[0, 0].set_ylabel('Cyclomatic Complexity (cc)')
-    axs[0, 0].set_title('Cyclomatic Complexity vs Description Length')
+    axs[0, 0].set_title('Cyclomatic Complexity vs Description Length w/o')
     axs[0, 0].grid(True)
 
     axs[0, 1].errorbar(description_lengths, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index (mi)', marker='o', capsize=5)
     axs[0, 1].set_xlabel('Description Length (Binned)')
     axs[0, 1].set_ylabel('Maintainability Index (mi)')
-    axs[0, 1].set_title('Maintainability Index vs Description Length')
+    axs[0, 1].set_title('Maintainability Index vs Description Length w/o')
     axs[0, 1].grid(True)
 
     axs[1, 0].errorbar(description_lengths, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code (raw)', marker='o', capsize=5)
     axs[1, 0].set_xlabel('Description Length (Binned)')
     axs[1, 0].set_ylabel('Logical Lines of Code (raw)')
-    axs[1, 0].set_title('Logical Lines of Code vs Description Length')
+    axs[1, 0].set_title('Logical Lines of Code vs Description Length w/o')
     axs[1, 0].grid(True)
 
     axs[1, 1].errorbar(description_lengths, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort (hal)', marker='o', capsize=5)
     axs[1, 1].set_xlabel('Description Length (Binned)')
     axs[1, 1].set_ylabel('Halstead Effort (hal)')
-    axs[1, 1].set_title('Halstead Effort vs Description Length')
+    axs[1, 1].set_title('Halstead Effort vs Description Length w/o')
     axs[1, 1].grid(True)
 
     plt.tight_layout()
