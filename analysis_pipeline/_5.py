@@ -1,6 +1,8 @@
 def _5(data):
     return
+    total = 0
     total_bad = 0
+    n_by_typology = []
     pos = []
     for typology, experiments in data.items():
         n_bad = 0
@@ -18,6 +20,7 @@ def _5(data):
                         n_bad += 1
                     else:
                         bad.append(0)
+                    total += 1
 
             if sum(bad) > 0:
                 for i in range(len(bad)):
@@ -25,9 +28,16 @@ def _5(data):
                         pos.append((i+1, len(bad)))
                         total_bad += 1
         
-        print(f'{typology} - Total number of bad intentions: {n_bad}')
-            
-    print('Total number of intentions either grounded or predetermined: ', total_bad)
+        # print(f'{typology} - Number of G/P intentions: {n_bad}')
+        n_by_typology.append(n_bad)
+    
+    print("Typology | Number of G/P intentions")
+    print("-------------------------------")
+    for i, n in enumerate(n_by_typology):
+        print(f'{i+1:<8} | {n}')
+    
+    print('Total number of intentions: ', total)
+    print('Total number of G/P intentions: ', total_bad, '(', total_bad / total, '')
 
     for fraction in [2, 3, 4, 5, 6, 7, 8]:
         last = 0
@@ -40,7 +50,7 @@ def _5(data):
                 last += 1
             total += 1
 
-        print(f'Bad intentions found in last 1/{fraction} of intentions: {last}/{total}')
+        print(f'G/P intentions found in last 1/{fraction} of intentions: {last}/{total}')
 
     # Effettivamente ci sono un po' più di funzioni peggiori alla fine dell'esperimento, però non direi che sono abbastanza da trarre delle conclusioni effettive
     # Stessa cosa tra categorie diverse, ci sono più funzioni peggiori nelle tipologie 5-8 rispetto alle 1-4 e anche all'interno della 1-4 le peggiori sono in 3 e 4 ma questo potrebbe anche essere dovuto al fatto che nelle prime tipologie ci sono proprio meno intentions.

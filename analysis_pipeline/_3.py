@@ -9,7 +9,10 @@ def _3(data):
     total_intentions_generation_execution_error = 0
     total_intentions_generation_negative_evaluation = 0
 
+    generation_failure_by_typology = {}
+
     for typology, experiments in data.items():
+        generation_failure_by_typology[typology] = {'execution_error': 0, 'negative_evaluation': 0}
         for experiment in experiments:
             experiment_intentions = 0
             experiment_intentions_executable_at_experiment_end = 0
@@ -45,6 +48,9 @@ def _3(data):
             total_intentions_not_generated_correctly += experiment_intentions_not_generated_correctly
             total_intentions_generation_execution_error += experiment_intentions_generation_execution_error
             total_intentions_generation_negative_evaluation += experiment_intentions_generation_negative_evaluation
+
+            generation_failure_by_typology[typology]['execution_error'] += experiment_intentions_generation_execution_error
+            generation_failure_by_typology[typology]['negative_evaluation'] += experiment_intentions_generation_negative_evaluation
 
     print(f'Total intentions: {total_intentions}')
     print(f'Total intentions executable at experiment end: {total_intentions_executable_at_experiment_end}')
@@ -177,6 +183,27 @@ def _3(data):
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+
+
+    typologies = [typology.split('/')[-1] for typology in generation_failure_by_typology.keys()]
+    execution_errors = [generation_failure_by_typology[typology]['execution_error'] for typology in generation_failure_by_typology.keys()]
+    negative_evaluations = [generation_failure_by_typology[typology]['negative_evaluation'] for typology in generation_failure_by_typology.keys()]
+
+    plt.figure(figsize=(12, 6))
+    index = range(len(typologies))
+
+    plt.bar(index, execution_errors, label='Execution Errors')
+    plt.bar(index, negative_evaluations, bottom=execution_errors, label='Negative Evaluations')
+
+    plt.xlabel('Typologies')
+    plt.ylabel('Number of Intentions')
+    plt.title('Intentions Generation Failures by Typology')
+    plt.xticks(index, typologies, rotation=45)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
 
 
 

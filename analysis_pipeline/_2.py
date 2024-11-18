@@ -78,7 +78,7 @@ def _2(data):
 
     print("12 desires in total invalidated, 7 during their triggered execution")
     print("all desires except one had a runtime error in accessing belief set with wrong key")
-    print("the remaining desire had a runtime error due to agent not having key to go through door and thus being stuck on moving action")
+    print("the remaining desire had a timeout error due to agent not having key to go through door and thus being stuck on moving action")
 
     
 # error while accessing belief set, wrong key to read from 'keys' field

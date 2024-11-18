@@ -68,7 +68,7 @@ def _8(data):
     print(f"Fraction of intentions without calls that generated incorrectly: {intention_without_calls_generated_incorrectly/(n_intentions - n_intentions_with_calls)}")
     print()
 
-    # The fact that intentions with calls generate correctly less often might due to the fact that the resulting plan is not what the LLM expercted when including the intention call in the generated function.
+    # The fact that intentions with calls generate correctly less often might due to the fact that the resulting plan is not what the LLM expected when including the intention call in the generated function.
 
     # Given this, I would expect that, out of the intentions with calls that didn't pass the generation phase, the reason for not passing is due to negative evaluation more often (instead of execution error) than the intentions that do not contain calls.
 

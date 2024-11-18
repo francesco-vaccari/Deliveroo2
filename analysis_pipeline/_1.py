@@ -61,11 +61,8 @@ def _1(data):
         success_rate = success / total
         success_recognized_rate = success_recognized / success
         recognized_rate = success_recognized / total
-        print(f"[{i}]Success rate: {success_rate}")
-        print(f"[{i}]Success recognized rate: {success_recognized_rate}")
-        print(f"[{i}]Recognized rate: {recognized_rate}")
+        print(f'[{i}] Success {success_rate}, recognized {success_recognized_rate}')
         print()
-
 
 
 
@@ -100,25 +97,25 @@ def _1(data):
     plt.figure(figsize=(12, 6))
 
     plt.subplot(1, 2, 1)
-    plt.plot(typologies_1_to_4, success_rates_1_to_4, label='Success Rate')
-    plt.plot(typologies_1_to_4, recognized_rates_1_to_4, label='Recognized Rate')
+    plt.plot(typologies_1_to_4, success_rates_1_to_4, label='Success Rate', marker='o')
+    plt.plot(typologies_1_to_4, recognized_rates_1_to_4, label='Recognized Rate', marker='o')
     plt.xlabel('Typology')
     plt.ylabel('Rate')
     plt.title('Success and Recognized Rates for Typologies 1 to 4')
+    plt.ylim(-0.1, 1.1)
     plt.legend()
 
     plt.subplot(1, 2, 2)
-    plt.plot(typologies_5_to_8, success_rates_5_to_8, label='Success Rate')
-    plt.plot(typologies_5_to_8, recognized_rates_5_to_8, label='Recognized Rate')
+    plt.plot(typologies_5_to_8, success_rates_5_to_8, label='Success Rate', marker='o')
+    plt.plot(typologies_5_to_8, recognized_rates_5_to_8, label='Recognized Rate', marker='o')
     plt.xlabel('Typology')
     plt.ylabel('Rate')
     plt.title('Success and Recognized Rates for Typologies 5 to 8')
+    plt.ylim(-0.1, 1.1)
     plt.legend()
 
     plt.tight_layout()
     plt.show()
-
-    
 
 
 # Ovviamente come analisi base vado a vedere in quanti esperimenti l'obiettivo fissato per la categoria è stato effettivamente completato.
