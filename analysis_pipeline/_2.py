@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 def _2(data):
     return
     n_desires = 0
@@ -128,6 +131,165 @@ def _2(data):
     desires_then_invalidated = total_satisfied_with_trigger_not_executable_at_end / n_desires
     print(f"Desires correctly generated but later invalidated: {desires_then_invalidated}")
     print('----------------------------------------------------------')
+
+
+
+
+
+    # for elem in triggers:
+    #     print(f"Typology: {elem['typology']}")
+    #     print(f"n: {elem['n']}")
+    #     print(f"result: {elem['result']}")
+    #     print()
+
+    typologies = []
+    experiment_name = set()
+    experiment_n = 0
+
+    for typology, experiments in data.items():
+        experiment_name = set()
+        experiment_n = 0
+        typology = {'name': typology.split('/')[-1], 
+                    'satisfied': 0,
+                    'not_satisfied': 0,
+                    'satisfied_with_trigger': 0,
+                    'satisfied_without_trigger': 0,
+                    'satisfied_with_trigger_triggered': 0,
+                    'satisfied_with_trigger_not_triggered': 0,
+                    'satisfied_with_trigger_triggered_still_triggerable': 0,
+                    'satisfied_with_trigger_triggered_not_triggerable': 0,
+                    'desires_triggered': []
+                    }
+
+        for experiment in experiments:
+            for desire_id, desire in experiment['desires'].items():
+                if desire['satisfied']:
+                    typology['satisfied'] += 1
+                else:
+                    typology['not_satisfied'] += 1
+                
+                if desire['satisfied']:
+                    if desire['trigger_function'] is None:
+                        typology['satisfied_without_trigger'] += 1
+                    else:
+                        typology['satisfied_with_trigger'] += 1
+                
+                if desire['satisfied'] and desire['trigger_function'] is not None:
+                    if desire['triggered_n_times'] > 0:
+                        typology['satisfied_with_trigger_triggered'] += 1
+                        if experiment['path'] not in experiment_name:
+                            experiment_name.add(experiment['path'])
+                            experiment_n += 1
+                        typology['desires_triggered'].append({
+                            'typology': typology['name'],
+                            'desire_id': desire_id,
+                            'experiment': experiment_n,
+                            'n_triggers': desire['triggered_n_times'],
+                            'results': desire['evaluations'],
+                        })
+                    else:
+                        typology['satisfied_with_trigger_not_triggered'] += 1
+                
+                if desire['satisfied'] and desire['trigger_function'] is not None and desire['triggered_n_times'] > 0:
+                    if desire['executable']:
+                        typology['satisfied_with_trigger_triggered_still_triggerable'] += 1
+                    else:
+                        typology['satisfied_with_trigger_triggered_not_triggerable'] += 1
+                
+        typologies.append(typology)
+        
+    for typology in typologies:
+        print(f"Typology: {typology['name']}")
+        # print(f"Total satisfied with trigger and triggered and still triggerable: {typology['satisfied_with_trigger_triggered_still_triggerable']}")
+        # print(f"Total satisfied with trigger and triggered and not triggerable: {typology['satisfied_with_trigger_triggered_not_triggerable']}")
+        for desire in typology['desires_triggered']:
+            print(f"Desire {desire['desire_id']} {desire['experiment']} triggered {desire['n_triggers']} times with results: {desire['results']}")
+        print()
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    categories = [
+    'satisfied',
+    'not_satisfied',
+    'satisfied_with_trigger',
+    'satisfied_without_trigger',
+    'satisfied_with_trigger_triggered',
+    'satisfied_with_trigger_not_triggered',
+    'satisfied_with_trigger_triggered_still_triggerable',
+    'satisfied_with_trigger_triggered_not_triggerable'
+    ]
+
+    typology_names = [typology['name'] for typology in typologies]
+    satisfied_counts = [typology['satisfied'] for typology in typologies]
+    not_satisfied_counts = [typology['not_satisfied'] for typology in typologies]
+    satisfied_with_trigger_counts = [typology['satisfied_with_trigger'] for typology in typologies]
+    satisfied_without_trigger_counts = [typology['satisfied_without_trigger'] for typology in typologies]
+    satisfied_with_trigger_triggered_counts = [typology['satisfied_with_trigger_triggered'] for typology in typologies]
+    satisfied_with_trigger_not_triggered_counts = [typology['satisfied_with_trigger_not_triggered'] for typology in typologies]
+    satisfied_with_trigger_triggered_still_triggerable_counts = [typology['satisfied_with_trigger_triggered_still_triggerable'] for typology in typologies]
+    satisfied_with_trigger_triggered_not_triggerable_counts = [typology['satisfied_with_trigger_triggered_not_triggerable'] for typology in typologies]
+
+    x = np.arange(len(typology_names))
+    
+    bar_width = 0.15
+    plt.figure(figsize=(12, 8))
+    plt.bar(x, satisfied_counts, bar_width, color='green', label='Satisfied', align='center', edgecolor='black', alpha=0.4)
+    plt.bar(x, not_satisfied_counts, bar_width, bottom=satisfied_counts, color='red', label='Not Satisfied', align='center', edgecolor='black', alpha=0.4)
+    plt.bar(x + bar_width, satisfied_with_trigger_counts, bar_width, color='green', label='Satisfied with Trigger', align='center', edgecolor='black', alpha=0.6)
+    plt.bar(x + bar_width, satisfied_without_trigger_counts, bar_width, color='red', label='Satisfied without Trigger', bottom=satisfied_with_trigger_counts, align='center', edgecolor='black', alpha=0.6)
+    plt.bar(x + 2*bar_width, satisfied_with_trigger_triggered_counts, bar_width, color='green', label='Satisfied with Trigger and Triggered', align='center', edgecolor='black', alpha=0.8)
+    plt.bar(x + 2*bar_width, satisfied_with_trigger_not_triggered_counts, bar_width, color='red', label='Satisfied with Trigger and Not Triggered', bottom=satisfied_with_trigger_triggered_counts, align='center', edgecolor='black', alpha=0.8)
+    plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_still_triggerable_counts, bar_width, color='green', label='Satisfied with Trigger and Triggered and Still Triggerable', align='center', edgecolor='black', alpha=1)
+    plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_not_triggerable_counts, bar_width, color='red', label='Satisfied with Trigger and Triggered and Not Triggerable', bottom=satisfied_with_trigger_triggered_still_triggerable_counts, align='center', edgecolor='black', alpha=1)
+
+    plt.xlabel('Typology')
+    plt.ylabel('Number of Desires')
+    plt.title('Number of desires of different categories by typology')
+    plt.xticks(x, typology_names)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+
+
+    # ora voglio mostrare il numero di trigger avvenuti in ogni categoria e se hanno funzionato o meno
+
+    typology_names = [typology['name'] for typology in typologies][4:]
+    positive_triggers_by_typology = [sum([sum([str(result) == 'False' for result in desire['results']]) for desire in typology['desires_triggered']]) for typology in typologies][4:]
+    negative_triggers_by_typology = [sum([sum([str(result) == 'True' for result in desire['results']]) for desire in typology['desires_triggered']]) for typology in typologies][4:]
+    n_triggers_by_typology = [sum([len(desire['results']) for desire in typology['desires_triggered']]) for typology in typologies][4:]
+
+    bar_width = 0.2
+    plt.figure(figsize=(12, 8))
+    plt.bar(typology_names, positive_triggers_by_typology, bar_width*2, color='green', label='Positive', align='edge', edgecolor='black')
+    plt.bar(typology_names, negative_triggers_by_typology, bar_width*2, color='red', label='Negative', align='edge', bottom=positive_triggers_by_typology, edgecolor='black')
+    plt.bar(typology_names, n_triggers_by_typology, bar_width, label='Total', align='edge', edgecolor='black')
+
+    plt.xlabel('Typology')
+    plt.ylabel('Number of Triggers')
+    plt.title('Number of triggers by typology')
+    plt.xticks(typology_names, rotation='vertical')
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+
+
+
+
+
+
+
+    exit()
+
+
+
+
+
+
     import matplotlib.pyplot as plt
 
     typologies = []
