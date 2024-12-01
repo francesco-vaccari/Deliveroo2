@@ -94,28 +94,30 @@ def _1(data):
     success_rates_1_to_4, recognized_rates_1_to_4 = calculate_rates(typologies_1_to_4)
     success_rates_5_to_8, recognized_rates_5_to_8 = calculate_rates(typologies_5_to_8)
 
-    plt.figure(figsize=(12, 6))
-
-    plt.subplot(1, 2, 1)
+    plt.figure(figsize=(4, 6))
     plt.plot(typologies_1_to_4, success_rates_1_to_4, label='Success Rate', marker='o')
-    plt.plot(typologies_1_to_4, recognized_rates_1_to_4, label='Recognized Rate', marker='o')
-    plt.xlabel('Typology')
-    plt.ylabel('Rate')
-    plt.title('Success and Recognized Rates for Typologies 1 to 4')
+    plt.xlabel('Typology', fontsize=12)
     plt.ylim(-0.1, 1.1)
-    plt.legend()
-
-    plt.subplot(1, 2, 2)
-    plt.plot(typologies_5_to_8, success_rates_5_to_8, label='Success Rate', marker='o')
-    plt.plot(typologies_5_to_8, recognized_rates_5_to_8, label='Recognized Rate', marker='o')
-    plt.xlabel('Typology')
-    plt.ylabel('Rate')
-    plt.title('Success and Recognized Rates for Typologies 5 to 8')
-    plt.ylim(-0.1, 1.1)
-    plt.legend()
-
+    plt.xticks(typologies_1_to_4, fontsize=12)  # Set x-axis values to natural numbers
+    plt.yticks(fontsize=12)  # Set y-axis tick fontsize
+    plt.legend(fontsize=12)
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/success_rate_1-4.png', dpi=400)
+    plt.close()
+
+    plt.figure(figsize=(4, 6))
+    plt.plot(typologies_5_to_8, success_rates_5_to_8, label='Success Rate', marker='o')
+    plt.xlabel('Typology', fontsize=12)
+    plt.ylim(-0.1, 1.1)
+    plt.xticks(typologies_5_to_8, fontsize=12)  # Set x-axis values to natural numbers
+    plt.yticks(fontsize=12)  # Set y-axis tick fontsize
+    plt.legend(fontsize=12)
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/success_rate_5-8.png', dpi=400)
+    plt.close()
+
 
 
 # Ovviamente come analisi base vado a vedere in quanti esperimenti l'obiettivo fissato per la categoria è stato effettivamente completato.

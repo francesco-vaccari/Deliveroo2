@@ -233,25 +233,29 @@ def _2(data):
     satisfied_with_trigger_triggered_not_triggerable_counts = [typology['satisfied_with_trigger_triggered_not_triggerable'] for typology in typologies]
 
     x = np.arange(len(typology_names))
-    
+
     bar_width = 0.15
-    plt.figure(figsize=(12, 8))
-    plt.bar(x, satisfied_counts, bar_width, color='green', label='Satisfied', align='center', edgecolor='black', alpha=0.4)
-    plt.bar(x, not_satisfied_counts, bar_width, bottom=satisfied_counts, color='red', label='Not Satisfied', align='center', edgecolor='black', alpha=0.4)
-    plt.bar(x + bar_width, satisfied_with_trigger_counts, bar_width, color='green', label='Satisfied with Trigger', align='center', edgecolor='black', alpha=0.6)
-    plt.bar(x + bar_width, satisfied_without_trigger_counts, bar_width, color='red', label='Satisfied without Trigger', bottom=satisfied_with_trigger_counts, align='center', edgecolor='black', alpha=0.6)
-    plt.bar(x + 2*bar_width, satisfied_with_trigger_triggered_counts, bar_width, color='green', label='Satisfied with Trigger and Triggered', align='center', edgecolor='black', alpha=0.8)
-    plt.bar(x + 2*bar_width, satisfied_with_trigger_not_triggered_counts, bar_width, color='red', label='Satisfied with Trigger and Not Triggered', bottom=satisfied_with_trigger_triggered_counts, align='center', edgecolor='black', alpha=0.8)
-    plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_still_triggerable_counts, bar_width, color='green', label='Satisfied with Trigger and Triggered and Still Triggerable', align='center', edgecolor='black', alpha=1)
-    plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_not_triggerable_counts, bar_width, color='red', label='Satisfied with Trigger and Triggered and Not Triggerable', bottom=satisfied_with_trigger_triggered_still_triggerable_counts, align='center', edgecolor='black', alpha=1)
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.bar(x, satisfied_counts, bar_width, color=('#008000', 0.4), label='Satisfied', align='edge', edgecolor='black')
+    plt.bar(x, not_satisfied_counts, bar_width, bottom=satisfied_counts, color=('#E50000', 0.4), label='Not Satisfied', align='edge', edgecolor='black')
+    plt.bar(x + bar_width, satisfied_with_trigger_counts, bar_width, color=('#008000', 0.6), label='Triggerable', align='edge', edgecolor='black')
+    plt.bar(x + bar_width, satisfied_without_trigger_counts, bar_width, color=('#E50000', 0.6), label='Not Triggerable', bottom=satisfied_with_trigger_counts, align='edge', edgecolor='black')
+    plt.bar(x + 2*bar_width, satisfied_with_trigger_triggered_counts, bar_width, color=('#008000', 0.8), label='Triggered', align='edge', edgecolor='black')
+    plt.bar(x + 2*bar_width, satisfied_with_trigger_not_triggered_counts, bar_width, color=('#E50000', 0.8), label='Untriggered', bottom=satisfied_with_trigger_triggered_counts, align='edge', edgecolor='black')
+    plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_still_triggerable_counts, bar_width, color=('#008000', 1), label='Still Triggerable After', align='edge', edgecolor='black')
+    plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_not_triggerable_counts, bar_width, color=('#E50000', 1), label='Not Triggerable After', bottom=satisfied_with_trigger_triggered_still_triggerable_counts, align='edge', edgecolor='black')
 
     plt.xlabel('Typology')
     plt.ylabel('Number of Desires')
-    plt.title('Number of desires of different categories by typology')
     plt.xticks(x, typology_names)
+    plt.yticks(np.arange(0, 28, 3))
+    plt.grid(axis='y', linestyle='dashed')
     plt.legend()
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/n_desires_categories.png', dpi=400)
 
 
 
@@ -263,19 +267,35 @@ def _2(data):
     negative_triggers_by_typology = [sum([sum([str(result) == 'False' for result in desire['results']]) for desire in typology['desires_triggered']]) for typology in typologies][4:]
     n_triggers_by_typology = [sum([len(desire['results']) for desire in typology['desires_triggered']]) for typology in typologies][4:]
 
-    bar_width = 0.2
-    plt.figure(figsize=(12, 8))
-    plt.bar(typology_names, positive_triggers_by_typology, bar_width*2, color='green', label='Positive', align='edge', edgecolor='black')
-    plt.bar(typology_names, negative_triggers_by_typology, bar_width*2, color='red', label='Negative', align='edge', bottom=positive_triggers_by_typology, edgecolor='black')
-    plt.bar(typology_names, n_triggers_by_typology, bar_width, label='Total', align='edge', edgecolor='black')
+    bar_width = 0.3
+    x = np.arange(5, 9)
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    
+    # plt.bar(typology_names, n_triggers_by_typology, bar_width, label='Total', align='edge', edgecolor='black')
+
+    trigger_error = [
+        [1, 1],
+        [1, 2],
+        [0, 0],
+        [5, 2]
+    ]
+    
+    
+    plt.bar(x, positive_triggers_by_typology, bar_width, color='green', label='Success', align='edge', edgecolor='black')
+    plt.bar(x, negative_triggers_by_typology, bar_width, color='red', label='Failure', align='edge', bottom=positive_triggers_by_typology, edgecolor='black')
+    plt.bar(x + bar_width/2, [elem[0] for elem in trigger_error], bar_width/2, color='orange', bottom=positive_triggers_by_typology, label='Execution Error', align='edge', edgecolor='black')
+    plt.bar(x + bar_width/2, [elem[1] for elem in trigger_error], bar_width/2, color='yellow', bottom=[elem[0] + positive_triggers_by_typology[i] for i, elem in enumerate(trigger_error)], label='Negative Evaluation', align='edge', edgecolor='black')
 
     plt.xlabel('Typology')
     plt.ylabel('Number of Triggers')
-    plt.title('Number of triggers by typology')
-    plt.xticks(typology_names, rotation='vertical')
+    plt.xticks(x)
+    plt.grid(axis='y', linestyle='dashed')
     plt.legend()
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/n_triggers.png', dpi=400)
 
 
 

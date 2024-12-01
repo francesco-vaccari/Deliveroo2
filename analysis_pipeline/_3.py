@@ -72,14 +72,19 @@ def _3(data):
     typologies = list([elem.split('/')[-1] for elem in n_intentions_by_typology.keys()])
     intentions_counts = list(n_intentions_by_typology.values())
 
-    plt.figure(figsize=(10, 6))
-    plt.bar(typologies, intentions_counts)
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    bar_width = 0.7
+    plt.bar(typologies, intentions_counts, bar_width)
+    plt.grid(axis='y', linestyle='dashed')
+    plt.ylim(-0.1, 81.0)
+    plt.yticks(range(0, 81, 5))
     plt.xlabel('Typology')
     plt.ylabel('Number of Intentions')
-    plt.title('Number of Intentions by Typology')
-    plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/n_intentions.png', dpi=400)
     
 
 
@@ -175,80 +180,90 @@ def _3(data):
     }
 
     # Plot data for typologies 1 to 4
-    plt.figure(figsize=(10, 6))
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
     bar_width = 0.35
     index = range(len(data_1_to_4['Typology']))
 
-    plt.bar(index, data_1_to_4['Average Intentions Generated Correctly'], bar_width, label='Intentions executable after generation', color = 'lightgreen')
-    plt.bar([i + bar_width for i in index], data_1_to_4['Average Executable Intentions'], bar_width, label='Intentions still executable at end of experiment', color = 'darkgreen')
+    plt.bar(index, [float(elem) for elem in data_1_to_4['Average Intentions Generated Correctly']], bar_width, label='Intentions generated correctly', color = 'lightgreen')
+    plt.bar([i + bar_width for i in index], [float(elem) for elem in data_1_to_4['Average Executable Intentions']], bar_width, label='Intentions executable at experiment end', color = 'darkgreen')
 
     plt.xlabel('Typologies 1 to 4')
-    plt.ylabel('Fraction value of Intentions')
-    plt.title('Intentions by Typology (1 to 4)')
-    plt.xticks([i + bar_width / 2 for i in index], data_1_to_4['Typology'], rotation=45)
+    plt.ylabel('Fraction of Intentions')
+    plt.xticks([i + bar_width / 2 for i in index], [int(elem) for elem in data_1_to_4['Typology']])
     plt.legend()
+    plt.ylim(0, 1)
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/intentions_gen_vs_end_1_4.png', dpi=400)
 
     # Plot data for typologies 5 to 8
-    plt.figure(figsize=(10, 6))
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    bar_width = 0.35
     index = range(len(data_5_to_8['Typology']))
 
-    plt.bar(index, data_5_to_8['Average Intentions Generated Correctly'], bar_width, label='Intentions executable after generation', color = 'lightgreen')
-    plt.bar([i + bar_width for i in index], data_5_to_8['Average Executable Intentions'], bar_width, label='Intentions still executable at end of experiment', color = 'darkgreen')
+    plt.bar(index, [float(elem) for elem in data_5_to_8['Average Intentions Generated Correctly']], bar_width, label='Intentions generated correctly', color = 'lightgreen')
+    plt.bar([i + bar_width for i in index], [float(elem) for elem in data_5_to_8['Average Executable Intentions']], bar_width, label='Intentions executable at experiment end', color = 'darkgreen')
 
     plt.xlabel('Typologies 5 to 8')
-    plt.ylabel('Fraction value of Intentions')
-    plt.title('Intentions by Typology (5 to 8)')
-    plt.xticks([i + bar_width / 2 for i in index], data_5_to_8['Typology'], rotation=45)
+    plt.ylabel('Fraction of Intentions')
+    plt.xticks([i + bar_width / 2 for i in index], [int(elem) for elem in data_5_to_8['Typology']])
     plt.legend()
+    plt.ylim(0, 1)
     plt.tight_layout()
-    plt.show()
-
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/intentions_gen_vs_end_5_8.png', dpi=400)
 
 
     typologies = [typology.split('/')[-1] for typology in generation_failure_by_typology.keys()]
     execution_errors = [generation_failure_by_typology[typology]['execution_error'] for typology in generation_failure_by_typology.keys()]
     negative_evaluations = [generation_failure_by_typology[typology]['negative_evaluation'] for typology in generation_failure_by_typology.keys()]
 
-    plt.figure(figsize=(12, 6))
-    index = range(len(typologies))
-
-    plt.bar(index, execution_errors, label='Execution Error', color='red')
-    plt.bar(index, negative_evaluations, bottom=execution_errors, label='Negative Evaluation', color='orange')
-
-    plt.xlabel('Typologies')
-    plt.ylabel('Number of Intentions')
-    plt.title('Intentions Generation Failures by Typology')
-    plt.xticks(index, typologies, rotation=45)
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
-
-
-
-
-    # # Prepare data for the bar chart
-    # typologies = [elem.split('/')[-1] for elem in typology_averages.keys()]
-    # average_execution_errors = [averages['average_intentions_generation_execution_error'] for typology, averages in typology_averages.items()]
-    # average_negative_evaluations = [averages['average_intentions_generation_negative_evaluation'] for typology, averages in typology_averages.items()]
-
-    # # Normalize the values so that for each typology the two bars sum to 1
-    # total_failures = [execution_error + negative_evaluation for execution_error, negative_evaluation in zip(average_execution_errors, average_negative_evaluations)]
-    # normalized_execution_errors = [execution_error / total if total != 0 else 0 for execution_error, total in zip(average_execution_errors, total_failures)]
-    # normalized_negative_evaluations = [negative_evaluation / total if total != 0 else 0 for negative_evaluation, total in zip(average_negative_evaluations, total_failures)]
-
-    # # Plot the data with bars on top of each other
     # plt.figure(figsize=(12, 6))
     # index = range(len(typologies))
 
-    # plt.bar(index, normalized_execution_errors, label='Execution Errors')
-    # plt.bar(index, normalized_negative_evaluations, bottom=normalized_execution_errors, label='Negative Evaluations')
+    # plt.bar(index, execution_errors, label='Execution Error', color='red')
+    # plt.bar(index, negative_evaluations, bottom=execution_errors, label='Negative Evaluation', color='orange')
 
     # plt.xlabel('Typologies')
-    # plt.ylabel('Normalized Values')
-    # plt.title('Normalized Average Intentions Generation Failures by Typology')
+    # plt.ylabel('Number of Intentions')
+    # plt.title('Intentions Generation Failures by Typology')
     # plt.xticks(index, typologies, rotation=45)
     # plt.legend()
     # plt.tight_layout()
     # plt.show()
+
+
+
+
+    # Prepare data for the bar chart
+    typologies = [elem.split('/')[-1] for elem in typology_averages.keys()]
+    average_execution_errors = [averages['average_intentions_generation_execution_error'] for typology, averages in typology_averages.items()]
+    average_negative_evaluations = [averages['average_intentions_generation_negative_evaluation'] for typology, averages in typology_averages.items()]
+
+    # Normalize the values so that for each typology the two bars sum to 1
+    total_failures = [execution_error + negative_evaluation for execution_error, negative_evaluation in zip(average_execution_errors, average_negative_evaluations)]
+    normalized_execution_errors = [execution_error / total if total != 0 else 0 for execution_error, total in zip(average_execution_errors, total_failures)]
+    normalized_negative_evaluations = [negative_evaluation / total if total != 0 else 0 for negative_evaluation, total in zip(average_negative_evaluations, total_failures)]
+
+    # Plot the data with bars on top of each other
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    bar_width = 0.70
+    index = range(len(typologies))
+
+    plt.bar(index, normalized_execution_errors, label='Execution Error', color='orange', width=bar_width)
+    plt.bar(index, normalized_negative_evaluations, bottom=normalized_execution_errors, label='Negative Evaluation', color='yellow', width=bar_width)
+
+    plt.xlabel('Typology')
+    plt.ylabel('Fraction of Intentions')
+    plt.xticks(index, typologies)
+    plt.legend()
+    plt.ylim(0, 1)
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/intentions_failure_reasons.png', dpi=400)
