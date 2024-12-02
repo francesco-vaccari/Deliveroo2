@@ -116,25 +116,38 @@ def _4(data):
         hal_cis.append(typology_hal_ci)
 
     metrics = [
-        (cc_means, cc_cis, 'Cyclomatic Complexity', [(4, 5, 'green'), (5, 10, 'lightgreen'), (10, 16, 'yellow')]),
+        (cc_means, cc_cis, 'Cyclomatic Complexity', [(3, 5, 'green'), (5, 10, 'lightgreen'), (10, 17, 'yellow')]),
         (mi_means, mi_cis, 'Maintainability Index', [(49, 69, 'green')]),
         (raw_means, raw_cis, 'Lines of Code', []),
         (hal_means, hal_cis, 'Halstead Effort', [])
     ]
 
-    for metric_means, metric_cis, title, regions in metrics:
-        plt.figure(figsize=(10, 5))
+    for i, (metric_means, metric_cis, title, regions) in enumerate(metrics):
+        plt.rc('font', size=15)
+        plt.rc('axes', axisbelow=True)
+        plt.figure(figsize=(9, 6))
         yerr = np.array([(mean - ci[0], ci[1] - mean) for mean, ci in zip(metric_means, metric_cis)]).T
         plt.errorbar([typo.split('/')[-1] for typo in typologies], metric_means, yerr=yerr, fmt='o', marker='o', capsize=5)
         
         for region in regions:
             plt.axhspan(region[0], region[1], facecolor=region[2], alpha=0.3)
         
-        plt.title(title)
         plt.xlabel('Typology')
         plt.ylabel('Mean Value')
-        plt.grid(True)
-        plt.show()
+        if i == 0:
+            plt.ylim(3, 16)
+            title = 'cc'
+        if i == 1:
+            plt.ylim(49, 69)
+            title = 'mi'
+        if i == 2:
+            title = 'lloc'
+        if i == 3:
+            title = 'hal'
+
+        plt.grid(axis='y', linestyle='dashed')
+        # plt.show()
+        plt.savefig(f'/Users/francesco/Desktop/Master-Thesis/images/{title}_intentions.png', dpi=400)
 
 
 # Mi aspetto che nel corso dell'esperimento le metriche peggiorino per via del fatto che l'agente impara a fare cose più complesse.

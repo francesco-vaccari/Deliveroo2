@@ -3,7 +3,6 @@ from scipy import stats
 import matplotlib.pyplot as plt
 
 def _6(data):
-    return
     intention_metrics_by_n_objectives = {}
     intention_metrics_by_description_length = {}
     adaptive_intentions_metrics = []

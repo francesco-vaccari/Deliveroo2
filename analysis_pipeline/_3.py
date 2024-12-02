@@ -12,9 +12,13 @@ def _3(data):
     generation_failure_by_typology = {}
 
     n_intentions_by_typology = {}
+    generated_correctly_by_typology = {}
+    not_generated_correctly_by_typology = {}
 
     for typology, experiments in data.items():
         generation_failure_by_typology[typology] = {'execution_error': 0, 'negative_evaluation': 0}
+        generated_correctly_by_typology[typology] = 0
+        not_generated_correctly_by_typology[typology] = 0
         for experiment in experiments:
             experiment_intentions = 0
             experiment_intentions_executable_at_experiment_end = 0
@@ -30,12 +34,14 @@ def _3(data):
 
                     if intention['invalidation_reason'] == 'right_after_generation':
                         experiment_intentions_not_generated_correctly += 1
+                        not_generated_correctly_by_typology[typology] += 1
                         if intention['invalidation_after_generation_reason'] == 'negative_evaluation':
                             experiment_intentions_generation_negative_evaluation += 1
                         if intention['invalidation_after_generation_reason'] == 'execution_error':
                             experiment_intentions_generation_execution_error += 1
                     else:
                         experiment_intentions_generated_correctly += 1
+                        generated_correctly_by_typology[typology] += 1
             
             # print(f'Experiment intentions: {experiment_intentions}')
             # print(f'Experiment intentions executable at experiment end: {experiment_intentions_executable_at_experiment_end}')
@@ -86,6 +92,33 @@ def _3(data):
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/n_intentions.png', dpi=400)
     
+
+
+    typologies = [typology.split('/')[-1] for typology in generated_correctly_by_typology.keys()]
+    generated_correctly = [generated_correctly_by_typology[typology] for typology in generated_correctly_by_typology.keys()]
+    not_generated_correctly = [not_generated_correctly_by_typology[typology] for typology in not_generated_correctly_by_typology.keys()]
+
+    # Plot the data with bars on top of each other
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    bar_width = 0.7
+    index = range(len(typologies))
+
+    plt.bar(index, generated_correctly, label='Generated Correctly', color='green', width=bar_width)
+    plt.bar(index, not_generated_correctly, bottom=generated_correctly, label='Not Generated Correctly', color='red', width=bar_width)
+
+    plt.xlabel('Typology')
+    plt.ylabel('Number of Intentions')
+    plt.xticks(index, typologies)
+    plt.ylim(-0.1, 81.0)
+    plt.yticks(range(0, 81, 5))
+    plt.grid(axis='y', linestyle='dashed')
+    plt.legend()
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/intentions_generated_vs_not_generated.png', dpi=400)
+
 
 
     typology_averages = {}
