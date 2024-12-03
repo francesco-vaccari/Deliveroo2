@@ -3,7 +3,6 @@ from scipy import stats
 import matplotlib.pyplot as plt
 
 def _6_2(data):
-    return
     intention_metrics_by_n_objectives = {}
     intention_metrics_by_description_length = {}
     adaptive_intentions_metrics = []
@@ -123,34 +122,56 @@ def _6_2(data):
             raw_intervals.append((metrics['raw'], metrics['raw']))
             hal_intervals.append((metrics['hal'], metrics['hal']))
 
-    fig, axs = plt.subplots(2, 2, figsize=(12, 8))
-
-    axs[0, 0].errorbar(n_objectives, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity (cc)', marker='o', capsize=5)
-    axs[0, 0].set_xlabel('Number of Objectives')
-    axs[0, 0].set_ylabel('Cyclomatic Complexity (cc)')
-    axs[0, 0].set_title('Cyclomatic Complexity vs Number of Objectives w/o')
-    axs[0, 0].grid(True)
-
-    axs[0, 1].errorbar(n_objectives, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index (mi)', marker='o', capsize=5)
-    axs[0, 1].set_xlabel('Number of Objectives')
-    axs[0, 1].set_ylabel('Maintainability Index (mi)')
-    axs[0, 1].set_title('Maintainability Index vs Number of Objectives w/o')
-    axs[0, 1].grid(True)
-
-    axs[1, 0].errorbar(n_objectives, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code (raw)', marker='o', capsize=5)
-    axs[1, 0].set_xlabel('Number of Objectives')
-    axs[1, 0].set_ylabel('Logical Lines of Code (raw)')
-    axs[1, 0].set_title('Logical Lines of Code vs Number of Objectives w/o')
-    axs[1, 0].grid(True)
-
-    axs[1, 1].errorbar(n_objectives, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort (hal)', marker='o', capsize=5)
-    axs[1, 1].set_xlabel('Number of Objectives')
-    axs[1, 1].set_ylabel('Halstead Effort (hal)')
-    axs[1, 1].set_title('Halstead Effort vs Number of Objectives w/o')
-    axs[1, 1].grid(True)
-
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.axhspan(0, 5, facecolor='green', alpha=0.3)
+    plt.axhspan(5, 10, facecolor='lightgreen', alpha=0.3)
+    plt.axhspan(10, 20, facecolor='yellow', alpha=0.3)
+    plt.axhspan(20, 30, facecolor='orange', alpha=0.3)
+    plt.grid(axis='y', linestyle='dashed')
+    plt.errorbar(n_objectives, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity', marker='o', capsize=5)
+    plt.xlabel('Number of Objectives')
+    plt.ylabel('Cyclomatic Complexity')
+    plt.ylim(6, 25)
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/cc_by_n_objectives_without.png', dpi=400)
+
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.axhspan(20, 100, facecolor='green', alpha=0.3)
+    plt.grid(axis='y', linestyle='dashed')
+    plt.errorbar(n_objectives, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index', marker='o', capsize=5)
+    plt.xlabel('Number of Objectives')
+    plt.ylabel('Maintainability Index')
+    plt.ylim(43, 62)
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/mi_by_n_objectives_without.png', dpi=400)
+
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.grid(axis='y', linestyle='dashed')
+    plt.errorbar(n_objectives, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code', marker='o', capsize=5)
+    plt.xlabel('Number of Objectives')
+    plt.ylabel('Logical Lines of Code')
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/raw_by_n_objectives_without.png', dpi=400)
+
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.grid(axis='y', linestyle='dashed')
+    plt.errorbar(n_objectives, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort', marker='o', capsize=5)
+    plt.xlabel('Number of Objectives')
+    plt.ylabel('Halstead Effort')
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/hal_by_n_objectives_without.png', dpi=400)
 
 
 
@@ -263,11 +284,13 @@ def _6_2(data):
         current_bin.append(length)
         current_count += count
         if current_count >= target_per_bin:
+            print(current_count)
             adaptive_bins.append((min(current_bin), max(current_bin)))
             current_bin = []
             current_count = 0
 
     if current_bin:  # Handle remaining data
+        print(current_count)
         adaptive_bins.append((min(current_bin), max(current_bin)))
 
     # Bin metrics according to adaptive bins
@@ -318,34 +341,57 @@ def _6_2(data):
         raw_intervals.append(metrics['raw_confidence_interval'])
         hal_intervals.append(metrics['hal_confidence_interval'])
 
-    fig, axs = plt.subplots(2, 2, figsize=(12, 8))
-
-    axs[0, 0].errorbar(description_lengths, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity (cc)', marker='o', capsize=5)
-    axs[0, 0].set_xlabel('Description Length (Binned)')
-    axs[0, 0].set_ylabel('Cyclomatic Complexity (cc)')
-    axs[0, 0].set_title('Cyclomatic Complexity vs Description Length w/o')
-    axs[0, 0].grid(True)
-
-    axs[0, 1].errorbar(description_lengths, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index (mi)', marker='o', capsize=5)
-    axs[0, 1].set_xlabel('Description Length (Binned)')
-    axs[0, 1].set_ylabel('Maintainability Index (mi)')
-    axs[0, 1].set_title('Maintainability Index vs Description Length w/o')
-    axs[0, 1].grid(True)
-
-    axs[1, 0].errorbar(description_lengths, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code (raw)', marker='o', capsize=5)
-    axs[1, 0].set_xlabel('Description Length (Binned)')
-    axs[1, 0].set_ylabel('Logical Lines of Code (raw)')
-    axs[1, 0].set_title('Logical Lines of Code vs Description Length w/o')
-    axs[1, 0].grid(True)
-
-    axs[1, 1].errorbar(description_lengths, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort (hal)', marker='o', capsize=5)
-    axs[1, 1].set_xlabel('Description Length (Binned)')
-    axs[1, 1].set_ylabel('Halstead Effort (hal)')
-    axs[1, 1].set_title('Halstead Effort vs Description Length w/o')
-    axs[1, 1].grid(True)
-
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.axhspan(0, 5, facecolor='green', alpha=0.3)
+    plt.axhspan(5, 10, facecolor='lightgreen', alpha=0.3)
+    plt.axhspan(10, 20, facecolor='yellow', alpha=0.3)
+    plt.axhspan(20, 30, facecolor='orange', alpha=0.3)
+    plt.grid(axis='y', linestyle='dashed')
+    plt.errorbar(description_lengths, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity (cc)', marker='o', capsize=5)
+    plt.xlabel('Description Length')
+    plt.ylabel('Cyclomatic Complexity')
+    plt.ylim(5, 18)
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/cc_by_description_length_without.png', dpi=400)
+
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.axhspan(20, 100, facecolor='green', alpha=0.3)
+    plt.grid(axis='y', linestyle='dashed')
+    plt.errorbar(description_lengths, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index (mi)', marker='o', capsize=5)
+    plt.xlabel('Description Length')
+    plt.ylabel('Maintainability Index')
+    plt.ylim(48, 62)
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/mi_by_description_length_without.png', dpi=400)
+
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.grid(axis='y', linestyle='dashed')
+    plt.errorbar(description_lengths, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code (raw)', marker='o', capsize=5)
+    plt.xlabel('Description Length')
+    plt.ylabel('Logical Lines of Code')
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/raw_by_description_length_without.png', dpi=400)
+
+    plt.rc('font', size=15)
+    plt.rc('axes', axisbelow=True)
+    plt.figure(figsize=(9, 6))
+    plt.grid(axis='y', linestyle='dashed')
+    plt.errorbar(description_lengths, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort (hal)', marker='o', capsize=5)
+    plt.xlabel('Description Length')
+    plt.ylabel('Halstead Effort')
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/hal_by_description_length_without.png', dpi=400)
+
 
 
 
