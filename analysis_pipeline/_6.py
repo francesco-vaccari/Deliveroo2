@@ -116,14 +116,15 @@ def _6(data):
     plt.rc('font', size=15)
     plt.rc('axes', axisbelow=True)
     plt.figure(figsize=(9, 6))
-    plt.axhspan(3, 5, facecolor='green', alpha=0.3)
+    plt.axhspan(0, 5, facecolor='green', alpha=0.3)
     plt.axhspan(5, 10, facecolor='lightgreen', alpha=0.3)
-    plt.axhspan(10, 17, facecolor='yellow', alpha=0.3)
+    plt.axhspan(10, 20, facecolor='yellow', alpha=0.3)
+    plt.axhspan(20, 30, facecolor='orange', alpha=0.3)
     plt.grid(axis='y', linestyle='dashed')
     plt.errorbar(n_objectives, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity', marker='o', capsize=5)
     plt.xlabel('Number of Objectives')
     plt.ylabel('Cyclomatic Complexity')
-    plt.ylim(6, 16)
+    plt.ylim(6, 25) # 6 16
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/cc_by_n_objectives.png', dpi=400)
@@ -136,7 +137,7 @@ def _6(data):
     plt.errorbar(n_objectives, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index', marker='o', capsize=5)
     plt.xlabel('Number of Objectives')
     plt.ylabel('Maintainability Index')
-    plt.ylim(48, 64)
+    plt.ylim(43, 64) # 48 64
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/mi_by_n_objectives.png', dpi=400)
@@ -148,6 +149,7 @@ def _6(data):
     plt.errorbar(n_objectives, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code', marker='o', capsize=5)
     plt.xlabel('Number of Objectives')
     plt.ylabel('Logical Lines of Code')
+    plt.ylim(13, 38) # 13 33
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/raw_by_n_objectives.png', dpi=400)
@@ -159,6 +161,7 @@ def _6(data):
     plt.errorbar(n_objectives, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort', marker='o', capsize=5)
     plt.xlabel('Number of Objectives')
     plt.ylabel('Halstead Effort')
+    plt.ylim(120, 2350) # 140 1290
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/hal_by_n_objectives.png', dpi=400)
@@ -333,11 +336,12 @@ def _6(data):
     plt.axhspan(0, 5, facecolor='green', alpha=0.3)
     plt.axhspan(5, 10, facecolor='lightgreen', alpha=0.3)
     plt.axhspan(10, 20, facecolor='yellow', alpha=0.3)
+    plt.axhspan(20, 30, facecolor='orange', alpha=0.3)
     plt.grid(axis='y', linestyle='dashed')
     plt.errorbar(description_lengths, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity', marker='o', capsize=5)
     plt.xlabel('Description Length')
     plt.ylabel('Cyclomatic Complexity')
-    plt.ylim(5, 18)
+    plt.ylim(5, 18) # 5 18
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/cc_by_description_length.png', dpi=400)
@@ -350,7 +354,7 @@ def _6(data):
     plt.errorbar(description_lengths, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index', marker='o', capsize=5)
     plt.xlabel('Description Length')
     plt.ylabel('Maintainability Index')
-    plt.ylim(49, 66)
+    plt.ylim(48, 67) # 49 66
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/mi_by_description_length.png', dpi=400)
@@ -362,6 +366,7 @@ def _6(data):
     plt.errorbar(description_lengths, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code', marker='o', capsize=5)
     plt.xlabel('Description Length')
     plt.ylabel('Logical Lines of Code')
+    plt.ylim(13, 31) # 13 28
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/raw_by_description_length.png', dpi=400)
@@ -373,6 +378,7 @@ def _6(data):
     plt.errorbar(description_lengths, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort', marker='o', capsize=5)
     plt.xlabel('Description Length')
     plt.ylabel('Halstead Effort')
+    plt.ylim(0, 1790) # 0 1790
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/hal_by_description_length.png', dpi=400)

@@ -133,7 +133,7 @@ def _6_2(data):
     plt.errorbar(n_objectives, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity', marker='o', capsize=5)
     plt.xlabel('Number of Objectives')
     plt.ylabel('Cyclomatic Complexity')
-    plt.ylim(6, 25)
+    plt.ylim(6, 25) # 6 25
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/cc_by_n_objectives_without.png', dpi=400)
@@ -146,7 +146,7 @@ def _6_2(data):
     plt.errorbar(n_objectives, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index', marker='o', capsize=5)
     plt.xlabel('Number of Objectives')
     plt.ylabel('Maintainability Index')
-    plt.ylim(43, 62)
+    plt.ylim(43, 64) # 43 62
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/mi_by_n_objectives_without.png', dpi=400)
@@ -158,6 +158,7 @@ def _6_2(data):
     plt.errorbar(n_objectives, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code', marker='o', capsize=5)
     plt.xlabel('Number of Objectives')
     plt.ylabel('Logical Lines of Code')
+    plt.ylim(13, 38) # 13 38
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/raw_by_n_objectives_without.png', dpi=400)
@@ -169,6 +170,7 @@ def _6_2(data):
     plt.errorbar(n_objectives, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort', marker='o', capsize=5)
     plt.xlabel('Number of Objectives')
     plt.ylabel('Halstead Effort')
+    plt.ylim(120, 2350) # 120 2350
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/hal_by_n_objectives_without.png', dpi=400)
@@ -352,7 +354,7 @@ def _6_2(data):
     plt.errorbar(description_lengths, ccs, yerr=[(top - bot) / 2 for bot, top in cc_intervals], label='Cyclomatic Complexity (cc)', marker='o', capsize=5)
     plt.xlabel('Description Length')
     plt.ylabel('Cyclomatic Complexity')
-    plt.ylim(5, 18)
+    plt.ylim(5, 18) # 5 18
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/cc_by_description_length_without.png', dpi=400)
@@ -365,7 +367,7 @@ def _6_2(data):
     plt.errorbar(description_lengths, mis, yerr=[(top - bot) / 2 for bot, top in mi_intervals], label='Maintainability Index (mi)', marker='o', capsize=5)
     plt.xlabel('Description Length')
     plt.ylabel('Maintainability Index')
-    plt.ylim(48, 62)
+    plt.ylim(48, 67) # 48 62
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/mi_by_description_length_without.png', dpi=400)
@@ -377,6 +379,7 @@ def _6_2(data):
     plt.errorbar(description_lengths, raws, yerr=[(top - bot) / 2 for bot, top in raw_intervals], label='Logical Lines of Code (raw)', marker='o', capsize=5)
     plt.xlabel('Description Length')
     plt.ylabel('Logical Lines of Code')
+    plt.ylim(13, 31) # 13 31
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/raw_by_description_length_without.png', dpi=400)
@@ -388,6 +391,7 @@ def _6_2(data):
     plt.errorbar(description_lengths, hals, yerr=[(top - bot) / 2 for bot, top in hal_intervals], label='Halstead Effort (hal)', marker='o', capsize=5)
     plt.xlabel('Description Length')
     plt.ylabel('Halstead Effort')
+    plt.ylim(0, 1790) # 80 1345
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/hal_by_description_length_without.png', dpi=400)
