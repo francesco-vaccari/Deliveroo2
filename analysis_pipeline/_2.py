@@ -210,6 +210,7 @@ def _2(data):
 
     import matplotlib.pyplot as plt
     import numpy as np
+    from matplotlib.patches import Patch
 
     categories = [
     'satisfied',
@@ -234,18 +235,26 @@ def _2(data):
 
     x = np.arange(len(typology_names))
 
-    bar_width = 0.15
+    # tab:green : #2ca02c
+    # tab:red : #d62728
+
+    bar_width = 0.175
     plt.rc('font', size=15)
     plt.rc('axes', axisbelow=True)
     plt.figure(figsize=(9, 6))
-    plt.bar(x, satisfied_counts, bar_width, color=('#008000', 0.4), label='Satisfied', align='edge', edgecolor='black')
-    plt.bar(x, not_satisfied_counts, bar_width, bottom=satisfied_counts, color=('#E50000', 0.4), label='Not Satisfied', align='edge', edgecolor='black')
-    plt.bar(x + bar_width, satisfied_with_trigger_counts, bar_width, color=('#008000', 0.6), label='Triggerable', align='edge', edgecolor='black')
-    plt.bar(x + bar_width, satisfied_without_trigger_counts, bar_width, color=('#E50000', 0.6), label='Not Triggerable', bottom=satisfied_with_trigger_counts, align='edge', edgecolor='black')
-    plt.bar(x + 2*bar_width, satisfied_with_trigger_triggered_counts, bar_width, color=('#008000', 0.8), label='Triggered', align='edge', edgecolor='black')
-    plt.bar(x + 2*bar_width, satisfied_with_trigger_not_triggered_counts, bar_width, color=('#E50000', 0.8), label='Untriggered', bottom=satisfied_with_trigger_triggered_counts, align='edge', edgecolor='black')
-    plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_still_triggerable_counts, bar_width, color=('#008000', 1), label='Still Triggerable After', align='edge', edgecolor='black')
-    plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_not_triggerable_counts, bar_width, color=('#E50000', 1), label='Not Triggerable After', bottom=satisfied_with_trigger_triggered_still_triggerable_counts, align='edge', edgecolor='black')
+    bars = [
+        plt.bar(x, satisfied_counts, bar_width, color=('#2ca02c', 0.4), label='Satisfied', align='edge', edgecolor='black'),
+        plt.bar(x, not_satisfied_counts, bar_width, bottom=satisfied_counts, color=('#d62728', 0.4), label='Not Satisfied', align='edge', edgecolor='black'),
+        plt.bar(x + bar_width, satisfied_with_trigger_counts, bar_width, color=('#2ca02c', 0.6), label='Triggerable', align='edge', edgecolor='black', hatch='//'),
+        plt.bar(x + bar_width, satisfied_without_trigger_counts, bar_width, color=('#d62728', 0.6), label='Not Triggerable', bottom=satisfied_with_trigger_counts, align='edge', edgecolor='black', hatch='//'),
+        plt.bar(x + 2*bar_width, satisfied_with_trigger_triggered_counts, bar_width, color=('#2ca02c', 0.8), label='Triggered', align='edge', edgecolor='black', hatch='\\\\'),
+        plt.bar(x + 2*bar_width, satisfied_with_trigger_not_triggered_counts, bar_width, color=('#d62728', 0.8), label='Untriggered', bottom=satisfied_with_trigger_triggered_counts, align='edge', edgecolor='black', hatch='\\\\'),
+        plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_still_triggerable_counts, bar_width, color=('#2ca02c', 1), label='Still Triggerable After', align='edge', edgecolor='black', hatch='xx'),
+        plt.bar(x + 3*bar_width, satisfied_with_trigger_triggered_not_triggerable_counts, bar_width, color=('#d62728', 1), label='Not Triggerable After', bottom=satisfied_with_trigger_triggered_still_triggerable_counts, align='edge', edgecolor='black', hatch='xx')
+    ]
+
+    legend_elements = [Patch(facecolor=bar[0].get_facecolor(), edgecolor='black', hatch='//', label=bar[0].get_label()) for bar in bars]
+    plt.legend(handles=legend_elements)
 
     plt.xlabel('Typology')
     plt.ylabel('Number of Desires')
@@ -256,6 +265,7 @@ def _2(data):
     plt.tight_layout()
     # plt.show()
     plt.savefig('/Users/francesco/Desktop/Master-Thesis/images/n_desires_categories.png', dpi=400)
+    plt.close()
 
 
 
@@ -283,10 +293,10 @@ def _2(data):
     ]
     
     
-    plt.bar(x, positive_triggers_by_typology, bar_width, color='green', label='Success', align='edge', edgecolor='black')
-    plt.bar(x, negative_triggers_by_typology, bar_width, color='red', label='Failure', align='edge', bottom=positive_triggers_by_typology, edgecolor='black')
-    plt.bar(x + bar_width/2, [elem[0] for elem in trigger_error], bar_width/2, color='orange', bottom=positive_triggers_by_typology, label='Execution Error', align='edge', edgecolor='black')
-    plt.bar(x + bar_width/2, [elem[1] for elem in trigger_error], bar_width/2, color='yellow', bottom=[elem[0] + positive_triggers_by_typology[i] for i, elem in enumerate(trigger_error)], label='Negative Evaluation', align='edge', edgecolor='black')
+    plt.bar(x, positive_triggers_by_typology, bar_width, color='tab:green', label='Success', align='edge', edgecolor='black')
+    plt.bar(x, negative_triggers_by_typology, bar_width, color='tab:red', label='Failure', align='edge', bottom=positive_triggers_by_typology, edgecolor='black')
+    plt.bar(x + bar_width/2, [elem[0] for elem in trigger_error], bar_width/2, color='tab:orange', bottom=positive_triggers_by_typology, label='Execution Error', align='edge', edgecolor='black', hatch='//')
+    plt.bar(x + bar_width/2, [elem[1] for elem in trigger_error], bar_width/2, color='tab:olive', bottom=[elem[0] + positive_triggers_by_typology[i] for i, elem in enumerate(trigger_error)], label='Negative Evaluation', align='edge', edgecolor='black', hatch='\\\\')
 
     plt.xlabel('Typology')
     plt.ylabel('Number of Triggers')

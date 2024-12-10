@@ -82,7 +82,7 @@ def _3(data):
     plt.rc('axes', axisbelow=True)
     plt.figure(figsize=(9, 6))
     bar_width = 0.7
-    plt.bar(typologies, intentions_counts, bar_width)
+    plt.bar(typologies, intentions_counts, bar_width, edgecolor='black', color='tab:blue')
     plt.grid(axis='y', linestyle='dashed')
     plt.ylim(-0.1, 81.0)
     plt.yticks(range(0, 81, 5))
@@ -97,7 +97,7 @@ def _3(data):
     typologies = [typology.split('/')[-1] for typology in generated_correctly_by_typology.keys()]
     generated_correctly = [generated_correctly_by_typology[typology] for typology in generated_correctly_by_typology.keys()]
     not_generated_correctly = [not_generated_correctly_by_typology[typology] for typology in not_generated_correctly_by_typology.keys()]
-
+    plt.close()
     # Plot the data with bars on top of each other
     plt.rc('font', size=15)
     plt.rc('axes', axisbelow=True)
@@ -105,8 +105,8 @@ def _3(data):
     bar_width = 0.7
     index = range(len(typologies))
 
-    plt.bar(index, generated_correctly, label='Generated Correctly', color='green', width=bar_width)
-    plt.bar(index, not_generated_correctly, bottom=generated_correctly, label='Not Generated Correctly', color='red', width=bar_width)
+    plt.bar(index, generated_correctly, label='Generated Correctly', color='tab:green', width=bar_width, edgecolor='black')
+    plt.bar(index, not_generated_correctly, bottom=generated_correctly, label='Not Generated Correctly', color='tab:red', width=bar_width, edgecolor='black')
 
     plt.xlabel('Typology')
     plt.ylabel('Number of Intentions')
@@ -212,6 +212,9 @@ def _3(data):
         'Average Intentions Generated Correctly': [averages['average_intentions_generated_correctly'] for typology, averages in typology_averages.items() if int(typology.split('/')[-1]) in range(5, 9)]
     }
 
+    # tab:green : #2ca02c
+    # tab:red : #d62728
+    plt.close()
     # Plot data for typologies 1 to 4
     plt.rc('font', size=15)
     plt.rc('axes', axisbelow=True)
@@ -219,8 +222,8 @@ def _3(data):
     bar_width = 0.35
     index = range(len(data_1_to_4['Typology']))
 
-    plt.bar(index, [float(elem) for elem in data_1_to_4['Average Intentions Generated Correctly']], bar_width, label='Intentions generated correctly', color = 'lightgreen')
-    plt.bar([i + bar_width for i in index], [float(elem) for elem in data_1_to_4['Average Executable Intentions']], bar_width, label='Intentions executable at experiment end', color = 'darkgreen')
+    plt.bar(index, [float(elem) for elem in data_1_to_4['Average Intentions Generated Correctly']], bar_width, label='Intentions generated correctly', color=('#2ca02c', 0.3), edgecolor='black')
+    plt.bar([i + bar_width for i in index], [float(elem) for elem in data_1_to_4['Average Executable Intentions']], bar_width, label='Intentions executable at experiment end', color = 'tab:green', edgecolor='black', hatch='/')
 
     plt.xlabel('Typologies 1 to 4')
     plt.ylabel('Fraction of Intentions')
@@ -238,8 +241,8 @@ def _3(data):
     bar_width = 0.35
     index = range(len(data_5_to_8['Typology']))
 
-    plt.bar(index, [float(elem) for elem in data_5_to_8['Average Intentions Generated Correctly']], bar_width, label='Intentions generated correctly', color = 'lightgreen')
-    plt.bar([i + bar_width for i in index], [float(elem) for elem in data_5_to_8['Average Executable Intentions']], bar_width, label='Intentions executable at experiment end', color = 'darkgreen')
+    plt.bar(index, [float(elem) for elem in data_5_to_8['Average Intentions Generated Correctly']], bar_width, label='Intentions generated correctly', color=('#2ca02c', 0.3), edgecolor='black')
+    plt.bar([i + bar_width for i in index], [float(elem) for elem in data_5_to_8['Average Executable Intentions']], bar_width, label='Intentions executable at experiment end', color = 'tab:green', edgecolor='black', hatch='/')
 
     plt.xlabel('Typologies 5 to 8')
     plt.ylabel('Fraction of Intentions')
@@ -289,8 +292,8 @@ def _3(data):
     bar_width = 0.70
     index = range(len(typologies))
 
-    plt.bar(index, normalized_execution_errors, label='Execution Error', color='orange', width=bar_width)
-    plt.bar(index, normalized_negative_evaluations, bottom=normalized_execution_errors, label='Negative Evaluation', color='yellow', width=bar_width)
+    plt.bar(index, normalized_execution_errors, label='Execution Error', color='tab:orange', width=bar_width, edgecolor='black')
+    plt.bar(index, normalized_negative_evaluations, bottom=normalized_execution_errors, label='Negative Evaluation', color='tab:olive', width=bar_width, edgecolor='black')
 
     plt.xlabel('Typology')
     plt.ylabel('Fraction of Intentions')
